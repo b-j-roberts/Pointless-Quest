@@ -1,0 +1,5 @@
+Make +- rand() mod on some biome heights in order to make rougher borders.
+Put update in thread & vector of rendered items.
+
+Use map for constant time render determination. ie have a map of a 2d array onto a vector of renderables at that point
+   then loop through 2d loop going through map of points in view

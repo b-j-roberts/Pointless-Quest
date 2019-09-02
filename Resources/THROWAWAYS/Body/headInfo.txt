@@ -1,0 +1,2 @@
+Connector type: Bottom of Head Position, XX YY
+07 12

@@ -1,0 +1,54 @@
+#ifndef __OLDOCEAN_H_INCLUDED__
+#define __OLDOCEAN_H_INCLUDED__
+
+#include "Structures.h"
+
+class Old_Ocean_Large_Fish;
+class Old_Ocean_Small_Fish;
+
+class Old_Ocean {
+
+  public:
+
+    Old_Ocean():
+      old_ocean_large_fish_t_(32, 64, 2, "old_ocean/largeFishBones.png"), // TO DO: formatted improperly in png
+      old_ocean_small_fish_t_(32, 32, 2, "old_ocean/smallFishBones.png"),
+      old_ocean_large_fish_(std::make_shared<Sprite_Obj>(old_ocean_large_fish_t_)),
+      old_ocean_small_fish_(std::make_shared<Sprite_Obj>(old_ocean_small_fish_t_)) { }
+
+  private:
+    
+    Old_Ocean(const Old_Ocean&);
+    Old_Ocean& operator= (const Old_Ocean&);
+
+    Texture_Obj old_ocean_large_fish_t_;
+    Texture_Obj old_ocean_small_fish_t_;
+
+    std::shared_ptr<Sprite_Obj> old_ocean_large_fish_;
+    std::shared_ptr<Sprite_Obj> old_ocean_small_fish_;
+
+    friend Old_Ocean_Large_Fish;
+    friend Old_Ocean_Small_Fish;
+};
+
+class Old_Ocean_Large_Fish : One_Piece {
+
+  public:
+    
+    Old_Ocean_Large_Fish(const float pos_x, const float pos_y, const Old_Ocean& old_ocean):
+      One_Piece(pos_x, pos_y,
+                old_ocean.old_ocean_large_fish_->get_Ptr(rand() % old_ocean.old_ocean_large_fish_->size())) { }
+
+};
+
+class Old_Ocean_Small_Fish : One_Piece {
+
+  public:
+
+    Old_Ocean_Small_Fish(const float pos_x, const float pos_y, const Old_Ocean& old_ocean):
+      One_Piece(pos_x, pos_y,
+                old_ocean.old_ocean_small_fish_->get_Ptr(rand() % old_ocean.old_ocean_small_fish_->size())) { }
+
+};
+
+#endif
