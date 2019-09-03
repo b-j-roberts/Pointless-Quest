@@ -89,7 +89,7 @@ int main() {
   sf::Joystick::update();
   bool is_gamepad, is_l_x, is_l_y, is_r_x, is_r_y;
   is_gamepad = sf::Joystick::isConnected(0);
-  if(!is_gamepad) ;// TO DO : LOG NO GAMEPAD
+  if(!is_gamepad) std::cout << "No gamepad" << std::endl;// TO DO : LOG NO GAMEPAD
   is_l_x = sf::Joystick::hasAxis(0, sf::Joystick::X);
   is_l_y = sf::Joystick::hasAxis(0, sf::Joystick::Y);
   is_r_x = sf::Joystick::hasAxis(0, sf::Joystick::Z);
@@ -111,20 +111,20 @@ int main() {
     sf::Joystick::update();                
     sf::Vector2f r_stick, l_stick;
     if(is_l_x) {
-      l_stick.x = sf::Joystick::getAxisPosition(0, sf::Joystick::X) / 100.f;
-      if(l_stick.x < .07) l_stick.x = 0;
+      l_stick.x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
+      if(l_stick.x < .07 && l_stick.x > -0.07) l_stick.x = 0;
     }
     if(is_l_y) {
-      l_stick.y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y) / 100.f;
-      if(l_stick.y < .07) l_stick.y = 0;
+      l_stick.y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
+      if(l_stick.y < .07 && l_stick.y > -0.07) l_stick.y = 0;
     }
     if(is_r_x) {
-      r_stick.x = sf::Joystick::getAxisPosition(0, sf::Joystick::Z) / 100.f;
-      if(r_stick.x < .07) r_stick.x = 0;
+      r_stick.x = sf::Joystick::getAxisPosition(0, sf::Joystick::Z);
+      if(r_stick.x < .07 && r_stick.x > -0.07) r_stick.x = 0;
     }
     if(is_r_y) {
-      r_stick.y = sf::Joystick::getAxisPosition(0, sf::Joystick::R) / 100.f;
-      if(r_stick.y < .07) r_stick.y = 0;
+      r_stick.y = sf::Joystick::getAxisPosition(0, sf::Joystick::R);
+      if(r_stick.y < .07 && r_stick.y > -0.07) r_stick.y = 0;
     }
 
     //Other Input (Keyboard or window)

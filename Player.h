@@ -11,12 +11,11 @@ class Body : public Resource {
   // TO DO : Create body class for player with draw function, include pos_x_ and pos_y_ members
   public:
     void draw(sf::RenderWindow& window) override { //Placeholder
-      std::cout << "this is a placeholder, so i do not have an abstract class" << std::endl;
     }
     
     void update(float, float, float);
 
-    Body(): Resource(0,0), angle_(0) { }
+    Body(): Resource(1000,1000), angle_(0) { } // TO DO : Set default position
 
   private:
     float angle_;

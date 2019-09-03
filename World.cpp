@@ -121,12 +121,14 @@ void World::generate(size_t width, size_t height, const std::vector<std::shared_
 
   std::vector<std::vector<Biome>> biomes = get_Biomes(width, height);
   size_t h = biomes.size();
+  tile_map_.resize(h);
   for(size_t i = 0; i < h; ++i) {
     size_t w = biomes[i].size();
     std::vector<std::shared_ptr<Tile>> temp;
     for(size_t j = 0; j < w; ++j) {
       temp.emplace_back(std::make_shared<Tile>(biomes[i][j], tile_vec[biomes[i][j]]));
-    } 
+    }
+    tile_map_[i].swap(temp); 
   }
 
   // TO DO : 
@@ -135,13 +137,19 @@ void World::generate(size_t width, size_t height, const std::vector<std::shared_
 
 }
 
+// TO DO : Move this to an include function file somewhere in the future
+template <typename T1, typename T2>
+decltype(auto) max(T1 a, T2 b) {
+  return (a < b ? b : a);
+}
+
 void World::draw(sf::RenderWindow& window, const Player& player) {
-  
-  auto viewport = player.get_View().getViewport();
-  std::cout << "Drawing window at " << viewport.left << " : " << (viewport.left + viewport.width) << " | " <<
-               viewport.top  << " : " << (viewport.top + viewport.height)  << std::endl;   
-  for(int i = viewport.left, end_i = (viewport.left + viewport.width); i < end_i; i++) {
-    for(int j = viewport.top, end_j = (viewport.top + viewport.height); j < end_j; j++) {
+
+  auto size = player.get_View().getSize();
+  auto center = player.get_View().getCenter();
+
+  for(int i = max(0, center.x - (size.x / 2) - 320) / 32, end_i = max(0, center.x + (size.x / 2) + 320) / 32; i < end_i; ++i) {// TO DO : Catch min for right and bottom
+    for(int j = max(0, center.y - (size.y / 2) - 320) / 32, end_j = max(0, center.y + (size.y / 2) + 320) / 32; j < end_j; ++j) { 
       tile_map_[i][j]->sprite_->setPosition(i * 32, j * 32);
       window.draw(*(tile_map_[i][j]->sprite_));
     }
