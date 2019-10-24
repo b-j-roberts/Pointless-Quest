@@ -3,4 +3,20 @@
 
 // This is blank for now because I dont have any ocean resources!!
 
+class Ocean : public Biome {
+
+  public:
+
+    Ocean() { }
+
+    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
+                       const std::vector<std::vector<Biome_enum>>&, std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
+
+  private:
+
+    Ocean(const Ocean&);
+    Ocean& operator= (const Ocean&);
+
+};
+
 #endif

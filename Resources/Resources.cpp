@@ -7,7 +7,7 @@ Texture_Obj::Texture_Obj(const size_t height, const size_t width, const size_t n
   num_(num)
 {
   std::vector<sf::Texture> temp_t(num);
-  std::string file_path("Resources/" + s + ".png");
+  std::string file_path("Resources/Biomes/" + s + ".png");
   for(size_t i = 0; i < num; i++) {
     if(!temp_t[i].loadFromFile(file_path,sf::IntRect(width * i + width_offset, height_offset, width, height)))
       std::cout << "Error loading " << file_path << " resource in position " << i << std::endl;

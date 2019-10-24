@@ -2,11 +2,12 @@
 #define __OLDOCEAN_H_INCLUDED__
 
 #include "Structures.h"
+#include "Biome.h"
 
 class Old_Ocean_Large_Fish;
 class Old_Ocean_Small_Fish;
 
-class Old_Ocean {
+class Old_Ocean : public Biome {
 
   public:
 
@@ -15,6 +16,10 @@ class Old_Ocean {
       old_ocean_small_fish_t_(32, 32, 2, "old_ocean/smallFishBones.png"),
       old_ocean_large_fish_(std::make_shared<Sprite_Obj>(old_ocean_large_fish_t_)),
       old_ocean_small_fish_(std::make_shared<Sprite_Obj>(old_ocean_small_fish_t_)) { }
+
+     const size_t perlins_needed() override { return 0; }
+     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
+                       const std::vector<std::vector<Biome_enum>>&, std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
 
   private:
     
@@ -31,7 +36,7 @@ class Old_Ocean {
     friend Old_Ocean_Small_Fish;
 };
 
-class Old_Ocean_Large_Fish : One_Piece {
+class Old_Ocean_Large_Fish : public One_Piece {
 
   public:
     
@@ -41,7 +46,7 @@ class Old_Ocean_Large_Fish : One_Piece {
 
 };
 
-class Old_Ocean_Small_Fish : One_Piece {
+class Old_Ocean_Small_Fish : public One_Piece {
 
   public:
 

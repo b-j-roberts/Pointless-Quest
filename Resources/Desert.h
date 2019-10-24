@@ -2,16 +2,21 @@
 #define __DESERT_H_INCLUDED__
 
 #include "Structures.h"
+#include "Biome.h"
 
 class Desert_Cactus;
 
-class Desert {
+class Desert : public Biome {
 
   public:
 
     Desert():
       desert_cactus_t_(64, 32, 3, "desert/Cactus"),
       desert_cactus_(std::make_shared<Sprite_Obj>(desert_cactus_t_)) { }
+
+    const size_t perlins_needed() override { return 1; }
+    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
+                       const std::vector<std::vector<Biome_enum>>&, std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
 
   private:
 
@@ -26,7 +31,7 @@ class Desert {
 
 };
 
-class Desert_Cactus : One_Piece {
+class Desert_Cactus : public One_Piece {
 
   public:
 

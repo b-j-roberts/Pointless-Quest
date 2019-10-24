@@ -2,13 +2,14 @@
 #define __FOREST_H_INCLUDED__
 
 #include "Structures.h"
+#include "Biome.h"
 
 class Forest_Bush;
 class Forest_Moss;
 class Forest_Small_Tree;
 class Forest_Tree;
 
-class Forest {
+class Forest : public Biome {
 
   public:
 	
@@ -28,6 +29,9 @@ class Forest {
       forest_tree_top_(std::make_shared<Sprite_Obj>(63, 0, 1.f, 1.f, forest_tree_top_t_)),
       forest_tree_bot_(std::make_shared<Sprite_Obj>(forest_tree_bot_t_)) { }
 
+    const size_t perlins_needed() override { return 2; }
+    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
+                       const std::vector<std::vector<Biome_enum>>&, std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
 
   private:
 
@@ -56,19 +60,19 @@ class Forest {
     friend Forest_Tree;
 };
 
-class Forest_Bush : Two_Piece_Vert {
+class Forest_Bush : public Two_Piece_Vert {
 
   public:
 
     Forest_Bush(const float pos_x, const float pos_y, const Forest& forest):
-      Two_Piece_Vert(pos_x, pos_y, 0, 0, 
+      Two_Piece_Vert(pos_x, pos_y, 0, 32, 
 	      	     forest.forest_bush_bot_->get_Ptr(rand() % forest.forest_bush_bot_->size()),
 		     forest.forest_bush_top_->get_Ptr(rand() % forest.forest_bush_top_->size())) { }
   // TO DO : Add interface for collisions and invisible when under
   // TO DO : Other interface ? 
 };
 
-class Forest_Moss : One_Piece {
+class Forest_Moss : public One_Piece {
 
   public:
 
@@ -77,26 +81,26 @@ class Forest_Moss : One_Piece {
 	        forest.forest_moss_->get_Ptr(rand() % forest.forest_moss_->size())) { }
  
 };
-
-class Forest_Small_Tree : Two_Piece_Vert {
+// TO DO : Fix these so there is a constant method of determining the center 
+class Forest_Small_Tree : public Two_Piece_Vert {
 
   public:
 
     Forest_Small_Tree(const float pos_x, const float pos_y, const Forest& forest):
-      Two_Piece_Vert(pos_x, pos_y, 0, 0,
+      Two_Piece_Vert(pos_x, pos_y, 0, 64,
 		   forest.forest_small_tree_bot_->get_Ptr(rand() % forest.forest_small_tree_bot_->size()),
 		   forest.forest_small_tree_top_->get_Ptr(rand() % forest.forest_small_tree_top_->size())) { }
 
 };
 
-class Forest_Tree : Two_Piece_Vert {
+class Forest_Tree : public Two_Piece_Vert {
 
   public:
 
     Forest_Tree(const float pos_x, const float pos_y, const Forest& forest):
-      Two_Piece_Vert(pos_x, pos_y, 32, 0,
-                   forest.forest_tree_bot_->get_Ptr(rand() % forest.forest_small_tree_bot_->size()),
-                   forest.forest_tree_top_->get_Ptr(rand() % forest.forest_small_tree_top_->size())) { }
+      Two_Piece_Vert(pos_x, pos_y, 31, 96,
+                   forest.forest_tree_bot_->get_Ptr(rand() % forest.forest_tree_bot_->size()),
+                   forest.forest_tree_top_->get_Ptr(rand() % forest.forest_tree_top_->size())) { }
 
 };
 

@@ -14,9 +14,9 @@ body_(std::make_unique<Body>(tempbody)), // default body construct
   vel_x_(0),
   vel_y_(0),
   angle_(0),
-//  view_(sf::View(sf::FloatRect(0, 0, x_scale * 55.f * tile_size / 3, 55.f * tile_size / 3))) {
+  //view_(sf::View(sf::FloatRect(0, 0, x_scale * 55.f * tile_size / 3, 55.f * tile_size / 3))) {
   view_(sf::Vector2f(tile_size / 2 + body_->x(), tile_size / 2 + body_->y()), sf::Vector2f(x_scale * 55.f * tile_size / 3, 55.f * tile_size / 3)) { }
-//  view_.setCenter(sf::Vector2f(tile_size / 2 + body_->x(), tile_size / 2 + body_->y()));
+  //view_.setCenter(sf::Vector2f(tile_size / 2 + body_->x(), tile_size / 2 + body_->y()));
 //}
 
 Player::Player(float x_scale, int tile_size, float pos_x, float pos_y):

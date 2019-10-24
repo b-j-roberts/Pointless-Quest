@@ -15,7 +15,7 @@ class One_Piece : public Resource {
     //Create a 1 piece object with parameters (position x, position y, sprite pointer)
     One_Piece(const float, const float, std::shared_ptr<sf::Sprite>);
 
-    void draw(sf::RenderWindow&); // TO DO : Override
+    void draw(sf::RenderWindow&) override; // TO DO : Override
 
   private:
 
@@ -41,7 +41,7 @@ class Two_Piece_Vert : public Resource {
     //                                                              bot to top connector position y, sprite pointer bot, sprite pointer top)
     Two_Piece_Vert(const float, const float, const size_t, const size_t, std::shared_ptr<sf::Sprite>, std::shared_ptr<sf::Sprite>);
     
-    void draw(sf::RenderWindow&);
+    void draw(sf::RenderWindow&) override;
 
   private:
 

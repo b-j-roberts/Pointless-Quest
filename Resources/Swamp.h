@@ -2,13 +2,14 @@
 #define __SWAMP_H_INCLUDED__
 
 #include "Structures.h"
+#include "Biome.h"
 
 class Swamp_Reeds;
 class Swamp_Spikes;
 class Swamp_Tree;
 class Swamp_Water;
 
-class Swamp {
+class Swamp : public Biome {
 
   public:
  
@@ -23,6 +24,10 @@ class Swamp {
       swamp_tree_bot_(std::make_shared<Sprite_Obj>(swamp_tree_bot_t_)),
       swamp_tree_top_(std::make_shared<Sprite_Obj>(swamp_tree_top_t_)),
       swamp_water_(std::make_shared<Sprite_Obj>(swamp_water_t_)) {}
+
+    const size_t perlins_needed() override { return 3; }
+    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
+                       const std::vector<std::vector<Biome_enum>>&, std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
 
   private:
 
@@ -48,7 +53,7 @@ class Swamp {
 
 };
 
-class Swamp_Reeds : One_Piece {
+class Swamp_Reeds : public One_Piece {
 
   public:
 
@@ -58,7 +63,7 @@ class Swamp_Reeds : One_Piece {
 
 };
 
-class Swamp_Spikes : One_Piece {
+class Swamp_Spikes : public One_Piece {
 
   public:
 
@@ -68,18 +73,18 @@ class Swamp_Spikes : One_Piece {
 
 };
 
-class Swamp_Tree : Two_Piece_Vert {
+class Swamp_Tree : public Two_Piece_Vert {
 
   public:
 
     Swamp_Tree(const float pos_x, const float pos_y, const Swamp& swamp):
-      Two_Piece_Vert(pos_x, pos_y, 0, 0,
+      Two_Piece_Vert(pos_x, pos_y, 0, 128,
                      swamp.swamp_tree_bot_->get_Ptr(rand() % swamp.swamp_tree_bot_->size()),
                      swamp.swamp_tree_top_->get_Ptr(rand() % swamp.swamp_tree_top_->size())) { }
 
 };
 
-class Swamp_Water : One_Piece {
+class Swamp_Water : public One_Piece {
 
   public:
 

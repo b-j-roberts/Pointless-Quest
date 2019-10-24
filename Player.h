@@ -15,7 +15,7 @@ class Body : public Resource {
     
     void update(float, float, float);
 
-    Body(): Resource(1000,1000), angle_(0) { } // TO DO : Set default position
+    Body(): Resource(1000 * 32, 1000 * 32), angle_(0) { } // TO DO : Set default position
 
   private:
     float angle_;

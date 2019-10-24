@@ -4,6 +4,8 @@
 #include "Resources/Structures.h"
 #include "Player.h"
 
+size_t frame = 0;
+
 int main() {
 
   sf::VideoMode desktop = sf::VideoMode().getDesktopMode();
@@ -31,31 +33,31 @@ int main() {
   // TO DO : Check if number of tiles in each biome is correct
 
   //Load Forest Tiles
-  const Texture_Obj forest_tile_t(tile_size, tile_size, 10, "Biomes/forest/Tiles");
+  const Texture_Obj forest_tile_t(tile_size, tile_size, 10, "forest/Tiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(forest_tile_t));
   
   //Load Desert Tiles
-  const Texture_Obj desert_tile_t(tile_size, tile_size, 10, "Biomes/desert/sandTiles");
+  const Texture_Obj desert_tile_t(tile_size, tile_size, 10, "desert/sandTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(desert_tile_t));
 
   //Load Magic Tiles
-  const Texture_Obj magic_tile_t(tile_size, tile_size, 7, "Biomes/magic/magicTiles");
+  const Texture_Obj magic_tile_t(tile_size, tile_size, 7, "magic/magicTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(magic_tile_t));
 
   //Load Ocean Tiles
-  const Texture_Obj ocean_tile_t(tile_size, tile_size, 4, "Biomes/ocean/waterTiles");
+  const Texture_Obj ocean_tile_t(tile_size, tile_size, 4, "ocean/waterTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(ocean_tile_t));
 
   //Load Swamp Tiles
-  const Texture_Obj swamp_tile_t(tile_size, tile_size, 10, "Biomes/swamp/SwampTiles");
+  const Texture_Obj swamp_tile_t(tile_size, tile_size, 10, "swamp/SwampTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(swamp_tile_t));
 
   //Load Tundra Tiles
-  const Texture_Obj tundra_tile_t(tile_size, tile_size, 10, "Biomes/tundra/snowTiles");
-  tile_vec.push_back(std::make_shared<Sprite_Obj>(tundra_tile_t));
+  //const Texture_Obj tundra_tile_t(tile_size, tile_size, 10, "tundra/snowTiles");
+  //tile_vec.push_back(std::make_shared<Sprite_Obj>(tundra_tile_t));
 
   //Load Old Ocean Tiles
-  const Texture_Obj old_ocean_tile_t(tile_size, tile_size, 10, "Biomes/old_ocean/oldoceanTiles");
+  const Texture_Obj old_ocean_tile_t(tile_size, tile_size, 10, "old_ocean/oldoceanTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(old_ocean_tile_t));
 
   // TO DO : Make each block load all resources of that biome
@@ -163,7 +165,7 @@ int main() {
 
     window.setView(player.get_View()); // TO DO : Need player view
     window.display();
-
+    std::cout << "Frame : " << frame++ << std::endl;
   }
   // Closed Game Loop
 

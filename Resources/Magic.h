@@ -2,11 +2,12 @@
 #define __MAGIC_H_INCLUDED__
 
 #include "Structures.h"
+#include "Biome.h"
 
 class Magic_Flowers;
 class Magic_Trees;
 
-class Magic {
+class Magic : public Biome {
 
   public:
 
@@ -15,6 +16,10 @@ class Magic {
       magic_trees_t_(160, 96, 2, "magic/magicTrees"),
       magic_flowers_(std::make_shared<Sprite_Obj>(magic_flowers_t_)),
       magic_trees_(std::make_shared<Sprite_Obj>(magic_trees_t_)) { }
+
+    const size_t perlins_needed() override { return 2; }
+    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
+                       const std::vector<std::vector<Biome_enum>>&, std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
 
   private:
 	
@@ -32,7 +37,7 @@ class Magic {
 
 };
 
-class Magic_Flowers : One_Piece {
+class Magic_Flowers : public One_Piece {
 
   public:
 	
@@ -42,7 +47,7 @@ class Magic_Flowers : One_Piece {
 
 };
 
-class Magic_Trees : One_Piece {
+class Magic_Trees : public One_Piece {
 
   public:
 	

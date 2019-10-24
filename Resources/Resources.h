@@ -79,8 +79,8 @@ class Resource {
     const float y() { return pos_y_; }
     void move(float x, float y) { pos_x_ += x; pos_y_ += y; }
 
-    virtual void draw(sf::RenderWindow&) = 0;
-    
+    virtual void draw(sf::RenderWindow& window) { }
+
   protected:
 
     float pos_x_, pos_y_;
