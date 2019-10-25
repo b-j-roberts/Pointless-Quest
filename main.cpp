@@ -71,7 +71,7 @@ int main() {
    *
    */
 
-  sf::Vector2u world_size(2000, 2000);
+  sf::Vector2u world_size(2048, 2048);
 
   World world;
   world.generate(world_size.x, world_size.y, tile_vec); 
@@ -132,6 +132,22 @@ int main() {
     //Other Input (Keyboard or window)
     while(window.pollEvent(event)) {
       switch(event.type) {
+
+        case sf::Event::KeyPressed:
+          if(event.key.code == sf::Keyboard::W) {
+            l_stick.y = -100;
+          }
+          if(event.key.code == sf::Keyboard::S) {
+            l_stick.y = 100;
+          }
+          if(event.key.code == sf::Keyboard::A) {
+            l_stick.x = -100;
+          }
+          if(event.key.code == sf::Keyboard::D) {
+            l_stick.x = 100;
+          }
+          break;
+
         case sf::Event::Closed:
       	  window.close();
 	        break;
