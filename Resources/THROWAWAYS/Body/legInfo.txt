@@ -1,3 +1,0 @@
-Connector Type: Top Position, XX YY; bottom position;
-02 01
-03 06
