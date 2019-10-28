@@ -22,10 +22,7 @@ class One_Piece : public Resource {
     //Disallow default constuction
     One_Piece() = delete;
 
-    // TO DO : Do I want to be able to copy these?
-    //Private Swap function
-    //void Swap(One_Piece&);
-    //Copy construction and Copy assignment
+    //NON Copy construction and Copy assignment
     One_Piece(const One_Piece&);
     One_Piece& operator= (const One_Piece&);
 
@@ -48,10 +45,7 @@ class Two_Piece_Vert : public Resource {
     //Disallow default construction
     Two_Piece_Vert() = delete;
 
-    // TO DO : Do I want to copy ? if so need to use pimpl idiom bc const members
-    //Private Swap function
-    //void Swap(Two_Piece_Vert&);
-    //Copy constuctor and Copy assignment
+    //NON Copy constuctor and Copy assignment
     Two_Piece_Vert(const Two_Piece_Vert&);
     Two_Piece_Vert& operator= (const Two_Piece_Vert&);
 

@@ -1,69 +1,63 @@
 #ifndef __RESOURCES_H_INCLUDED__
 #define __RESOURCES_H_INCLUDED__
 
-#include <iostream>
 #include <memory>
+#include <vector>
+#include <string>
 
 #include <SFML/Graphics.hpp>
-
-#include <string>
-#include <vector>
 
 class Sprite_Obj;
 class Texture_Obj;
 
+// Store texture info from a png file inside Resources/
 class Texture_Obj {
  
   //NOTES: Texture file should be a single row of all textures of a given type, all with the
   //       same size (ie width and height)
 
-  public:
+  //Disallow default constuction, copy constuction, and copy assignment
+  Texture_Obj() = delete;
+  Texture_Obj(const Texture_Obj&);
+  Texture_Obj& operator= (const Texture_Obj&);
+
+  const size_t height_, width_;
+  const size_t num_;
+  std::vector<sf::Texture> t_;
+
+  friend class Sprite_Obj;
+  
+public:
     
     //Create a texture object with parameters (height, width, num, name of file w/o .png, height offset (def 0), width offset (def 0))
     Texture_Obj(const size_t, const size_t, const size_t, std::string, const size_t = 0, const size_t = 0);
 
-  private:
-
-    //Disallow default constuction, copy constuction, and copy assignment
-    Texture_Obj() = delete;
-    Texture_Obj(const Texture_Obj&);
-    Texture_Obj& operator= (const Texture_Obj&);
-
-    const size_t height_, width_;
-    const size_t num_;
-    std::vector<sf::Texture> t_;
-
-
-    friend class Sprite_Obj;
-
 };
 
+// Holds sprites of provided textures
 class Sprite_Obj {
 
   //NOTE: This class is a friend of Texture_Obj and holds sprites of provided textures
   //      Origin should be the connection position, if it has one
 
-  public:
+  //Disallow default constuction, copy constuction, and copy assignment
+  Sprite_Obj() = delete;
+  Sprite_Obj(const Sprite_Obj&);
+  Sprite_Obj& operator= (const Sprite_Obj&);
 
-    //Create a sprite object with parameters (origin x, origin y, scale x, scale y, texture object)
-    Sprite_Obj(const size_t, const size_t, const double, const double, const Texture_Obj&);
+  std::vector<std::shared_ptr<sf::Sprite>> s_;
 
-    //Create a sprite object with origin at (0,0) and no scale with parameter (texture object)
-    Sprite_Obj(const Texture_Obj&);
+public:
+  //Create a sprite object with parameters (origin x, origin y, scale x, scale y, texture object)
+  Sprite_Obj(const size_t, const size_t, const double, const double, const Texture_Obj&);
 
-    //Method to get sprite in position (param)
-    std::shared_ptr<sf::Sprite> get_Ptr(const int); // TO DO : change to size_t
+  //Create a sprite object with origin at (0,0) and no scale with parameter (texture object)
+  Sprite_Obj(const Texture_Obj&);
 
-    size_t size() { return s_.size(); }
+  //Method to get sprite in position (param)
+  std::shared_ptr<sf::Sprite> get_Ptr(const int); // TO DO : change to size_t
 
-  private:
-    
-    //Disallow default constuction, copy constuction, and copy assignment
-    Sprite_Obj() = delete;
-    Sprite_Obj(const Sprite_Obj&);
-    Sprite_Obj& operator= (const Sprite_Obj&);
-
-    std::vector<std::shared_ptr<sf::Sprite>> s_;
+  size_t size() { return s_.size(); }
 
 };
 
@@ -77,7 +71,7 @@ class Resource {
 
     const float x() { return pos_x_; }
     const float y() { return pos_y_; }
-    void move(float x, float y) { pos_x_ += x; pos_y_ += y; }
+    void move(float x, float y) { pos_x_ += x; pos_y_ += y; } // TO DO : Make negative y?
 
     virtual void draw(sf::RenderWindow& window) { }
 
