@@ -29,8 +29,10 @@ class Texture_Obj {
   
 public:
     
-    //Create a texture object with parameters (height, width, num, name of file w/o .png, height offset (def 0), width offset (def 0))
-    Texture_Obj(const size_t, const size_t, const size_t, std::string, const size_t = 0, const size_t = 0);
+    //Create a texture object with parameters 
+    //  (height, width, num, name of file w/o .png, height offset (def 0), width offset (def 0))
+    Texture_Obj(const size_t, const size_t, const size_t, std::string, 
+                const size_t = 0, const size_t = 0);
 
 };
 

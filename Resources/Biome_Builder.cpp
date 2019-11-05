@@ -5,8 +5,16 @@
 #include "OldOcean.h"
 #include "Swamp.h"
 
-void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, size_t pos,
-                           const std::vector<std::vector<Biome_enum>>& biomes_map, std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+
+// TO DO : Scaling and tuning
+//         When is each state
+//         Some random ones outside of perlin range
+//         stacking resources checks
+//         layering of resources
+
+void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
+                           size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
+                           std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
 
   // TO DO : We skip one of the perlins because we are skipping the tile guy for now
 
@@ -17,26 +25,38 @@ void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
         int rnd = rand() % 100; // based on base 100 scale
         switch(all_perlin[pos + 1][i][j]) {
           case Top:
-            if(rnd > 95) resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this); // TO DO : Checking for stacking
-            else if(rnd > 87) resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
-            else if(rnd > 80) resource_map[i][j] = std::make_shared<Forest_Bush>(i * 32, j * 32, *this);
-            else if(rnd > 70) resource_map[i][j] = std::make_shared<Forest_Moss>(i * 32, j * 32, *this); // TO DO : Layering
+            if(rnd > 95) 
+              resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 87) 
+              resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 80) 
+              resource_map[i][j] = std::make_shared<Forest_Bush>(i * 32, j * 32, *this);
+            else if(rnd > 70) 
+              resource_map[i][j] = std::make_shared<Forest_Moss>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Middle:
-            if(rnd > 98) resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this); // TO DO : Checking for stacking
-            else if(rnd > 95) resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
-            else if(rnd > 90) resource_map[i][j] = std::make_shared<Forest_Bush>(i * 32, j * 32, *this);
-            else if(rnd > 85) resource_map[i][j] = std::make_shared<Forest_Moss>(i * 32, j * 32, *this); // TO DO : Layering
+            if(rnd > 98) 
+              resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 95) 
+              resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 90) 
+              resource_map[i][j] = std::make_shared<Forest_Bush>(i * 32, j * 32, *this);
+            else if(rnd > 85) 
+              resource_map[i][j] = std::make_shared<Forest_Moss>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Bottom:
-            if(rnd > 98) resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this); // TO DO : Checking for stacking
-            else if(rnd > 97) resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
-            else if(rnd > 96) resource_map[i][j] = std::make_shared<Forest_Bush>(i * 32, j * 32, *this);
-            else if(rnd > 94) resource_map[i][j] = std::make_shared<Forest_Moss>(i * 32, j * 32, *this); // TO DO : Layering
+            if(rnd > 98) 
+              resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 97) 
+              resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 96) 
+              resource_map[i][j] = std::make_shared<Forest_Bush>(i * 32, j * 32, *this);
+            else if(rnd > 94) 
+              resource_map[i][j] = std::make_shared<Forest_Moss>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
@@ -50,8 +70,9 @@ void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
 
 }
 
-void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, size_t pos,
-                           const std::vector<std::vector<Biome_enum>>& biomes_map, std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin,
+                          size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
+                          std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
 
   // Flower Layer
   for(size_t i = 0; i < biomes_map.size(); ++i) {
@@ -60,17 +81,20 @@ void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
         int rnd = rand() % 100;
         switch(all_perlin[pos][i][j]) {
           case Top:
-            if(rnd > 85) resource_map[i][j] = std::make_shared<Magic_Flowers>(i * 32, j * 32, *this);
+            if(rnd > 85) 
+              resource_map[i][j] = std::make_shared<Magic_Flowers>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Middle:
-            if(rnd > 95) resource_map[i][j] = std::make_shared<Magic_Flowers>(i * 32, j * 32, *this);
+            if(rnd > 95) 
+              resource_map[i][j] = std::make_shared<Magic_Flowers>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Bottom:
-            if(rnd > 98) resource_map[i][j] = std::make_shared<Magic_Flowers>(i * 32, j * 32, *this);
+            if(rnd > 98) 
+              resource_map[i][j] = std::make_shared<Magic_Flowers>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
@@ -90,17 +114,20 @@ void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
         int rnd = rand() % 100;
         switch(all_perlin[pos + 1][i][j]) {
           case Top:
-            if(rnd > 90) resource_map[i][j] = std::make_shared<Magic_Trees>(i * 32, j * 32, *this);
+            if(rnd > 90) 
+              resource_map[i][j] = std::make_shared<Magic_Trees>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Middle:
-            if(rnd > 95) resource_map[i][j] = std::make_shared<Magic_Trees>(i * 32, j * 32, *this);
+            if(rnd > 95) 
+              resource_map[i][j] = std::make_shared<Magic_Trees>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Bottom:
-            if(rnd > 99) resource_map[i][j] = std::make_shared<Magic_Trees>(i * 32, j * 32, *this);
+            if(rnd > 98) 
+              resource_map[i][j] = std::make_shared<Magic_Trees>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
@@ -114,8 +141,9 @@ void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
 
 }
 
-void Desert::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, size_t pos,
-                           const std::vector<std::vector<Biome_enum>>& biomes_map, std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Desert::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
+                           size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
+                           std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
 
   // Cactus Layer
   for(size_t i = 0; i < biomes_map.size(); ++i) {
@@ -124,17 +152,20 @@ void Desert::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
         int rnd = rand() % 100;
         switch(all_perlin[pos][i][j]) {
           case Top:
-            if(rnd > 90) resource_map[i][j] = std::make_shared<Desert_Cactus>(i * 32, j * 32, *this);
+            if(rnd > 90) 
+              resource_map[i][j] = std::make_shared<Desert_Cactus>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Middle:
-            if(rnd > 95) resource_map[i][j] = std::make_shared<Desert_Cactus>(i * 32, j * 32, *this);
+            if(rnd > 95) 
+              resource_map[i][j] = std::make_shared<Desert_Cactus>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Bottom:
-            if(rnd > 99) resource_map[i][j] = std::make_shared<Desert_Cactus>(i * 32, j * 32, *this);
+            if(rnd > 98) 
+              resource_map[i][j] = std::make_shared<Desert_Cactus>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
@@ -148,10 +179,11 @@ void Desert::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
 
 }
 
-void Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, size_t pos,
-                           const std::vector<std::vector<Biome_enum>>& biomes_map, std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
+                          size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
+                          std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
 
-  // There are currently no resources with this biome so we will just fill map with default resource objects
+  // There are currently no resources with this biome so just fill map with default resource objects
   for(size_t i = 0; i < biomes_map.size(); ++i) {
     for(size_t j = 0; j < biomes_map[i].size(); ++j) {
       if(biomes_map[i][j] == Ocean_) {
@@ -162,17 +194,19 @@ void Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
 
 }
 
-void Old_Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, size_t pos,
-                           const std::vector<std::vector<Biome_enum>>& biomes_map, std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Old_Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
+                              size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
+                              std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
 
   // Bones Layer (Note : does not use perlin)
   for(size_t i = 0; i < biomes_map.size(); ++i) {
     for(size_t j = 0; j < biomes_map[i].size(); ++j) {
       if(biomes_map[i][j] == Unocean_) {
         int rnd = rand() % 100;
-        if(rnd > 98) resource_map[i][j] = std::make_shared<Old_Ocean_Large_Fish>(i * 32, j * 32, *this); // TO DO : Use unique_ptr and nullptr for none, check for nullptr
-                                                                                                         //         in draw and other spots
-        else if(rnd > 95) resource_map[i][j] = std::make_shared<Old_Ocean_Small_Fish>(i * 32, j * 32, *this);
+        if(rnd > 98) 
+          resource_map[i][j] = std::make_shared<Old_Ocean_Large_Fish>(i * 32, j * 32, *this);
+        else if(rnd > 95) 
+          resource_map[i][j] = std::make_shared<Old_Ocean_Small_Fish>(i * 32, j * 32, *this);
         else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
       }
     }
@@ -180,8 +214,9 @@ void Old_Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>
 
 }
 
-void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, size_t pos,
-                           const std::vector<std::vector<Biome_enum>>& biomes_map, std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
+                          size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
+                          std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
 
   // Trees Layer
   for(size_t i = 0; i < biomes_map.size(); ++i) {
@@ -190,20 +225,26 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
         int rnd = rand() % 100;
         switch(all_perlin[pos][i][j]) {
           case Top:
-            if(rnd > 95) resource_map[i][j] = std::make_shared<Swamp_Tree>(i * 32, j * 32, *this);
-            else if(rnd > 91) resource_map[i][j] = std::make_shared<Swamp_Spikes>(i * 32, j * 32, *this);
+            if(rnd > 95) 
+              resource_map[i][j] = std::make_shared<Swamp_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 91) 
+              resource_map[i][j] = std::make_shared<Swamp_Spikes>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Middle:
-            if(rnd > 97) resource_map[i][j] = std::make_shared<Swamp_Tree>(i * 32, j * 32, *this);
-            else if(rnd > 93) resource_map[i][j] = std::make_shared<Swamp_Spikes>(i * 32, j * 32, *this);
+            if(rnd > 97) 
+              resource_map[i][j] = std::make_shared<Swamp_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 93) 
+              resource_map[i][j] = std::make_shared<Swamp_Spikes>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Bottom:
-            if(rnd > 98) resource_map[i][j] = std::make_shared<Swamp_Tree>(i * 32, j * 32, *this);
-            else if(rnd > 95) resource_map[i][j] = std::make_shared<Swamp_Spikes>(i * 32, j * 32, *this);
+            if(rnd > 98) 
+              resource_map[i][j] = std::make_shared<Swamp_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 95) 
+              resource_map[i][j] = std::make_shared<Swamp_Spikes>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
@@ -225,11 +266,9 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
             break;
 /*
           case Middle:
-            if(rnd > 95) resource_map[i][j] = std::make_shared<Resource>(Magic_Flowers(i * 32, j * 32, *this));
             break;
 
           case Bottom:
-            if(rnd > 98) resource_map[i][j] = std::make_shared<Resource>(Magic_Flowers(i * 32, j * 32, *this));
             break;
 */
           default: 
@@ -247,17 +286,20 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
         int rnd = rand() % 100;
         switch(all_perlin[pos + 2][i][j]) {
           case Top:
-            if(rnd > 92) resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
+            if(rnd > 92) 
+              resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Middle:
-            if(rnd > 96) resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
+            if(rnd > 96) 
+              resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 
           case Bottom:
-            if(rnd > 98) resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
+            if(rnd > 98) 
+              resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
             else resource_map[i][j] = std::make_shared<Resource>(i * 32, j * 32);
             break;
 

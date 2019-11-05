@@ -34,9 +34,11 @@ class Two_Piece_Vert : public Resource {
   
   public:
 
-    //Create a 2 piece vertically connected object with parameters (position x, position y, bot to top connector position x,
-    //                                                              bot to top connector position y, sprite pointer bot, sprite pointer top)
-    Two_Piece_Vert(const float, const float, const size_t, const size_t, std::shared_ptr<sf::Sprite>, std::shared_ptr<sf::Sprite>);
+    //Create a 2 piece vertically connected object with parameters 
+    //  (position x, position y, bot to top connector position x,
+    //   bot to top connector position y, sprite pointer bot, sprite pointer top)
+    Two_Piece_Vert(const float, const float, const size_t, const size_t, 
+                   std::shared_ptr<sf::Sprite>, std::shared_ptr<sf::Sprite>);
     
     void draw(sf::RenderWindow&) override;
 

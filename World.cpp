@@ -3,6 +3,7 @@
 //static members
 constexpr Biome_enum World::biomes_[4];
 
+//returns minumum power of mult greater than num
 int get_Min_Power(int num, int mult) {
   int ret = mult;
   while(ret < num) {
@@ -10,55 +11,6 @@ int get_Min_Power(int num, int mult) {
   }
   return ret;
 }
-
-/*
-double inter_Point_Triangle_TL(double height_one, double height_two, double height_three, int pos_x, int pos_y, int leg_length) {
-  return height_one + ((height_two - height_one) / leg_length) * pos_x + ((height_three - height_one) / leg_length) * pos_y;
-}
-
-double inter_Point_Triangle_BR(double height_one, double height_two, double height_three, int pos_x, int pos_y, int leg_length) {
-  return height_three + height_two - height_one + ((height_one - height_two) / leg_length) * pos_x + ((height_one - height_three) / leg_length) * pos_y;
-}
-
-std::vector<std::vector<double>> get_Perlin_2D (size_t width, size_t height) {
-
-  size_t maximum = (width < height ? height : width);
-  int two_mult = get_Min_Power(maximum, 2);
-
-  std::vector<std::vector<double>> rand_noise(two_mult);
-  for(size_t i = 0; i < two_mult; ++i) {
-    std::vector<double> rand_row(two_mult);
-    for(size_t j = 0; j < two_mult; ++j) {
-      rand_row[j] = static_cast<double>(rand() % 100);
-    }
-    rand_noise[i].swap(rand_row);
-  }
-
-  std::vector<double> zero_vec(two_mult, 0);
-  std::vector<std::vector<double>> perlin(two_mult, zero_vec);
-
-  
-  for(int i = 2; i <= two_mult; i*=2) {
-    int sub_div = two_mult / i;
-    for(int j = 0; j < two_mult; j += sub_div) {
-      for(int k = 0; k < two_mult; k += sub_div) {
-        perlin[j][k] += (1.f / i) * rand_noise[j][k];
-      	for(int l = k - sub_div; l < k && k > 0 && j > 0; l++) {
-          for(int m = j - sub_div; m < j; m++) {
-            int current_x = m - j + sub_div;
-	          int current_y = l - k - sub_div;
-	          if(current_x <= sub_div - current_y) perlin[m][l] += inter_Point_Triangle_TL(rand_noise[j - sub_div][k - sub_div], rand_noise[j - sub_div][k],
-			                                                                                   rand_noise[j][k - sub_div], current_x, current_y, sub_div);
-	          else perlin[m][l] += inter_Point_Triangle_BR(rand_noise[j][k], rand_noise[j][k - sub_div], rand_noise[j - sub_div][k], current_x, current_y, sub_div);
-	        }
-       	}
-      }
-    } 
-  } 
-
-  return perlin;
-}
-*/
 
 struct point_3D {
 
@@ -68,27 +20,34 @@ struct point_3D {
 
 };
 
+// return height of point at pos on line with points (start , height_1) & (end , height_2)
 double line_calc(size_t pos, double start, double end, double height_1, double height_2) {
 
   double m = (height_2 - height_1) / (end - start);
   return m * ( pos - end ) + height_1;
 }
 
-double height_calc(size_t x, size_t y, const point_3D& corner_1, const point_3D& corner_2, const point_3D& center) {
+// returns height of point (x , y) in 3D space on place with 3 points corner_1, 2, & 3
+double height_calc(size_t x, size_t y, const point_3D& corner_1, 
+                   const point_3D& corner_2, const point_3D& center) {
 
-  double a = (corner_1.y - center.y) * (corner_2.z - center.z) - (corner_2.y - center.y) * (corner_1.z - center.z);
-  double b = (corner_1.z - center.z) * (corner_2.x - center.x) - (corner_2.z - center.z) * (corner_1.x - center.x);
-  double c = (corner_1.x - center.x) * (corner_2.y - center.y) - (corner_2.x - center.x) * (corner_1.y - center.y);
+  double a = (corner_1.y - center.y) * (corner_2.z - center.z) - 
+             (corner_2.y - center.y) * (corner_1.z - center.z);
+  double b = (corner_1.z - center.z) * (corner_2.x - center.x) - 
+             (corner_2.z - center.z) * (corner_1.x - center.x);
+  double c = (corner_1.x - center.x) * (corner_2.y - center.y) - 
+             (corner_2.x - center.x) * (corner_1.y - center.y);
   double d = -1 * (a * center.x + b * center.y + c * center.z);
 
   return -1 * (a * (double)x - b * (double)y + d) / c;
 }
 
+// returns true if (x , y) in bottom right triangle of square with bottom-left point bl
 bool is_under(size_t x, size_t y, const point_3D& bl) {
-
   return (-1 * (double)y) < ((double)x + bl.y - bl.x);
 }
 
+// return a perlin-ish 2D vector with width and height as specified ( must be power of 2 )
 std::vector<std::vector<double>> sudo_perlin_2D(size_t width, size_t height) {
 
   std::vector<double> empty_vec(width + 1, 0);
@@ -147,6 +106,7 @@ std::vector<std::vector<double>> sudo_perlin_2D(size_t width, size_t height) {
 
 }
 
+// return max value in 2D vector
 template <typename T>
 T max_2D(const std::vector<std::vector<T>>& vec) {
   
@@ -163,6 +123,7 @@ T max_2D(const std::vector<std::vector<T>>& vec) {
   return max;
 }
 
+// normalizes 2D vector ( ie scales so max val is 1 ) using max_2D funtion
 void normalize_2D(std::vector<std::vector<double>>& vec) {
   
   double max = max_2D(vec);
@@ -176,17 +137,7 @@ void normalize_2D(std::vector<std::vector<double>>& vec) {
 
 }
 
-// TO DO : Move this to an include function file somewhere in the future
-template <typename T1, typename T2>
-decltype(auto) max(T1 a, T2 b) {
-  return (a < b ? b : a);
-}
-
-template <typename T1, typename T2>
-decltype(auto) min(T1 a, T2 b) {
-  return (a > b ? b : a);
-}
-
+// returns the avg value about vec[i][j] with square radius rad
 double avg_abt_2D(const std::vector<std::vector<double>>& vec, size_t i, size_t j, size_t rad) {
 
   double avg = 0;
@@ -204,6 +155,7 @@ double avg_abt_2D(const std::vector<std::vector<double>>& vec, size_t i, size_t 
 
 };
 
+// smooths vec by making each value equal to the average about it with square radius smooth_rad
 void smooth_2D(std::vector<std::vector<double>>& vec, size_t smooth_rad) {
 
   size_t w = vec.size();
@@ -221,7 +173,10 @@ void smooth_2D(std::vector<std::vector<double>>& vec, size_t smooth_rad) {
 
 };
 
+// return generated biome 2D vector with biome_enum values for biome 
 std::vector<std::vector<Biome_enum>> World::get_Biomes(size_t width, size_t height) {
+
+  // TO DO : Use get_Min_Power on width and height
 
   std::vector<std::vector<double>> tile_heights = sudo_perlin_2D(width, height);
   normalize_2D(tile_heights);
@@ -247,7 +202,9 @@ std::vector<std::vector<Biome_enum>> World::get_Biomes(size_t width, size_t heig
 
 }
 
-std::vector<std::vector<state>> get_States(size_t width, size_t height, double top_cutoff, double bot_cutoff) {
+// get a sudo perlin for states with cutoffs of state values specified 
+std::vector<std::vector<state>> get_States(size_t width, size_t height, 
+                                           double top_cutoff, double bot_cutoff) {
 
   std::vector<std::vector<double>> tile_heights = sudo_perlin_2D(width, height);
   normalize_2D(tile_heights);
@@ -267,7 +224,9 @@ std::vector<std::vector<state>> get_States(size_t width, size_t height, double t
   
 }
 
-void World::generate(size_t width, size_t height, const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec) {
+// Generates the entire world [ biomes (tiles , resources)
+void World::generate(size_t width, size_t height, 
+                     const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec) {
 
   // Loading Biomes Sprites and Textures
   biomes[0] = std::make_unique<BiomeType<biomes_[0]>::type>();
@@ -320,19 +279,20 @@ void World::generate(size_t width, size_t height, const std::vector<std::shared_
 
 }
 
+// Draw part of world in view of player to window
 void World::draw(sf::RenderWindow& window, const Player& player) {
 
   auto size = player.get_View().getSize();
   auto center = player.get_View().getCenter();
 
-  int world_size_i = tile_map_.size();
-  int world_size_j = tile_map_[0].size();
+  const int world_size_i = tile_map_.size();
+  const int world_size_j = tile_map_[0].size();
 
-  int begin_i = max(0, center.x - (size.x / 2) - 64) / 32;
-  int end_i = min(max(0, (center.x + (size.x / 2) + 64) / 32), world_size_i);
+  int begin_i = max(0, center.x - (size.x / 2) - 512) / 32;
+  int end_i = min(max(0, (center.x + (size.x / 2) + 512) / 32), world_size_i);
 
-  int begin_j = max(0, center.y - (size.y / 2) - 64) / 32;
-  int end_j = min(max(0, (center.y + (size.y / 2) + 64) / 32), world_size_j);
+  int begin_j = max(0, center.y - (size.y / 2) - 512) / 32;
+  int end_j = min(max(0, (center.y + (size.y / 2) + 512) / 32), world_size_j);
 
   // Draw Tiles in view
   for(int i = begin_i; i < end_i; ++i) {
@@ -345,8 +305,8 @@ void World::draw(sf::RenderWindow& window, const Player& player) {
   player.draw(window);
 
   //Draw Resources in view
-  for(int i = begin_i; i < end_i; ++i) {
-    for(int j = begin_j; j < end_j; ++j) {                                                                                       
+  for(int j = begin_j; j < end_j; ++j) {
+    for(int i = begin_i; i < end_i; ++i) {
       resource_map_[i][j]->draw(window);
     }
   }
@@ -356,6 +316,7 @@ void World::draw(sf::RenderWindow& window, const Player& player) {
 bool collision(const Player& player) { 
 	// TO DO
   return false;
-  //run through resources close to player and return true if any resource returns true on a call to Resource.collision(player)
+  //run through resources close to player and return true if any resource returns true 
+  //  on a call to Resource.collision(player)
 
 }

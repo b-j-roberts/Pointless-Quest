@@ -14,20 +14,21 @@ class Swamp : public Biome {
   public:
  
     Swamp():
-      swamp_reeds_t_(32, 32, 2, "swamp/SwampReeds.png"),
-      swamp_spikes_t_(32, 32, 3, "swamp/SwampSpikes.png"),
-      swamp_tree_bot_t_(128, 64, 3, "swamp/SwampTreeBottom.png"),
-      swamp_tree_top_t_(128, 64, 2, "swamp/SwampTreeTop.png"),
-      swamp_water_t_(32, 32, 10, "swamp/SwampWater.png"),
-      swamp_reeds_(std::make_shared<Sprite_Obj>(swamp_reeds_t_)),
-      swamp_spikes_(std::make_shared<Sprite_Obj>(swamp_spikes_t_)),
-      swamp_tree_bot_(std::make_shared<Sprite_Obj>(swamp_tree_bot_t_)),
-      swamp_tree_top_(std::make_shared<Sprite_Obj>(swamp_tree_top_t_)),
+      swamp_reeds_t_(32, 32, 2, "Biomes/swamp/SwampReeds.png"),
+      swamp_spikes_t_(32, 32, 3, "Biomes/swamp/SwampSpikes.png"),
+      swamp_tree_bot_t_(128, 64, 3, "Biomes/swamp/SwampTreeBottom.png"),
+      swamp_tree_top_t_(128, 64, 2, "Biomes/swamp/SwampTreeTop.png"),
+      swamp_water_t_(32, 32, 10, "Biomes/swamp/SwampWater.png"),
+      swamp_reeds_(std::make_shared<Sprite_Obj>(15, 31, 1.2, 1.2, swamp_reeds_t_)),
+      swamp_spikes_(std::make_shared<Sprite_Obj>(15, 31, 1, 1, swamp_spikes_t_)),
+      swamp_tree_bot_(std::make_shared<Sprite_Obj>(31, 127, 1, 1, swamp_tree_bot_t_)),
+      swamp_tree_top_(std::make_shared<Sprite_Obj>(31, 127, 1, 1, swamp_tree_top_t_)),
       swamp_water_(std::make_shared<Sprite_Obj>(swamp_water_t_)) {}
 
     const size_t perlins_needed() override { return 3; }
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
-                       const std::vector<std::vector<Biome_enum>>&, std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
+                       const std::vector<std::vector<Biome_enum>>&, 
+                       std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
 
   private:
 
@@ -78,7 +79,7 @@ class Swamp_Tree : public Two_Piece_Vert {
   public:
 
     Swamp_Tree(const float pos_x, const float pos_y, const Swamp& swamp):
-      Two_Piece_Vert(pos_x, pos_y, 0, 128,
+      Two_Piece_Vert(pos_x, pos_y, 0, 120,
                      swamp.swamp_tree_bot_->get_Ptr(rand() % swamp.swamp_tree_bot_->size()),
                      swamp.swamp_tree_top_->get_Ptr(rand() % swamp.swamp_tree_top_->size())) { }
 

@@ -1,7 +1,7 @@
 main: main.o
-	g++ main.o World.o Player.o Resources/Biome_Builder.o Resources/Resources.o Resources/Structures.o -o main -lsfml-graphics -lsfml-window -lsfml-system
+	g++ main.o World.o Player.o Map.o Resources/Biome_Builder.o Resources/Resources.o Resources/Structures.o -o main -lsfml-graphics -lsfml-window -lsfml-system
 
-main.o: main.cpp Resources/Resources.o Resources/Structures.o Resources/Biome_Builder.o World.o Player.o 
+main.o: main.cpp Resources/Resources.o Resources/Structures.o Resources/Biome_Builder.o World.o Player.o Map.o
 	g++ -c main.cpp -ggdb -o main.o
 
 Resources/Resources.o:
@@ -19,5 +19,8 @@ Player.o: Resources/Resources.o
 World.o: Player.o Resources/Biome_Builder.o
 	g++ -c World.cpp -ggdb -o World.o
 
+Map.o: World.o
+	g++ -c Map.cpp -ggdb -o Map.o
+
 clean:
-	rm Player.o World.o Resources/Resources.o Resources/Structures.o Resources/Biome_Builder.o main.o main
+	rm Player.o World.o Map.o Resources/Resources.o Resources/Structures.o Resources/Biome_Builder.o main.o main

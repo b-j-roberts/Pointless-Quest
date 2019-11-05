@@ -10,7 +10,8 @@ void One_Piece::draw(sf::RenderWindow& window) {
 }
 
 Two_Piece_Vert::Two_Piece_Vert(const float pos_x, const float pos_y, const size_t bot_conn_x,
-	               	   const size_t bot_conn_y, std::shared_ptr<sf::Sprite> bot, std::shared_ptr<sf::Sprite> top):
+	               	             const size_t bot_conn_y, std::shared_ptr<sf::Sprite> bot, 
+                               std::shared_ptr<sf::Sprite> top):
   Resource(pos_x, pos_y),
   top_pos_x_(static_cast<float>(bot_conn_x)),
   top_pos_y_(static_cast<float>(bot_conn_y)),

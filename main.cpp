@@ -1,10 +1,10 @@
 #include <SFML/Window/Joystick.hpp>
 
-#include "World.h"
+#include "Map.h"
 #include "Resources/Structures.h"
 #include "Player.h"
 
-size_t frame = 0;
+#include <iostream> // TO DO : debug
 
 int main() {
 
@@ -27,37 +27,37 @@ int main() {
    *
    *
    */
-
-  std::vector<std::shared_ptr<Sprite_Obj>> tile_vec; // TO DO : reserve 4 for the 4 loaded lile textures (in some standardized order, ie bottom to top)
+  // TO DO : reserve 4 for the 4 loaded lile textures (in some standardized order, ie bottom to top)
+  std::vector<std::shared_ptr<Sprite_Obj>> tile_vec; 
 
   // TO DO : Check if number of tiles in each biome is correct
 
   //Load Forest Tiles
-  const Texture_Obj forest_tile_t(tile_size, tile_size, 10, "forest/Tiles");
+  const Texture_Obj forest_tile_t(tile_size, tile_size, 10, "Biomes/forest/Tiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(forest_tile_t));
   
   //Load Desert Tiles
-  const Texture_Obj desert_tile_t(tile_size, tile_size, 10, "desert/sandTiles");
+  const Texture_Obj desert_tile_t(tile_size, tile_size, 10, "Biomes/desert/sandTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(desert_tile_t));
 
   //Load Magic Tiles
-  const Texture_Obj magic_tile_t(tile_size, tile_size, 7, "magic/magicTiles");
+  const Texture_Obj magic_tile_t(tile_size, tile_size, 7, "Biomes/magic/magicTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(magic_tile_t));
 
   //Load Ocean Tiles
-  const Texture_Obj ocean_tile_t(tile_size, tile_size, 4, "ocean/waterTiles");
+  const Texture_Obj ocean_tile_t(tile_size, tile_size, 4, "Biomes/ocean/waterTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(ocean_tile_t));
 
   //Load Swamp Tiles
-  const Texture_Obj swamp_tile_t(tile_size, tile_size, 10, "swamp/SwampTiles");
+  const Texture_Obj swamp_tile_t(tile_size, tile_size, 10, "Biomes/swamp/SwampTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(swamp_tile_t));
 
   //Load Tundra Tiles
-  //const Texture_Obj tundra_tile_t(tile_size, tile_size, 10, "tundra/snowTiles");
+  //const Texture_Obj tundra_tile_t(tile_size, tile_size, 10, "Biomes/tundra/snowTiles");
   //tile_vec.push_back(std::make_shared<Sprite_Obj>(tundra_tile_t));
 
   //Load Old Ocean Tiles
-  const Texture_Obj old_ocean_tile_t(tile_size, tile_size, 10, "old_ocean/oldoceanTiles");
+  const Texture_Obj old_ocean_tile_t(tile_size, tile_size, 10, "Biomes/old_ocean/oldoceanTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(old_ocean_tile_t));
 
   // TO DO : Make each block load all resources of that biome
@@ -79,6 +79,10 @@ int main() {
   Player player(x_scale, tile_size);
 
   // TO DO : LOG WORLD COMPLETION
+  
+  // MAP
+  Map map(player); // TO DO : All drawables need pointer to player
+                   //         In update step to player, calculate begin and end view points
   
   /*
    *
@@ -177,11 +181,11 @@ int main() {
 
     window.clear();
 
-    world.draw(window, player); // TO DO : Make player (also view?)
+    world.draw(window, player);
+    map.draw(window, world, player);
 
-    window.setView(player.get_View()); // TO DO : Need player view
+    window.setView(player.get_View());
     window.display();
-    std::cout << "Frame : " << frame++ << std::endl;
   }
   // Closed Game Loop
 

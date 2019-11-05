@@ -8,12 +8,12 @@
 class Player;
 
 class Body : public Resource {
-  // TO DO : Create body class for player with draw function, include pos_x_ and pos_y_ members
+  // TO DO : Create body class for player with draw function
   public:
     void draw(sf::RenderWindow& window) override { //Placeholder
     }
     
-    void update(float, float, float);
+    void update(float, float);
 
     Body(): Resource(1000 * 32, 1000 * 32), angle_(0) { } // TO DO : Set default position
 
@@ -29,7 +29,8 @@ class Player {
 
     //Default, places body at position (0,0) with (x_scale, tilesize) by param
     explicit Player(float, int);
-    //Constructor placing body at position and args (x_scale, tile_size, pos_x, pos_y), passed arguments
+    //Constructor placing body at position and args 
+    //  (x_scale, tile_size, pos_x, pos_y), passed arguments
     Player(float, int, float, float);
 
     //Update function for state of player, for now just changes position and 
@@ -37,7 +38,6 @@ class Player {
     void update(float, float, float, float);
     void draw(sf::RenderWindow& window) const { body_->draw(window); }
     sf::View get_View() const { return view_; }
-
 
   private:
   
