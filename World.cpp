@@ -264,8 +264,9 @@ void World::generate(size_t width, size_t height,
   // Other ?
 
   resource_map_.resize(h);
+  std::vector<std::shared_ptr<Resource>> null_tile_vec(biomes_map[0].size(), nullptr);
   for(int i = 0; i < h; ++i) {
-    resource_map_[i].resize(biomes_map[i].size());
+    resource_map_[i] = null_tile_vec;
   }
 
   size_t pos = 0; 
@@ -307,7 +308,7 @@ void World::draw(sf::RenderWindow& window, const Player& player) {
   //Draw Resources in view
   for(int j = begin_j; j < end_j; ++j) {
     for(int i = begin_i; i < end_i; ++i) {
-      resource_map_[i][j]->draw(window);
+      if(resource_map_[i][j]) resource_map_[i][j]->draw(window); // ignores nullptr
     }
   }
 

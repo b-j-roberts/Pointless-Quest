@@ -6,6 +6,7 @@
 class Map {
 
   sf::RectangleShape background_;
+  size_t pos_x_, pos_y_;
   size_t width_, height_;
 
 public:

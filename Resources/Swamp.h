@@ -14,11 +14,11 @@ class Swamp : public Biome {
   public:
  
     Swamp():
-      swamp_reeds_t_(32, 32, 2, "Biomes/swamp/SwampReeds.png"),
-      swamp_spikes_t_(32, 32, 3, "Biomes/swamp/SwampSpikes.png"),
-      swamp_tree_bot_t_(128, 64, 3, "Biomes/swamp/SwampTreeBottom.png"),
-      swamp_tree_top_t_(128, 64, 2, "Biomes/swamp/SwampTreeTop.png"),
-      swamp_water_t_(32, 32, 10, "Biomes/swamp/SwampWater.png"),
+      swamp_reeds_t_(32, 32, 2, "Biomes/swamp/SwampReeds"),
+      swamp_spikes_t_(32, 32, 3, "Biomes/swamp/SwampSpikes"),
+      swamp_tree_bot_t_(128, 64, 3, "Biomes/swamp/SwampTreeBottom"),
+      swamp_tree_top_t_(128, 64, 2, "Biomes/swamp/SwampTreeTop"),
+      swamp_water_t_(32, 32, 10, "Biomes/swamp/SwampWater"),
       swamp_reeds_(std::make_shared<Sprite_Obj>(15, 31, 1.2, 1.2, swamp_reeds_t_)),
       swamp_spikes_(std::make_shared<Sprite_Obj>(15, 31, 1, 1, swamp_spikes_t_)),
       swamp_tree_bot_(std::make_shared<Sprite_Obj>(31, 127, 1, 1, swamp_tree_bot_t_)),
