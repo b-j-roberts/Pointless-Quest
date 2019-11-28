@@ -11,6 +11,9 @@ class Ocean : public Biome {
 
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
                        const std::vector<std::vector<Biome_enum>>&, 
+                       const std::vector<std::shared_ptr<Sprite_Obj>>&,
+                       std::vector<std::vector<std::shared_ptr<Tile>>>&,
+                       const std::vector<std::vector<state>>&,
                        std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
 
   private:

@@ -11,15 +11,14 @@
 class Sprite_Obj; // Forward Declaration
 class Resource; // Forward Declaration (see into using with class template)
 class Map; // Forward Declare friend
-
-// TO DO : Make tile a resource and combine tile map with resource map ? 
-
-struct Tile {
+/*
+struct Tile { // Layer 0 Resource
 
   const Biome_enum biome_;
 
   const size_t tile_id_;
-
+  // TO DO : Is water variable?
+  
   std::shared_ptr<sf::Sprite> sprite_;
  
   Tile(Biome_enum biome, std::shared_ptr<Sprite_Obj> sprite_obj):
@@ -28,7 +27,7 @@ struct Tile {
     sprite_(sprite_obj->get_Ptr(tile_id_)) { } 	
  
 };
-
+*/
 class World {
   
   public:
@@ -52,12 +51,13 @@ class World {
 
     std::vector<std::vector<Biome_enum>> get_Biomes(size_t width, size_t height);
 
-    static constexpr Biome_enum biomes_[4] = { Magic_, Swamp_, Desert_, Ocean_ }; 
-                                               // Top,     Mid,     Bot,    Liq
+    static constexpr Biome_enum biomes_[4] = { Magic_, Forest_, Desert_, Ocean_ }; 
+                                               // Top,    Mid,     Bot,    Liq
     std::unique_ptr<Biome> biomes[4];
 
     //Index is map location divided by 32 (tile width) mapped to Tile object 
     //  (contains sprite and biome info) in that location
+    // Layer 0 of resources
     std::vector<std::vector<std::shared_ptr<Tile>>> tile_map_; // TO DO: Use shared_ptr?
     //location to mapped resource
     std::vector<std::vector<std::shared_ptr<Resource>>> resource_map_;

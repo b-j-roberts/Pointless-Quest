@@ -1,7 +1,5 @@
 #include "Map.h"
 
-#include <iostream> // TO DO : Debug
-
 Map::Map(const Player& player) {
  
   auto size = player.get_View().getSize();
@@ -30,13 +28,6 @@ void Map::draw(sf::RenderWindow& window, const World& world, const Player& playe
   background_.setPosition(begin_i + pos_x_, begin_j + pos_y_);
   window.draw(background_);
 
-  // TO DO : Create these colors in the biomes?
-  sf::Color forest_map_color(sf::Color(0, 250, 0, 255));
-  sf::Color ocean_map_color(sf::Color(0, 0, 250, 255));
-  sf::Color magic_map_color(sf::Color(125, 0, 125, 255));
-  sf::Color desert_map_color(sf::Color(140, 100, 0, 255));
-  sf::Color swamp_map_color(sf::Color(0, 128, 128, 255));
-
   // TO DO : Use window size to determine size of map drawn
   sf::RectangleShape map_pixel;
   map_pixel.setSize(sf::Vector2f(1, 1));
@@ -50,30 +41,38 @@ void Map::draw(sf::RenderWindow& window, const World& world, const Player& playe
                                          begin_j + pos_y_ + j - offset_y));
       switch(world.tile_map_[i][j]->biome_) {
         case Magic_:
-          map_pixel.setFillColor(magic_map_color);
+          map_pixel.setFillColor(magic_map_color_);
           break;
 
         case Forest_:
-          map_pixel.setFillColor(forest_map_color);
+          map_pixel.setFillColor(forest_map_color_);
           break;
 
         case Desert_:
-          map_pixel.setFillColor(desert_map_color);
+          map_pixel.setFillColor(desert_map_color_);
           break;
 
         case Ocean_:
-          map_pixel.setFillColor(ocean_map_color);
+          map_pixel.setFillColor(ocean_map_color_);
           break;
 
         case Swamp_:
-          map_pixel.setFillColor(swamp_map_color);
+          map_pixel.setFillColor(swamp_map_color_);
+          break;
+
+        case Unocean_:
+          map_pixel.setFillColor(unocean_map_color_);
           break;
 
         default:
           map_pixel.setFillColor(sf::Color(0, 0, 0, 255));
           break;
       }
-      
+     
+      if(world.tile_map_[i][j]->is_water_) {
+        map_pixel.setFillColor(ocean_map_color_);
+      }
+
       window.draw(map_pixel);
     }
   }

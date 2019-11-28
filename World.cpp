@@ -1,5 +1,10 @@
 #include "World.h"
 
+#include <algorithm>
+
+#include <map> // TO DO
+#include <iostream> // TO DO
+
 //static members
 constexpr Biome_enum World::biomes_[4];
 
@@ -153,7 +158,7 @@ double avg_abt_2D(const std::vector<std::vector<double>>& vec, size_t i, size_t 
 
   return avg / tot;
 
-};
+}
 
 // smooths vec by making each value equal to the average about it with square radius smooth_rad
 void smooth_2D(std::vector<std::vector<double>>& vec, size_t smooth_rad) {
@@ -171,7 +176,21 @@ void smooth_2D(std::vector<std::vector<double>>& vec, size_t smooth_rad) {
 
   std::swap(smoother, vec);
 
-};
+}
+
+// adds random noise based on noise scale given to all items in vec
+// ex: factor = 3, scale = 10 => noise added ranges [-3/10 , 3/10 ]
+void add_noise(std::vector<std::vector<double>>& vec, int factor, int scale) {
+  size_t w = vec.size();
+  for(int i = 0; i < w; ++i) {
+    size_t h = vec[i].size();
+    for(int j = 0; j < h; ++j) {
+      float noise = (rand() % (2 * factor + 1)) - factor;
+      noise /= (float)scale; // TO DO : move cast out?
+      vec[i][j] += noise;
+    }
+  }
+}
 
 // return generated biome 2D vector with biome_enum values for biome 
 std::vector<std::vector<Biome_enum>> World::get_Biomes(size_t width, size_t height) {
@@ -181,10 +200,23 @@ std::vector<std::vector<Biome_enum>> World::get_Biomes(size_t width, size_t heig
   std::vector<std::vector<double>> tile_heights = sudo_perlin_2D(width, height);
   normalize_2D(tile_heights);
   //smooth_2D(tile_heights, 3); TO DO : Super slow rn
+  add_noise(tile_heights, 1, 300);
 
-  double top_cutoff = .80;
-  double mid_cutoff = .40;
-  double bottom_cutoff = .15;
+  double top_percent_cut = .75;
+  double mid_percent_cut = .40;
+  double bottom_percent_cut = .15;
+
+  //get cutoff values
+  std::vector<double> all_heights;
+  for(size_t i = 0; i < width; ++i) {
+    for(size_t j = 0; j < height; ++j) {
+      all_heights.push_back(tile_heights[i][j]);
+    }
+  }
+  std::sort(all_heights.begin(), all_heights.end());
+  double top_cutoff = all_heights[width * height * top_percent_cut];
+  double mid_cutoff = all_heights[width * height * mid_percent_cut];
+  double bottom_cutoff = all_heights[width * height * bottom_percent_cut];
 
   std::vector<std::vector<Biome_enum>> ret;
   for(size_t i = 0; i < width; ++i) {
@@ -198,17 +230,45 @@ std::vector<std::vector<Biome_enum>> World::get_Biomes(size_t width, size_t heig
     ret.push_back(temp);
   }
 
+  /*
+  std::map<Biome_enum, size_t> biome_counts;
+  biome_counts[biomes_[0]] = 0;
+  biome_counts[biomes_[1]] = 0;
+  biome_counts[biomes_[2]] = 0;
+  biome_counts[biomes_[3]] = 0;
+  for(size_t i = 0; i < ret.size(); ++i) {
+    for(size_t j = 0; j < ret[i].size(); ++j) {
+      biome_counts[ret[i][j]] += 1; 
+    }
+  }
+  std::cout << "Top : " << biome_counts[biomes_[0]] << std::endl;
+  std::cout << "Mid : " << biome_counts[biomes_[1]] << std::endl;
+  std::cout << "Bot : " << biome_counts[biomes_[2]] << std::endl;
+  std::cout << "Liq : " << biome_counts[biomes_[3]] << std::endl;
+  */  
+
   return ret;
 
 }
 
 // get a sudo perlin for states with cutoffs of state values specified 
 std::vector<std::vector<state>> get_States(size_t width, size_t height, 
-                                           double top_cutoff, double bot_cutoff) {
+                                           double top_percent_cut, double bot_percent_cut) {
 
   std::vector<std::vector<double>> tile_heights = sudo_perlin_2D(width, height);
   normalize_2D(tile_heights);
 
+  //get cutoff values
+  std::vector<double> all_heights;
+  for(size_t i = 0; i < width; ++i) {
+    for(size_t j = 0; j < height; ++j) {
+      all_heights.push_back(tile_heights[i][j]);
+    }
+  }
+  std::sort(all_heights.begin(), all_heights.end());
+  double top_cutoff = all_heights[width * height * top_percent_cut];
+  double bot_cutoff = all_heights[width * height * bot_percent_cut];
+  
   std::vector<std::vector<state>> ret;
   for(size_t i = 0; i < width; ++i) {
     std::vector<state> temp;
@@ -221,7 +281,6 @@ std::vector<std::vector<state>> get_States(size_t width, size_t height,
   }
 
   return ret;
-  
 }
 
 // Generates the entire world [ biomes (tiles , resources)
@@ -248,35 +307,38 @@ void World::generate(size_t width, size_t height,
 
   std::vector<std::vector<Biome_enum>> biomes_map = get_Biomes(width, height);
 
+  state_perlin river = get_States(width, height, 0.70, 0.68); // TO DO : More than one river
+
+  // TO DO : Do tile map with other resources so one can use perlin in case needed
+  // TO DO : Noisy edges
   size_t h = biomes_map.size();
+
+  // Layer 0 initialize
   tile_map_.resize(h);
+  std::vector<std::shared_ptr<Tile>> null_tile_vec(biomes_map[0].size(), nullptr);
   for(size_t i = 0; i < h; ++i) {
-    size_t w = biomes_map[i].size();
-    std::vector<std::shared_ptr<Tile>> temp;
-    for(size_t j = 0; j < w; ++j) {
-      temp.emplace_back(std::make_shared<Tile>(biomes_map[i][j], tile_vec[biomes_map[i][j]]));
-    }
-    tile_map_[i].swap(temp); 
+    tile_map_[i] = null_tile_vec; 
+  }
+
+  // Layer 1 initialize
+  resource_map_.resize(h);
+  std::vector<std::shared_ptr<Resource>> null_rec_vec(biomes_map[0].size(), nullptr);
+  for(int i = 0; i < h; ++i) {
+    resource_map_[i] = null_rec_vec;
   }
 
   // TO DO : 
-  // Resources ? 
+  // layers
   // Other ?
 
-  resource_map_.resize(h);
-  std::vector<std::shared_ptr<Resource>> null_tile_vec(biomes_map[0].size(), nullptr);
-  for(int i = 0; i < h; ++i) {
-    resource_map_[i] = null_tile_vec;
-  }
-
   size_t pos = 0; 
-  biomes[0]->get_Resources(all_perlin, pos, biomes_map, resource_map_);
+  biomes[0]->get_Resources(all_perlin, pos, biomes_map, tile_vec, tile_map_, river, resource_map_);
   pos += biomes[0]->perlins_needed();
-  biomes[1]->get_Resources(all_perlin, pos, biomes_map, resource_map_);
+  biomes[1]->get_Resources(all_perlin, pos, biomes_map, tile_vec, tile_map_, river, resource_map_);
   pos += biomes[1]->perlins_needed();
-  biomes[2]->get_Resources(all_perlin, pos, biomes_map, resource_map_);
+  biomes[2]->get_Resources(all_perlin, pos, biomes_map, tile_vec, tile_map_, river, resource_map_);
   pos += biomes[2]->perlins_needed();
-  biomes[3]->get_Resources(all_perlin, pos, biomes_map, resource_map_);
+  biomes[3]->get_Resources(all_perlin, pos, biomes_map, tile_vec, tile_map_, river, resource_map_);
 
 }
 

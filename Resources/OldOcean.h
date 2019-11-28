@@ -12,14 +12,17 @@ class Old_Ocean : public Biome {
   public:
 
     Old_Ocean():
-      old_ocean_large_fish_t_(32, 64, 2, "Biomes/old_ocean/largeFishBones.png"),
-      old_ocean_small_fish_t_(32, 32, 2, "Biomes/old_ocean/smallFishBones.png"),
+      old_ocean_large_fish_t_(32, 64, 2, "Biomes/old_ocean/largeFishBones"),
+      old_ocean_small_fish_t_(32, 32, 2, "Biomes/old_ocean/smallFishBones"),
       old_ocean_large_fish_(std::make_shared<Sprite_Obj>(31, 15, 1.2, 1.2, old_ocean_large_fish_t_)),
       old_ocean_small_fish_(std::make_shared<Sprite_Obj>(15, 15, 1, 1, old_ocean_small_fish_t_)) { }
 
-     const size_t perlins_needed() override { return 0; }
+     const size_t perlins_needed() override { return 1; }
      void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
                        const std::vector<std::vector<Biome_enum>>&, 
+                       const std::vector<std::shared_ptr<Sprite_Obj>>&,
+                       std::vector<std::vector<std::shared_ptr<Tile>>>&,
+                       const std::vector<std::vector<state>>&,
                        std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
 
   private:
