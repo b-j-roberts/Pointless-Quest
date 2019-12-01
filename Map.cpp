@@ -35,6 +35,7 @@ void Map::draw(sf::RenderWindow& window, const World& world, const Player& playe
   // TO DO : Seg fault outside of map range
   int offset_x = (center.x / 32) - (width_ / 2);
   int offset_y = (center.y / 32) - (height_ / 2);
+
   for(int i = offset_x, end_i = offset_x + width_; i < end_i; ++i){
     for(int j = offset_y, end_j = offset_y + height_; j < end_j; ++j) {
       map_pixel.setPosition(sf::Vector2f(begin_i + pos_x_ + i - offset_x,
@@ -45,7 +46,8 @@ void Map::draw(sf::RenderWindow& window, const World& world, const Player& playe
           break;
 
         case Forest_:
-          map_pixel.setFillColor(forest_map_color_);
+          if(world.resource_map_[i][j]) map_pixel.setFillColor(forest_resource_color_);
+          else map_pixel.setFillColor(forest_map_color_);
           break;
 
         case Desert_:

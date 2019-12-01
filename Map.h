@@ -9,7 +9,8 @@ class Map {
   size_t pos_x_, pos_y_;
   size_t width_, height_;
 
-  const sf::Color forest_map_color_ = sf::Color(0, 250, 0, 255);
+  const sf::Color forest_map_color_ = sf::Color(124, 252, 0, 255);
+  const sf::Color forest_resource_color_ = sf::Color(0, 100, 0, 255);
   const sf::Color ocean_map_color_ = sf::Color(0, 0, 250, 255);
   const sf::Color magic_map_color_ = sf::Color(125, 0, 125, 255);
   const sf::Color swamp_map_color_ = sf::Color(0, 128, 128, 255);
