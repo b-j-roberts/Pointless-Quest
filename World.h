@@ -51,7 +51,7 @@ class World {
 
     std::vector<std::vector<Biome_enum>> get_Biomes(size_t width, size_t height);
 
-    static constexpr Biome_enum biomes_[4] = { Magic_, Forest_, Desert_, Ocean_ }; 
+    static constexpr Biome_enum biomes_[4] = { Swamp_, Unocean_, Desert_, Ocean_ }; 
                                                // Top,    Mid,     Bot,    Liq
     std::unique_ptr<Biome> biomes[4];
 

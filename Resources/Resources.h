@@ -77,6 +77,9 @@ class Resource {
 
     virtual void draw(sf::RenderWindow& window) { }
 
+    virtual size_t generation_range() { return 1; } // width of square space needed to generate
+                                                    // TO DO : const static?
+
   protected:
 
     float pos_x_, pos_y_;

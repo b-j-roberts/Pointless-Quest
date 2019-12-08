@@ -12,7 +12,7 @@ class Desert : public Biome {
 
     Desert():
       desert_cactus_t_(64, 32, 3, "Biomes/desert/Cactus"),
-      desert_cactus_(std::make_shared<Sprite_Obj>(15, 63, 1, 1, desert_cactus_t_)) { }
+      desert_cactus_(std::make_shared<Sprite_Obj>(15, 47, 1, 1, desert_cactus_t_)) { }
 
     const size_t perlins_needed() override { return 1; }
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
@@ -42,6 +42,8 @@ class Desert_Cactus : public One_Piece {
     Desert_Cactus(const float pos_x, const float pos_y, const Desert& desert):
       One_Piece(pos_x, pos_y,
 	              desert.desert_cactus_->get_Ptr(rand() % desert.desert_cactus_->size())) { }
+
+    virtual size_t generation_range() override { return 1; }
 
 };
 

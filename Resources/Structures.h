@@ -12,8 +12,8 @@ class One_Piece : public Resource {
   
   public:
 
-    //Create a 1 piece object with parameters (position x, position y, sprite pointer)
-    One_Piece(const float, const float, std::shared_ptr<sf::Sprite>);
+    //Create a 1 piece object with parameters (position x, position y, sprite pointer, angle)
+    One_Piece(const float, const float, std::shared_ptr<sf::Sprite>, const float angle = 0);
 
     void draw(sf::RenderWindow&) override; // TO DO : Override
 
@@ -27,6 +27,8 @@ class One_Piece : public Resource {
     One_Piece& operator= (const One_Piece&);
 
     std::shared_ptr<sf::Sprite> sprite_;
+
+    float angle_;
 
 };
 

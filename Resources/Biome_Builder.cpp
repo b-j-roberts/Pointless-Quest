@@ -53,11 +53,12 @@ void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
   // Tree Layer
   for(size_t i = 0; i < biomes_map.size(); ++i) {
     for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Forest_ && resource_map[i][j] == nullptr && !tile_map[i][j]->is_water_) {
+      if(biomes_map[i][j] == Forest_ && resource_map[i][j] == nullptr && 
+         !tile_map[i][j]->is_water_) {
         int rnd = rand() % 100; // based on base 100 scale
         switch(all_perlin[pos + 1][i][j]) {
           case Top:
-            if(rnd > 95) 
+            if(rnd > 95)
               resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this);
             else if(rnd > 87) 
               resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
@@ -91,6 +92,22 @@ void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
 
           default: break;
         }
+
+        // generation range collision
+        if(resource_map[i][j] != nullptr) {
+          size_t gen_rng = resource_map[i][j]->generation_range();
+          if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
+            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
+              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
+                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
+                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+              }
+            }
+          } else {
+            resource_map[i][j] = nullptr;
+          }
+        }
+
       }
     }
   }
@@ -138,6 +155,22 @@ void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
 
           default: break;
         }
+
+        // generation range collision
+        if(resource_map[i][j] != nullptr) {
+          size_t gen_rng = resource_map[i][j]->generation_range();
+          if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
+            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
+              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
+                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
+                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+              }
+            }
+          } else {
+            resource_map[i][j] = nullptr;
+          }
+        }
+
       }
     }
   }
@@ -165,6 +198,22 @@ void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
 
           default: break;
         }
+
+        // generation range collision
+        if(resource_map[i][j] != nullptr) {
+          size_t gen_rng = resource_map[i][j]->generation_range();
+          if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
+            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
+              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
+                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
+                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+              }
+            }
+          } else {
+            resource_map[i][j] = nullptr;
+          }
+        } // TO DO : Think about avoiding doing this twice
+
       }
     }
   }
@@ -192,7 +241,8 @@ void Desert::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
   // Cactus Layer
   for(size_t i = 0; i < biomes_map.size(); ++i) {
     for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Desert_ && resource_map[i][j] == nullptr && !tile_map[i][j]->is_water_) {
+      if(biomes_map[i][j] == Desert_ && resource_map[i][j] == nullptr && 
+         !tile_map[i][j]->is_water_) {
         int rnd = rand() % 100;
         switch(all_perlin[pos][i][j]) {
           case Top:
@@ -212,6 +262,22 @@ void Desert::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
 
           default: break;
         }
+
+        // generation range collision
+        if(resource_map[i][j] != nullptr) {
+          size_t gen_rng = resource_map[i][j]->generation_range();
+          if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
+            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
+              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
+                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
+                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+              }
+            }
+          } else {
+            resource_map[i][j] = nullptr;
+          }
+        }
+
       }
     }
   }
@@ -273,6 +339,22 @@ void Old_Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>
           resource_map[i][j] = std::make_shared<Old_Ocean_Large_Fish>(i * 32, j * 32, *this);
         else if(rnd > 95) 
           resource_map[i][j] = std::make_shared<Old_Ocean_Small_Fish>(i * 32, j * 32, *this);
+        
+        // generation range collision
+        if(resource_map[i][j] != nullptr) {
+          size_t gen_rng = resource_map[i][j]->generation_range();
+          if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
+            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
+              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
+                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
+                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+              }
+            }
+          } else {
+            resource_map[i][j] = nullptr;
+          }
+        }
+
       }
     }
   }
@@ -327,6 +409,22 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
 
           default: break;
         }
+
+        // generation range collision
+        if(resource_map[i][j] != nullptr) {
+          size_t gen_rng = resource_map[i][j]->generation_range();
+          if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
+            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
+              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
+                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
+                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+              }
+            }
+          } else {
+            resource_map[i][j] = nullptr;
+          }
+        }
+
       }
     }
   }
@@ -377,6 +475,22 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
 
           default: break;
         }
+
+        // generation range collision
+        if(resource_map[i][j] != nullptr) {
+          size_t gen_rng = resource_map[i][j]->generation_range();
+          if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
+            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
+              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
+                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
+                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+              }
+            }
+          } else {
+            resource_map[i][j] = nullptr;
+          }
+        } // TO DO : Think about not doing this twice
+
       }
     }
   }

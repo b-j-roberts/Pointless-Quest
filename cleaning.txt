@@ -1,0 +1,6 @@
+make biomes folder outside resources and move appropriate things (keep resources in resources)
+*add diagonal movement to main
+go through each file and make sure we have notes on interface and other things & all is clean
+
+next : collisions
+       invisible while under

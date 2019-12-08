@@ -36,13 +36,17 @@ void Map::draw(sf::RenderWindow& window, const World& world, const Player& playe
   int offset_x = (center.x / 32) - (width_ / 2);
   int offset_y = (center.y / 32) - (height_ / 2);
 
+  // TO DO : do generation_range square for resources instead of single dot
+  // TO DO : make different colors for different resources?
+  // TO DO : Implement same layering as world here (tiles, water, resources)
   for(int i = offset_x, end_i = offset_x + width_; i < end_i; ++i){
     for(int j = offset_y, end_j = offset_y + height_; j < end_j; ++j) {
       map_pixel.setPosition(sf::Vector2f(begin_i + pos_x_ + i - offset_x,
                                          begin_j + pos_y_ + j - offset_y));
       switch(world.tile_map_[i][j]->biome_) {
         case Magic_:
-          map_pixel.setFillColor(magic_map_color_);
+          if(world.resource_map_[i][j]) map_pixel.setFillColor(magic_resource_color_);
+          else map_pixel.setFillColor(magic_map_color_);
           break;
 
         case Forest_:
@@ -51,19 +55,23 @@ void Map::draw(sf::RenderWindow& window, const World& world, const Player& playe
           break;
 
         case Desert_:
-          map_pixel.setFillColor(desert_map_color_);
+          if(world.resource_map_[i][j]) map_pixel.setFillColor(desert_resource_color_);
+          else map_pixel.setFillColor(desert_map_color_);
           break;
 
         case Ocean_:
-          map_pixel.setFillColor(ocean_map_color_);
+          if(world.resource_map_[i][j]) map_pixel.setFillColor(ocean_resource_color_);
+          else map_pixel.setFillColor(ocean_map_color_);
           break;
 
         case Swamp_:
-          map_pixel.setFillColor(swamp_map_color_);
+          if(world.resource_map_[i][j]) map_pixel.setFillColor(swamp_resource_color_);
+          else map_pixel.setFillColor(swamp_map_color_);
           break;
 
         case Unocean_:
-          map_pixel.setFillColor(unocean_map_color_);
+          if(world.resource_map_[i][j]) map_pixel.setFillColor(unocean_resource_color_);
+          else map_pixel.setFillColor(unocean_map_color_);
           break;
 
         default:

@@ -19,10 +19,10 @@ class Swamp : public Biome {
       swamp_tree_bot_t_(128, 64, 3, "Biomes/swamp/SwampTreeBottom"),
       swamp_tree_top_t_(128, 64, 2, "Biomes/swamp/SwampTreeTop"),
       swamp_water_t_(32, 32, 10, "Biomes/swamp/SwampWater"),
-      swamp_reeds_(std::make_shared<Sprite_Obj>(15, 31, 1.2, 1.2, swamp_reeds_t_)),
-      swamp_spikes_(std::make_shared<Sprite_Obj>(15, 31, 1, 1, swamp_spikes_t_)),
-      swamp_tree_bot_(std::make_shared<Sprite_Obj>(31, 127, 1, 1, swamp_tree_bot_t_)),
-      swamp_tree_top_(std::make_shared<Sprite_Obj>(31, 127, 1, 1, swamp_tree_top_t_)),
+      swamp_reeds_(std::make_shared<Sprite_Obj>(15, 15, 1.2, 1.2, swamp_reeds_t_)),
+      swamp_spikes_(std::make_shared<Sprite_Obj>(15, 15, 1, 1, swamp_spikes_t_)),
+      swamp_tree_bot_(std::make_shared<Sprite_Obj>(31, 111, 1, 1, swamp_tree_bot_t_)),
+      swamp_tree_top_(std::make_shared<Sprite_Obj>(31, 111, 1, 1, swamp_tree_top_t_)),
       swamp_water_(std::make_shared<Sprite_Obj>(swamp_water_t_)) {}
 
     const size_t perlins_needed() override { return 3; }
@@ -65,6 +65,8 @@ class Swamp_Reeds : public One_Piece {
       One_Piece(pos_x, pos_y,
                 swamp.swamp_reeds_->get_Ptr(rand() % swamp.swamp_reeds_->size())) { }
 
+    virtual size_t generation_range() override { return 1; }
+
 };
 
 class Swamp_Spikes : public One_Piece {
@@ -74,6 +76,8 @@ class Swamp_Spikes : public One_Piece {
     Swamp_Spikes(const float pos_x, const float pos_y, const Swamp& swamp):
       One_Piece(pos_x, pos_y,
                 swamp.swamp_spikes_->get_Ptr(rand() % swamp.swamp_spikes_->size())) { }
+
+    virtual size_t generation_range() override { return 1; }
 
 };
 
@@ -86,6 +90,8 @@ class Swamp_Tree : public Two_Piece_Vert {
                      swamp.swamp_tree_bot_->get_Ptr(rand() % swamp.swamp_tree_bot_->size()),
                      swamp.swamp_tree_top_->get_Ptr(rand() % swamp.swamp_tree_top_->size())) { }
 
+    virtual size_t generation_range() override { return 2; }
+
 };
 
 class Swamp_Water : public One_Piece {
@@ -95,6 +101,8 @@ class Swamp_Water : public One_Piece {
     Swamp_Water(const float pos_x, const float pos_y, const Swamp& swamp):
       One_Piece(pos_x, pos_y,
                 swamp.swamp_water_->get_Ptr(rand() % swamp.swamp_water_->size())) { }
+
+    virtual size_t generation_range() override { return 1; }
 
 };
 

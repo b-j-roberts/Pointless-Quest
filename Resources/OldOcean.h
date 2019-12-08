@@ -46,7 +46,10 @@ class Old_Ocean_Large_Fish : public One_Piece {
     
     Old_Ocean_Large_Fish(const float pos_x, const float pos_y, const Old_Ocean& old_ocean):
       One_Piece(pos_x, pos_y,
-      old_ocean.old_ocean_large_fish_->get_Ptr(rand() % old_ocean.old_ocean_large_fish_->size())) { }
+      old_ocean.old_ocean_large_fish_->get_Ptr(rand() % old_ocean.old_ocean_large_fish_->size()),
+      rand() % 360) { }
+
+    virtual size_t generation_range() override { return 2; }
 
 };
 
@@ -56,7 +59,10 @@ class Old_Ocean_Small_Fish : public One_Piece {
 
     Old_Ocean_Small_Fish(const float pos_x, const float pos_y, const Old_Ocean& old_ocean):
       One_Piece(pos_x, pos_y,
-      old_ocean.old_ocean_small_fish_->get_Ptr(rand() % old_ocean.old_ocean_small_fish_->size())) { }
+      old_ocean.old_ocean_small_fish_->get_Ptr(rand() % old_ocean.old_ocean_small_fish_->size()),
+      rand() % 360) { }
+
+    virtual size_t generation_range() override { return 1; }
 
 };
 
