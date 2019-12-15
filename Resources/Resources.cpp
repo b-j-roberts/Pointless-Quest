@@ -37,7 +37,7 @@ Sprite_Obj::Sprite_Obj(const Texture_Obj& t_obj) {
   s_.swap(temp_s);
 }
 
-std::shared_ptr<sf::Sprite> Sprite_Obj::get_Ptr(const int i) {
+std::shared_ptr<sf::Sprite> Sprite_Obj::get_Ptr(const size_t i) const {
   if(i < s_.size())  return s_[i];
   else if(s_.size() != 0)  return s_[0];
   else {

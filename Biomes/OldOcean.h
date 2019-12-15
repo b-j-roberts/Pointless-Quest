@@ -1,7 +1,7 @@
 #ifndef __OLDOCEAN_H_INCLUDED__
 #define __OLDOCEAN_H_INCLUDED__
 
-#include "Structures.h"
+#include "../Resources/Structures.h"
 #include "Biome.h"
 
 class Old_Ocean_Large_Fish;
@@ -49,7 +49,8 @@ class Old_Ocean_Large_Fish : public One_Piece {
       old_ocean.old_ocean_large_fish_->get_Ptr(rand() % old_ocean.old_ocean_large_fish_->size()),
       rand() % 360) { }
 
-    virtual size_t generation_range() override { return 2; }
+    virtual const size_t generation_range() const override { return 2; }
+    virtual const float collision_radius() const override { return 0; } 
 
 };
 
@@ -62,7 +63,8 @@ class Old_Ocean_Small_Fish : public One_Piece {
       old_ocean.old_ocean_small_fish_->get_Ptr(rand() % old_ocean.old_ocean_small_fish_->size()),
       rand() % 360) { }
 
-    virtual size_t generation_range() override { return 1; }
+    virtual const size_t generation_range() const override { return 1; }
+    virtual const float collision_radius() const override { return 0; } 
 
 };
 

@@ -10,17 +10,28 @@ class Player;
 class Body : public Resource {
   // TO DO : Create body class for player with draw function
   public:
-    void draw(sf::RenderWindow& window) override { //Placeholder
+    
+    void draw(sf::RenderWindow& window) const override { // Placholder
+      sf::CircleShape body(15);
+      body.setPosition(pos_x_, pos_y_);
+      window.draw(body);
+    }
+
+    sf::FloatRect bounding_box() const { //Placeholder
+      sf::CircleShape body(15);
+      body.setPosition(pos_x_, pos_y_);
+      return body.getGlobalBounds();
     }
     
-    void update(float, float);
+    void update(float, float, Player&);
 
     Body(): Resource(1000 * 32, 1000 * 32), angle_(0) { } // TO DO : Set default position
 
   private:
+
     float angle_;
 
-  friend Player;
+//  friend Player;
 };
 
 class Player {
@@ -37,7 +48,9 @@ class Player {
     //  angle based on the passed parameters (Lstick_x, Lstick_y, Rstick_x, Rstick_y)
     void update(float, float, float, float);
     void draw(sf::RenderWindow& window) const { body_->draw(window); }
+    
     sf::View get_View() const { return view_; }
+    sf::FloatRect bounding_box() const { return body_->bounding_box(); }
 
   private:
   
@@ -45,6 +58,8 @@ class Player {
     float vel_x_, vel_y_;
     float angle_;
     sf::View view_;
+
+    friend Body;
 
 };
 

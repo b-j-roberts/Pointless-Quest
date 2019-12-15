@@ -1,7 +1,7 @@
 #ifndef __MAGIC_H_INCLUDED__
 #define __MAGIC_H_INCLUDED__
 
-#include "Structures.h"
+#include "../Resources/Structures.h"
 #include "Biome.h"
 
 class Magic_Flowers;
@@ -49,7 +49,8 @@ class Magic_Flowers : public One_Piece {
       One_Piece(pos_x, pos_y,
                 magic.magic_flowers_->get_Ptr(rand() % magic.magic_flowers_->size())) { }
 
-    virtual size_t generation_range() override { return 1; }
+    virtual const size_t generation_range() const override { return 1; }
+    virtual const float collision_radius() const override { return 15; } 
 
 };
 
@@ -61,7 +62,8 @@ class Magic_Trees : public One_Piece {
       One_Piece(pos_x, pos_y,
                 magic.magic_trees_->get_Ptr(rand() % magic.magic_trees_->size())) { }
 
-    virtual size_t generation_range() override { return 2; }
+    virtual const size_t generation_range() const override { return 2; }
+    virtual const float collision_radius() const override { return 31; } 
 
 };
 

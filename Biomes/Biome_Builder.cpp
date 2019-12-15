@@ -5,16 +5,12 @@
 #include "OldOcean.h"
 #include "Swamp.h"
 
-#include <iostream> // TO DO : Debug
-
 // TO DO : Scaling and tuning
-//         When is each state
-//         Some random ones outside of perlin range
-//         stacking resources checks
-//         rough biome edges
+//         When is each state, ie cutoff values
 //         River for each biome
-//         Resources over water
-//         layering of resources
+//         layering of resources, (0 - tile, 1 - river) tile map, (2 - ground resource) below player
+//                                (3 - other resources) above player` 
+//         cutoff bottom of resources in water, so they look submerged
 
 void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
                            size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 

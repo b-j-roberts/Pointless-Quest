@@ -136,28 +136,41 @@ int main() {
     //Other Input (Keyboard or window)
     while(window.pollEvent(event)) {
       switch(event.type) {
-
+/*
         case sf::Event::KeyPressed:
           if(event.key.code == sf::Keyboard::W) {
-            l_stick.y = -100;
+            l_stick.y = -20;
           }
           if(event.key.code == sf::Keyboard::S) {
-            l_stick.y = 100;
+            l_stick.y = 20;
           }
           if(event.key.code == sf::Keyboard::A) {
-            l_stick.x = -100;
+            l_stick.x = -20;
           }
           if(event.key.code == sf::Keyboard::D) {
-            l_stick.x = 100;
+            l_stick.x = 20;
           }
           break;
-
+*/
         case sf::Event::Closed:
       	  window.close();
 	        break;
 	
       	default: break;
       }
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+      l_stick.y = -70;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+      l_stick.x = -70;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+      l_stick.y = 70;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+      l_stick.x = 70;
     }
 
     /*

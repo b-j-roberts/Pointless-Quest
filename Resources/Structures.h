@@ -15,7 +15,10 @@ class One_Piece : public Resource {
     //Create a 1 piece object with parameters (position x, position y, sprite pointer, angle)
     One_Piece(const float, const float, std::shared_ptr<sf::Sprite>, const float angle = 0);
 
-    void draw(sf::RenderWindow&) override; // TO DO : Override
+    void draw(sf::RenderWindow&) const override;
+    void transparent_draw(sf::RenderWindow&) const override;
+
+    const bool is_overlapped(const sf::FloatRect&) override; // TO DO : Make const (so do update)
 
   private:
 
@@ -42,7 +45,10 @@ class Two_Piece_Vert : public Resource {
     Two_Piece_Vert(const float, const float, const size_t, const size_t, 
                    std::shared_ptr<sf::Sprite>, std::shared_ptr<sf::Sprite>);
     
-    void draw(sf::RenderWindow&) override;
+    void draw(sf::RenderWindow&) const override;
+    void transparent_draw(sf::RenderWindow&) const override;
+
+    const bool is_overlapped(const sf::FloatRect&) override; // TO DO
 
   private:
 

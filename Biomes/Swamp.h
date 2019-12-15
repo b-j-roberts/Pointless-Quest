@@ -1,7 +1,7 @@
 #ifndef __SWAMP_H_INCLUDED__
 #define __SWAMP_H_INCLUDED__
 
-#include "Structures.h"
+#include "../Resources/Structures.h"
 #include "Biome.h"
 
 class Swamp_Reeds;
@@ -65,7 +65,8 @@ class Swamp_Reeds : public One_Piece {
       One_Piece(pos_x, pos_y,
                 swamp.swamp_reeds_->get_Ptr(rand() % swamp.swamp_reeds_->size())) { }
 
-    virtual size_t generation_range() override { return 1; }
+    virtual const size_t generation_range() const override { return 1; }
+    virtual const float collision_radius() const override { return 15; } 
 
 };
 
@@ -77,7 +78,8 @@ class Swamp_Spikes : public One_Piece {
       One_Piece(pos_x, pos_y,
                 swamp.swamp_spikes_->get_Ptr(rand() % swamp.swamp_spikes_->size())) { }
 
-    virtual size_t generation_range() override { return 1; }
+    virtual const size_t generation_range() const override { return 1; }
+    virtual const float collision_radius() const override { return 15; } 
 
 };
 
@@ -90,7 +92,8 @@ class Swamp_Tree : public Two_Piece_Vert {
                      swamp.swamp_tree_bot_->get_Ptr(rand() % swamp.swamp_tree_bot_->size()),
                      swamp.swamp_tree_top_->get_Ptr(rand() % swamp.swamp_tree_top_->size())) { }
 
-    virtual size_t generation_range() override { return 2; }
+    virtual const size_t generation_range() const override { return 2; }
+    virtual const float collision_radius() const override { return 31; } 
 
 };
 
@@ -102,7 +105,8 @@ class Swamp_Water : public One_Piece {
       One_Piece(pos_x, pos_y,
                 swamp.swamp_water_->get_Ptr(rand() % swamp.swamp_water_->size())) { }
 
-    virtual size_t generation_range() override { return 1; }
+    virtual const size_t generation_range() const override { return 1; }
+    virtual const float collision_radius() const override { return 0; } 
 
 };
 

@@ -57,9 +57,9 @@ public:
   Sprite_Obj(const Texture_Obj&);
 
   //Method to get sprite in position (param)
-  std::shared_ptr<sf::Sprite> get_Ptr(const int); // TO DO : change to size_t
+  std::shared_ptr<sf::Sprite> get_Ptr(const size_t) const;
 
-  size_t size() { return s_.size(); }
+  const size_t size() const { return s_.size(); }
 
 };
 
@@ -71,14 +71,18 @@ class Resource {
       pos_x_(pos_x),
       pos_y_(pos_y) { }
 
-    const float x() { return pos_x_; }
-    const float y() { return pos_y_; }
-    void move(float x, float y) { pos_x_ += x; pos_y_ += y; } // TO DO : Make negative y?
+    const float x() const { return pos_x_; }
+    const float y() const { return pos_y_; }
+    void move(float x, float y) { pos_x_ += x; pos_y_ += y; }
 
-    virtual void draw(sf::RenderWindow& window) { }
+    virtual void draw(sf::RenderWindow& window) const { }
+    virtual void transparent_draw(sf::RenderWindow& window) const { }
 
-    virtual size_t generation_range() { return 1; } // width of square space needed to generate
-                                                    // TO DO : const static?
+    // width of space needed to place resource
+    virtual const size_t generation_range() const { return 1; }
+    virtual const float collision_radius() const { return 0.f; }
+                                                   
+    virtual const bool is_overlapped(const sf::FloatRect&) { return false; }
 
   protected:
 

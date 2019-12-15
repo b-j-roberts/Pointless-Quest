@@ -10,7 +10,7 @@ struct Tile { // Layer 0 Resource
 
   const Biome_enum biome_;
 
-  const size_t tile_id_;
+  const size_t tile_id_; // TO DO : Currently dont need, maybe use for rotatable tiles later
   const bool is_water_;
 
   std::shared_ptr<sf::Sprite> sprite_;

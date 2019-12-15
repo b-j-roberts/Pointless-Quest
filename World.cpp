@@ -367,10 +367,18 @@ void World::draw(sf::RenderWindow& window, const Player& player) {
   
   player.draw(window);
 
+  sf::FloatRect player_box = player.bounding_box();
+
   //Draw Resources in view
   for(int j = begin_j; j < end_j; ++j) {
     for(int i = begin_i; i < end_i; ++i) {
-      if(resource_map_[i][j]) resource_map_[i][j]->draw(window); // ignores nullptr
+      if(resource_map_[i][j]) { // ignores nullptr
+        if(resource_map_[i][j]->is_overlapped(player_box)) { // make transparent
+          resource_map_[i][j]->transparent_draw(window);
+        } else {
+          resource_map_[i][j]->draw(window);
+        }
+      }
     }
   }
 

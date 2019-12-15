@@ -1,7 +1,7 @@
 #ifndef __DESERT_H_INCLUDED__
 #define __DESERT_H_INCLUDED__
 
-#include "Structures.h"
+#include "../Resources/Structures.h"
 #include "Biome.h"
 
 class Desert_Cactus;
@@ -43,7 +43,8 @@ class Desert_Cactus : public One_Piece {
       One_Piece(pos_x, pos_y,
 	              desert.desert_cactus_->get_Ptr(rand() % desert.desert_cactus_->size())) { }
 
-    virtual size_t generation_range() override { return 1; }
+    virtual const size_t generation_range() const override { return 1; }
+    virtual const float collision_radius() const override { return 15; } 
 
 };
 

@@ -1,7 +1,7 @@
 #ifndef __FOREST_H_INCLUDED__
 #define __FOREST_H_INCLUDED__
 
-#include "Structures.h"
+#include "../Resources/Structures.h"
 #include "Biome.h"
 
 class Forest_Bush;
@@ -74,7 +74,8 @@ class Forest_Bush : public Two_Piece_Vert {
        	      	     forest.forest_bush_bot_->get_Ptr(rand() % forest.forest_bush_bot_->size()),
 		                 forest.forest_bush_top_->get_Ptr(rand() % forest.forest_bush_top_->size())) { }
 
-    virtual size_t generation_range() override { return 1; }
+    virtual const size_t generation_range() const override { return 1; }
+    virtual const float collision_radius() const override { return 15; } 
 
   // TO DO : Add interface for collisions and invisible when under
   // TO DO : Other interface ? 
@@ -89,7 +90,8 @@ class Forest_Moss : public One_Piece {
 	              forest.forest_moss_->get_Ptr(rand() % forest.forest_moss_->size()),
                 rand() % 360) { }
  
-    virtual size_t generation_range() override { return 1; }
+    virtual const size_t generation_range() const override { return 1; }
+    virtual const float collision_radius() const override { return 0; } 
 
 };
 
@@ -103,7 +105,8 @@ class Forest_Small_Tree : public Two_Piece_Vert {
 		    forest.forest_small_tree_bot_->get_Ptr(rand() % forest.forest_small_tree_bot_->size()),
 		    forest.forest_small_tree_top_->get_Ptr(rand() % forest.forest_small_tree_top_->size())) { }
 
-    virtual size_t generation_range() override { return 1; }
+    virtual const size_t generation_range() const override { return 1; }
+    virtual const float collision_radius() const override { return 15; } 
 
 };
 
@@ -116,7 +119,8 @@ class Forest_Tree : public Two_Piece_Vert {
                      forest.forest_tree_bot_->get_Ptr(rand() % forest.forest_tree_bot_->size()),
                      forest.forest_tree_top_->get_Ptr(rand() % forest.forest_tree_top_->size())) { }
 
-    virtual size_t generation_range() override { return 2; }
+    virtual const size_t generation_range() const override { return 2; }
+    virtual const float collision_radius() const override { return 31; } 
 
 };
 
