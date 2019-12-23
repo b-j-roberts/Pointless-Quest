@@ -4,6 +4,10 @@
 #include "../Resources/Structures.h"
 #include "Biome.h"
 
+// TO DO : Two_Piece_Vert structures show the top 
+//           really oddly when they do their transparent draw funciton
+// TO DO : Is transparent draw function being activated too graciously ?
+
 class Forest_Bush;
 class Forest_Moss;
 class Forest_Small_Tree;
@@ -21,14 +25,14 @@ class Forest : public Biome {
       forest_small_tree_bot_t_(64, 32, 3, "Biomes/forest/forestSmallTree"),
       forest_tree_top_t_(96, 128, 2, "Biomes/forest/forestTree", 128),
       forest_tree_bot_t_(128, 64, 3, "Biomes/forest/forestTree"),
-      forest_bush_top_(std::make_shared<Sprite_Obj>(15, 15, 1.2, 1.2, forest_bush_top_t_)),
-      forest_bush_bot_(std::make_shared<Sprite_Obj>(15, 15, 1, 1, forest_bush_bot_t_)),
+      forest_bush_top_(std::make_shared<Sprite_Obj>(15, 25, 1.2, 1.2, forest_bush_top_t_)),
+      forest_bush_bot_(std::make_shared<Sprite_Obj>(16, 25, 1, 1, forest_bush_bot_t_)),
       forest_moss_(std::make_shared<Sprite_Obj>(15, 15, 1.2, 1.2, forest_moss_t_)),
-      forest_small_tree_top_(std::make_shared<Sprite_Obj>(15, 47, 1.2, 
+      forest_small_tree_top_(std::make_shared<Sprite_Obj>(15, 54, 1.2, 
                                                           1.2, forest_small_tree_top_t_)),
-      forest_small_tree_bot_(std::make_shared<Sprite_Obj>(15, 47, 1, 1, forest_small_tree_bot_t_)),
-      forest_tree_top_(std::make_shared<Sprite_Obj>(63, 79, 1.3, 1.3, forest_tree_top_t_)),
-      forest_tree_bot_(std::make_shared<Sprite_Obj>(31, 111, 1, 1, forest_tree_bot_t_)) { }
+      forest_small_tree_bot_(std::make_shared<Sprite_Obj>(15, 52, 1, 1, forest_small_tree_bot_t_)),
+      forest_tree_top_(std::make_shared<Sprite_Obj>(63, 89, 1.3, 1.3, forest_tree_top_t_)),
+      forest_tree_bot_(std::make_shared<Sprite_Obj>(31, 110, 1, 1, forest_tree_bot_t_)) { }
 
     const size_t perlins_needed() override { return 2; }
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
@@ -75,7 +79,7 @@ class Forest_Bush : public Two_Piece_Vert {
 		                 forest.forest_bush_top_->get_Ptr(rand() % forest.forest_bush_top_->size())) { }
 
     virtual const size_t generation_range() const override { return 1; }
-    virtual const float collision_radius() const override { return 15; } 
+    virtual const float collision_radius() const override { return 10; } 
 
   // TO DO : Add interface for collisions and invisible when under
   // TO DO : Other interface ? 
@@ -106,7 +110,7 @@ class Forest_Small_Tree : public Two_Piece_Vert {
 		    forest.forest_small_tree_top_->get_Ptr(rand() % forest.forest_small_tree_top_->size())) { }
 
     virtual const size_t generation_range() const override { return 1; }
-    virtual const float collision_radius() const override { return 15; } 
+    virtual const float collision_radius() const override { return 12; } 
 
 };
 
@@ -120,7 +124,7 @@ class Forest_Tree : public Two_Piece_Vert {
                      forest.forest_tree_top_->get_Ptr(rand() % forest.forest_tree_top_->size())) { }
 
     virtual const size_t generation_range() const override { return 2; }
-    virtual const float collision_radius() const override { return 31; } 
+    virtual const float collision_radius() const override { return 19; } 
 
 };
 

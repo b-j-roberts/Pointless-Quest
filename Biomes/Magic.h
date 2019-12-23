@@ -14,8 +14,8 @@ class Magic : public Biome {
     Magic():
       magic_flowers_t_(32, 32, 5, "Biomes/magic/magicFlowers"),
       magic_trees_t_(160, 96, 2, "Biomes/magic/magicTrees"),
-      magic_flowers_(std::make_shared<Sprite_Obj>(15, 15, 1.2, 1.2, magic_flowers_t_)),
-      magic_trees_(std::make_shared<Sprite_Obj>(47, 143, 1, 1, magic_trees_t_)) { }
+      magic_flowers_(std::make_shared<Sprite_Obj>(15, 31, 1.2, 1.2, magic_flowers_t_)),
+      magic_trees_(std::make_shared<Sprite_Obj>(47, 150, 1, 1, magic_trees_t_)) { }
 
     const size_t perlins_needed() override { return 2; }
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
@@ -50,7 +50,7 @@ class Magic_Flowers : public One_Piece {
                 magic.magic_flowers_->get_Ptr(rand() % magic.magic_flowers_->size())) { }
 
     virtual const size_t generation_range() const override { return 1; }
-    virtual const float collision_radius() const override { return 15; } 
+    virtual const float collision_radius() const override { return 3; } 
 
 };
 
@@ -63,7 +63,7 @@ class Magic_Trees : public One_Piece {
                 magic.magic_trees_->get_Ptr(rand() % magic.magic_trees_->size())) { }
 
     virtual const size_t generation_range() const override { return 2; }
-    virtual const float collision_radius() const override { return 31; } 
+    virtual const float collision_radius() const override { return 10; } 
 
 };
 

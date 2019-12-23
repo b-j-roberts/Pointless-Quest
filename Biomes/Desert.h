@@ -4,6 +4,8 @@
 #include "../Resources/Structures.h"
 #include "Biome.h"
 
+// TO DO : Add circular base to cactus
+
 class Desert_Cactus;
 
 class Desert : public Biome {
@@ -12,7 +14,7 @@ class Desert : public Biome {
 
     Desert():
       desert_cactus_t_(64, 32, 3, "Biomes/desert/Cactus"),
-      desert_cactus_(std::make_shared<Sprite_Obj>(15, 47, 1, 1, desert_cactus_t_)) { }
+      desert_cactus_(std::make_shared<Sprite_Obj>(15, 57, 1, 1, desert_cactus_t_)) { }
 
     const size_t perlins_needed() override { return 1; }
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
@@ -44,7 +46,7 @@ class Desert_Cactus : public One_Piece {
 	              desert.desert_cactus_->get_Ptr(rand() % desert.desert_cactus_->size())) { }
 
     virtual const size_t generation_range() const override { return 1; }
-    virtual const float collision_radius() const override { return 15; } 
+    virtual const float collision_radius() const override { return 8; } 
 
 };
 

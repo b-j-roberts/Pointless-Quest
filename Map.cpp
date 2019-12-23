@@ -1,5 +1,8 @@
 #include "Map.h"
 
+// TO DO : Error in weird lines being missed
+// TO DO : Error where when walking down it shifts down
+
 Map::Map(const Player& player) {
  
   auto size = player.get_View().getSize();

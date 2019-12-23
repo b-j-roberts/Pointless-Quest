@@ -3,9 +3,13 @@
 
 #include <SFML/Graphics/View.hpp>
 
-#include "Resources/Resources.h"
+#include "Functions.h"
 
-class Player;
+#include "Resources/Resources.h"
+#include "World.h"
+
+class Player; // Forward Declaration
+class World; // Forward Declaration
 
 class Body : public Resource {
   // TO DO : Create body class for player with draw function
@@ -13,8 +17,14 @@ class Body : public Resource {
     
     void draw(sf::RenderWindow& window) const override { // Placholder
       sf::CircleShape body(15);
+      sf::CircleShape body_2(1);
       body.setPosition(pos_x_, pos_y_);
+      body.setOrigin(15, 15);
+      body_2.setOrigin(1, 1);
+      body_2.setFillColor(sf::Color::Red);
+      body_2.setPosition(pos_x_, pos_y_);
       window.draw(body);
+      window.draw(body_2);
     }
 
     sf::FloatRect bounding_box() const { //Placeholder
@@ -23,7 +33,7 @@ class Body : public Resource {
       return body.getGlobalBounds();
     }
     
-    void update(float, float, Player&);
+    void update(float, float, Player&, const World&);
 
     Body(): Resource(1000 * 32, 1000 * 32), angle_(0) { } // TO DO : Set default position
 
@@ -46,7 +56,7 @@ class Player {
 
     //Update function for state of player, for now just changes position and 
     //  angle based on the passed parameters (Lstick_x, Lstick_y, Rstick_x, Rstick_y)
-    void update(float, float, float, float);
+    void update(float, float, float, float, const World&);
     void draw(sf::RenderWindow& window) const { body_->draw(window); }
     
     sf::View get_View() const { return view_; }

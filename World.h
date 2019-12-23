@@ -3,31 +3,15 @@
 
 #include <stdlib.h>
 
-#include "Functions.h"
-
 #include "Player.h"
 #include "Biomes/Biomes.h"
 
 class Sprite_Obj; // Forward Declaration
 class Resource; // Forward Declaration (see into using with class template)
+class Player;
+class Body;
 class Map; // Forward Declare friend
-/*
-struct Tile { // Layer 0 Resource
 
-  const Biome_enum biome_;
-
-  const size_t tile_id_;
-  // TO DO : Is water variable?
-  
-  std::shared_ptr<sf::Sprite> sprite_;
- 
-  Tile(Biome_enum biome, std::shared_ptr<Sprite_Obj> sprite_obj):
-    biome_(biome),
-    tile_id_(rand() % sprite_obj->size()),
-    sprite_(sprite_obj->get_Ptr(tile_id_)) { } 	
- 
-};
-*/
 class World {
   
   public:
@@ -51,7 +35,7 @@ class World {
 
     std::vector<std::vector<Biome_enum>> get_Biomes(size_t width, size_t height);
 
-    static constexpr Biome_enum biomes_[4] = { Swamp_, Unocean_, Forest_, Ocean_ }; 
+    static constexpr Biome_enum biomes_[4] = { Magic_, Forest_, Swamp_, Ocean_ }; 
                                                // Top,    Mid,     Bot,    Liq
     std::unique_ptr<Biome> biomes[4];
 
@@ -63,6 +47,8 @@ class World {
     std::vector<std::vector<std::shared_ptr<Resource>>> resource_map_;
 
     friend Map;
+    friend Player;
+    friend Body;
 };
 
 #endif

@@ -4,6 +4,9 @@
 #include "../Resources/Structures.h"
 #include "Biome.h"
 
+// TO DO : Make circle and rectangle collision and use that for flowers 
+//         and reeds and think about using it for the desert cactuses
+
 class Swamp_Reeds;
 class Swamp_Spikes;
 class Swamp_Tree;
@@ -19,10 +22,10 @@ class Swamp : public Biome {
       swamp_tree_bot_t_(128, 64, 3, "Biomes/swamp/SwampTreeBottom"),
       swamp_tree_top_t_(128, 64, 2, "Biomes/swamp/SwampTreeTop"),
       swamp_water_t_(32, 32, 10, "Biomes/swamp/SwampWater"),
-      swamp_reeds_(std::make_shared<Sprite_Obj>(15, 15, 1.2, 1.2, swamp_reeds_t_)),
-      swamp_spikes_(std::make_shared<Sprite_Obj>(15, 15, 1, 1, swamp_spikes_t_)),
-      swamp_tree_bot_(std::make_shared<Sprite_Obj>(31, 111, 1, 1, swamp_tree_bot_t_)),
-      swamp_tree_top_(std::make_shared<Sprite_Obj>(31, 111, 1, 1, swamp_tree_top_t_)),
+      swamp_reeds_(std::make_shared<Sprite_Obj>(15, 28, 1.2, 1.2, swamp_reeds_t_)),
+      swamp_spikes_(std::make_shared<Sprite_Obj>(15, 28, 1, 1, swamp_spikes_t_)),
+      swamp_tree_bot_(std::make_shared<Sprite_Obj>(31, 110, 1, 1, swamp_tree_bot_t_)),
+      swamp_tree_top_(std::make_shared<Sprite_Obj>(31, 110, 1, 1, swamp_tree_top_t_)),
       swamp_water_(std::make_shared<Sprite_Obj>(swamp_water_t_)) {}
 
     const size_t perlins_needed() override { return 3; }
@@ -66,7 +69,7 @@ class Swamp_Reeds : public One_Piece {
                 swamp.swamp_reeds_->get_Ptr(rand() % swamp.swamp_reeds_->size())) { }
 
     virtual const size_t generation_range() const override { return 1; }
-    virtual const float collision_radius() const override { return 15; } 
+    virtual const float collision_radius() const override { return 4; } 
 
 };
 
@@ -79,7 +82,7 @@ class Swamp_Spikes : public One_Piece {
                 swamp.swamp_spikes_->get_Ptr(rand() % swamp.swamp_spikes_->size())) { }
 
     virtual const size_t generation_range() const override { return 1; }
-    virtual const float collision_radius() const override { return 15; } 
+    virtual const float collision_radius() const override { return 5; } 
 
 };
 
@@ -93,7 +96,7 @@ class Swamp_Tree : public Two_Piece_Vert {
                      swamp.swamp_tree_top_->get_Ptr(rand() % swamp.swamp_tree_top_->size())) { }
 
     virtual const size_t generation_range() const override { return 2; }
-    virtual const float collision_radius() const override { return 31; } 
+    virtual const float collision_radius() const override { return 17; } 
 
 };
 

@@ -19,6 +19,7 @@ class One_Piece : public Resource {
     void transparent_draw(sf::RenderWindow&) const override;
 
     const bool is_overlapped(const sf::FloatRect&) override; // TO DO : Make const (so do update)
+//    virtual const sf::Vector2f get_pos() const override;
 
   private:
 
@@ -49,6 +50,7 @@ class Two_Piece_Vert : public Resource {
     void transparent_draw(sf::RenderWindow&) const override;
 
     const bool is_overlapped(const sf::FloatRect&) override; // TO DO
+  //  virtual const sf::Vector2f get_pos() const override;
 
   private:
 

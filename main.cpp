@@ -72,6 +72,7 @@ int main() {
    */
 
   sf::Vector2u world_size(2048, 2048);
+  //sf::Vector2u world_size(512, 512); TO DO : Why is this seg fault?
 
   World world;
   world.generate(world_size.x, world_size.y, tile_vec); 
@@ -181,7 +182,7 @@ int main() {
      *
      */
 
-    player.update(l_stick.x / 10, l_stick.y / 10, r_stick.x, r_stick.y);
+    player.update(l_stick.x / 10, l_stick.y / 10, r_stick.x, r_stick.y, world);
 
 
     /*

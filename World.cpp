@@ -340,6 +340,20 @@ void World::generate(size_t width, size_t height,
   pos += biomes[2]->perlins_needed();
   biomes[3]->get_Resources(all_perlin, pos, biomes_map, tile_vec, tile_map_, river, resource_map_);
 
+  // TO DO : Temp
+  resource_map_[1000][1000] = nullptr;
+
+  // Create caves
+  
+  state_perlin caves = get_States(width, height, 0.80, 0.50); // TO DO : Think about size
+  // somehow pick a point inside of biome
+  // count how many cave blocks in this connected space by going outward from point
+  // if over a certain amount of blocks, then label this as the cave and zero out all other things
+  // else top again
+  // pick between 3 and 5 intrance points and place it on top biomes
+  // populate caves
+
+
 }
 
 // Draw part of world in view of player to window
