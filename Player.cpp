@@ -24,7 +24,7 @@ void Body::update(float vel_x, float vel_y, Player& player, const World& world) 
   int begin_j = max(0, center.y - (size.y / 2) - 512) / 32;
   int end_j = min(max(0, (center.y + (size.y / 2) + 512) / 32), world_size_j);
 
-  const float player_radius = 15; // TO DO : Temp
+  //const float player_radius = 15; // TO DO : Temp
 
   // TO DO : Issue : tunneling
   // TO DO : Issue : Error if spawn on top of resource
@@ -34,12 +34,12 @@ void Body::update(float vel_x, float vel_y, Player& player, const World& world) 
         const sf::Vector2f rec_pos = world.resource_map_[i][j]->get_pos();
         if((pos_x_ - rec_pos.x) * (pos_x_ - rec_pos.x) + 
             (pos_y_ - rec_pos.y) * (pos_y_ - rec_pos.y) <= 
-            (player_radius + world.resource_map_[i][j]->collision_radius()) * 
-            (player_radius + world.resource_map_[i][j]->collision_radius())) { // Collision
+            (body_size + world.resource_map_[i][j]->collision_radius()) * 
+            (body_size + world.resource_map_[i][j]->collision_radius())) { // Collision
           world.resource_map_[i][j]->collide();
           float center_distance = sqrt((pos_x_ - rec_pos.x) * (pos_x_ - rec_pos.x) + 
                                        (pos_y_ - rec_pos.y) * (pos_y_ - rec_pos.y));
-          float overlap = center_distance - player_radius - 
+          float overlap = center_distance - body_size - 
                           world.resource_map_[i][j]->collision_radius();
           shifted_x -= overlap * (pos_x_ - rec_pos.x) / center_distance;
           shifted_y -= overlap * (pos_y_ - rec_pos.y) / center_distance;

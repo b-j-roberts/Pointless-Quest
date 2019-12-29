@@ -47,6 +47,8 @@ class Sprite_Obj {
   Sprite_Obj(const Sprite_Obj&);
   Sprite_Obj& operator= (const Sprite_Obj&);
 
+protected: // TO DO : Is this what I want?
+
   std::vector<std::shared_ptr<sf::Sprite>> s_;
 
 public:
@@ -83,12 +85,13 @@ class Resource {
     virtual const float collision_radius() const { return 0.f; }
                                                    
     virtual const bool is_overlapped(const sf::FloatRect&) { return false; }
-    virtual const sf::Vector2f get_pos() const { return sf::Vector2f(pos_x_, pos_y_); }
+    virtual const sf::Vector2f get_pos() const { return sf::Vector2f(pos_x_, pos_y_); } // what for?
 
+/* Debug
     mutable bool collided = false;
     void collide() const { collided = true; }
-    bool get_collide() const { if(collided) { collided = false; return true; } else { return false; } }
-
+    bool get_collide() const {if(collided) { collided = false; return true; } else { return false; }}
+*/
   protected:
 
     float pos_x_, pos_y_;

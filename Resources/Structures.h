@@ -68,4 +68,33 @@ class Two_Piece_Vert : public Resource {
 
 };
 
+
+class Animation : public Resource, public Sprite_Obj { // Inherit from resource also?
+
+  // TO DO : Think about using percents instead of overrall frame counting in case
+  //         one needs to skip frames to get timing right (if runs super slow)
+  const size_t frames; // do I need this?
+  size_t curr_frame;
+  size_t frame_inc;
+  const size_t fps;
+  static const size_t framerate; // do I need to have this be a refrence to framerate?
+
+public:
+
+  // pos x , pos y , constructors from Sprite Object
+  Animation(const float, const float, 
+            const size_t, const size_t, const double, const double, const Texture_Obj&);
+  Animation(const float, const float, const Texture_Obj&);
+
+  
+
+  void update();
+
+  void draw(sf::RenderWindow&) const override;
+  void transparent_draw(sf::RenderWindow&) const override;
+
+  const bool is_overlapped(const sf::FloatRect&) override;
+
+};
+
 #endif

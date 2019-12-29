@@ -66,3 +66,50 @@ void Two_Piece_Vert::transparent_draw(sf::RenderWindow& window) const {
   bot_->setColor(sf::Color(255, 255, 255, 255));
   top_->setColor(sf::Color(255, 255, 255, 255));
 }
+
+// TO DO : Maybe change these to take a sprite object instead so we dont need to duplicate
+Animation::Animation(const float pos_x, const float pos_y, 
+                     const size_t orig_x, const size_t orig_y, const double scale_x, 
+                     const double scale_y, const Texture_Obj& t_obj):
+  Resource(pos_x, pos_y),
+  Sprite_Obj(orig_x, orig_y, scale_x, scale_y, t_obj),
+  frames(size()),
+  curr_frame(0),
+  frame_inc(0),
+  fps(5), // TO DO
+  framerate(60) // TO DO
+  { }
+
+Animation::Animation(const float pos_x, const float pos_y, const Texture_Obj& t_obj):
+  Resource(pos_x, pos_y),
+  Sprite_Obj(t_obj),
+  frames(size()),
+  curr_frame(0),
+  frame_inc(0), 
+  fps(5), // TO DO
+  framerate(60) // TO DO
+  { }
+
+void Animation::update() {
+  if(++frame_inc == framerate / fps) {
+    frame_inc = 0;
+    ++curr_frame;
+  } 
+  if(curr_frame == frames) curr_frame = 0;
+}
+
+void Animation::draw(sf::RenderWindow& window) const {
+  s_[curr_frame]->setPosition(pos_x_, pos_y_); 
+  window.draw(s_[curr_frame]);
+}
+
+void Animation::transparent_draw(sf::RenderWindow& window) const {
+  s_[curr_frame]->setPosition(pos_x_, pos_y_);
+  s_[curr_frame]->setColor(sf:Color(255, 255, 255, 100));
+  window.draw(s_[curr_frame]);
+  s_[curr_frame]->setColor(sf:Color(255, 255, 255, 255));
+}
+
+const bool Animation::is_overlapped(const sf::FloatRect& rect) {
+  return s_[curr_frame]->getGlobalBounds().intersects(rect);
+}

@@ -283,6 +283,59 @@ std::vector<std::vector<state>> get_States(size_t width, size_t height,
   return ret;
 }
 
+// TO DO : Think about checking low_bound to make sure it is possible to have that many elems
+// TO DO : Think about vector of bools
+//
+// create a 2d vector containing true if position in bounded region, and false otherwise
+// makes sure that there are at least low_bound elements in bounded region
+std::vector<std::vector<bool>> get_Bounded_Region(size_t width, size_t height, size_t low_bound) {
+
+  // Initialize vector
+  std::vector<bool> false_vec(width, false);
+  std::vector<std::vector<bool>> ret(height, false_vec);
+
+  // Pick random starting point
+  int x = rand() % (width - 2) + 1; // NOTE : this stops corners ( see below note )
+  int y = rand() % (height - 2) + 1;
+
+  ret[y][x] = true;
+
+  size_t bounded_count = 1;
+
+  // Note : min 1 & max - 2 because we dont want to have to check for indexing errors
+  int min_i = max(1, x - 1);
+  int min_j = max(1, y - 1);
+  int max_i = min(width - 2, x + 1);
+  int max_j = min(height - 2, y + 1);
+
+  while(bounded_count < low_bound) {
+    for(size_t i = min_i; i <= max_i; ++i) {
+      for(size_t j = min_j; j <= max_j; ++j) {
+        if(!ret[j][i]) {
+          size_t possible = 0;
+          // Make more and more possible based on surrounding points ( 100% likely if enclosed )
+          if(ret[j-1][i]) ++possible;
+          if(ret[j+1][i]) ++possible;
+          if(ret[j][i-1]) ++possible;
+          if(ret[j][i+1]) ++possible;
+          size_t chance = rand() % 4;
+          if(chance < possible) {
+            ret[j][i] = true;
+            if(j == min_j) min_j = max(1, j - 1);
+            else if(j == max_j) max_j = min(height - 2, j + 1);
+            else if(i == min_i) min_i = max(1, i - 1);
+            else if(i == max_i) max_i = min(width - 2, i + 1);
+            ++bounded_count;
+          }
+        }
+      }
+    }
+  }
+
+  return ret;
+
+}
+
 // Generates the entire world [ biomes (tiles , resources)
 void World::generate(size_t width, size_t height, 
                      const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec) {
@@ -345,14 +398,10 @@ void World::generate(size_t width, size_t height,
 
   // Create caves
   
-  state_perlin caves = get_States(width, height, 0.80, 0.50); // TO DO : Think about size
-  // somehow pick a point inside of biome
-  // count how many cave blocks in this connected space by going outward from point
-  // if over a certain amount of blocks, then label this as the cave and zero out all other things
-  // else top again
+  // TO DO : Think about size
+  std::vector<std::vector<bool>> caves = get_Bounded_Region(width, height, 50000); 
   // pick between 3 and 5 intrance points and place it on top biomes
   // populate caves
-
 
 }
 

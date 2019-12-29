@@ -1,5 +1,7 @@
 #include "Map.h"
 
+#include "Functions.h" // TO DO : Move
+
 // TO DO : Error in weird lines being missed
 // TO DO : Error where when walking down it shifts down
 
@@ -42,8 +44,10 @@ void Map::draw(sf::RenderWindow& window, const World& world, const Player& playe
   // TO DO : do generation_range square for resources instead of single dot
   // TO DO : make different colors for different resources?
   // TO DO : Implement same layering as world here (tiles, water, resources)
-  for(int i = offset_x, end_i = offset_x + width_; i < end_i; ++i){
-    for(int j = offset_y, end_j = offset_y + height_; j < end_j; ++j) {
+  for(int i = max(0, offset_x), end_i = min(offset_x + width_, world.tile_map_.size()); 
+      i < end_i; ++i) {
+    for(int j = max(0, offset_y), end_j = min(offset_y + height_, world.tile_map_[i].size()); 
+        j < end_j; ++j) {
       map_pixel.setPosition(sf::Vector2f(begin_i + pos_x_ + i - offset_x,
                                          begin_j + pos_y_ + j - offset_y));
       switch(world.tile_map_[i][j]->biome_) {

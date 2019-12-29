@@ -14,12 +14,14 @@ class World; // Forward Declaration
 class Body : public Resource {
   // TO DO : Create body class for player with draw function
   public:
+
+    const size_t body_size = 5; // TO DO : Temp
     
     void draw(sf::RenderWindow& window) const override { // Placholder
-      sf::CircleShape body(15);
+      sf::CircleShape body(body_size);
       sf::CircleShape body_2(1);
       body.setPosition(pos_x_, pos_y_);
-      body.setOrigin(15, 15);
+      body.setOrigin(body_size, body_size);
       body_2.setOrigin(1, 1);
       body_2.setFillColor(sf::Color::Red);
       body_2.setPosition(pos_x_, pos_y_);
@@ -28,7 +30,7 @@ class Body : public Resource {
     }
 
     sf::FloatRect bounding_box() const { //Placeholder
-      sf::CircleShape body(15);
+      sf::CircleShape body(body_size);
       body.setPosition(pos_x_, pos_y_);
       return body.getGlobalBounds();
     }
