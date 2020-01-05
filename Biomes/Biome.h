@@ -4,7 +4,7 @@
 enum state { Top, Middle, Bottom };
 
 enum Biome_enum {  Forest_ = 0, Desert_ = 1, Magic_ = 2, Ocean_ = 3, 
-                   Swamp_ = 4, Unocean_ = 5 };
+                   Swamp_ = 4, Unocean_ = 5, Cave_ = 6};
 
 struct Tile { // Layer 0 Resource
 

@@ -5,11 +5,14 @@
 #include "OldOcean.h"
 #include "Swamp.h"
 
+#include "Cave.h"
+
 // TO DO : Scaling and tuning
 //         When is each state, ie cutoff values
 //         River for each biome
 //         layering of resources, (0 - tile, 1 - river) tile map, (2 - ground resource) below player
-//                                (3 - other resources) above player` 
+//                                (3 - other resources) above player, (-1 - cave) needs each type of
+//                                layer itself 
 //         cutoff bottom of resources in water, so they look submerged
 
 void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
@@ -487,6 +490,35 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
           }
         } // TO DO : Think about not doing this twice
 
+      }
+    }
+  }
+
+}
+
+void Cave::get_Resources(const std::vector<std::vector<bool>>& cave,
+                         const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                         std::vector<std::vector<std::shared_ptr<Tile>>>& cave_tile_map,
+                         std::vector<std::vector<std::shared_ptr<Resource>>>& cave_resource_map) {
+  // TO DO
+  // Tiles 
+  for(size_t i = 0; i < cave.size(); ++i) {
+    for(size_t j = 0; j < cave[i].size(); ++j) {
+      if(cave[i][j]) {
+         cave_tile_map[i][j] = std::make_shared<Tile>(Cave_, tile_vec[Cave_]);
+      }
+    }
+  }
+
+  // Resources
+  for(size_t i = 0; i < cave.size(); ++i) {
+    for(size_t j = 0; j < cave[i].size(); ++j) {
+      if(cave[i][j]) {
+        int rnd = rand() % 100;
+        if(rnd > 97) 
+          cave_resource_map[i][j] = std::make_shared<Cave_Spike>(i * 32, j * 32, *this);
+        else if(rnd > 95) 
+          cave_resource_map[i][j] = std::make_shared<Cave_Crystal>(i * 32, j * 32, *this);
       }
     }
   }

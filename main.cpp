@@ -60,6 +60,10 @@ int main() {
   const Texture_Obj old_ocean_tile_t(tile_size, tile_size, 10, "Biomes/old_ocean/oldoceanTiles");
   tile_vec.push_back(std::make_shared<Sprite_Obj>(old_ocean_tile_t));
 
+  //Load Cave Tiles
+  const Texture_Obj cave_tile_t(tile_size, tile_size, 10, "Biomes/cave/caveTiles");
+  tile_vec.push_back(std::make_shared<Sprite_Obj>(cave_tile_t));
+
   // TO DO : Make each block load all resources of that biome
 
   
@@ -77,7 +81,7 @@ int main() {
   World world;
   world.generate(world_size.x, world_size.y, tile_vec); 
 
-  Player player(x_scale, tile_size);
+  Player player(x_scale, tile_size, ocean_tile_t);
 
   // TO DO : LOG WORLD COMPLETION
   
@@ -161,6 +165,7 @@ int main() {
       }
     }
 
+    // TO DO : Debug commands
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
       l_stick.y = -70;
     }
@@ -172,6 +177,12 @@ int main() {
     }
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
       l_stick.x = 70;
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+      player.pos();
+    }
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+      player.cross();
     }
 
     /*

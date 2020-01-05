@@ -76,8 +76,7 @@ Animation::Animation(const float pos_x, const float pos_y,
   frames(size()),
   curr_frame(0),
   frame_inc(0),
-  fps(5), // TO DO
-  framerate(60) // TO DO
+  fps(5) // TO DO
   { }
 
 Animation::Animation(const float pos_x, const float pos_y, const Texture_Obj& t_obj):
@@ -86,11 +85,10 @@ Animation::Animation(const float pos_x, const float pos_y, const Texture_Obj& t_
   frames(size()),
   curr_frame(0),
   frame_inc(0), 
-  fps(5), // TO DO
-  framerate(60) // TO DO
+  fps(5) // TO DO
   { }
 
-void Animation::update() {
+void Animation::set_frames() {
   if(++frame_inc == framerate / fps) {
     frame_inc = 0;
     ++curr_frame;
@@ -100,14 +98,14 @@ void Animation::update() {
 
 void Animation::draw(sf::RenderWindow& window) const {
   s_[curr_frame]->setPosition(pos_x_, pos_y_); 
-  window.draw(s_[curr_frame]);
+  window.draw(*s_[curr_frame]);
 }
 
 void Animation::transparent_draw(sf::RenderWindow& window) const {
   s_[curr_frame]->setPosition(pos_x_, pos_y_);
-  s_[curr_frame]->setColor(sf:Color(255, 255, 255, 100));
-  window.draw(s_[curr_frame]);
-  s_[curr_frame]->setColor(sf:Color(255, 255, 255, 255));
+  s_[curr_frame]->setColor(sf::Color(255, 255, 255, 100));
+  window.draw(*s_[curr_frame]);
+  s_[curr_frame]->setColor(sf::Color(255, 255, 255, 255));
 }
 
 const bool Animation::is_overlapped(const sf::FloatRect& rect) {

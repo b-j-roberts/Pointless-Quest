@@ -7,4 +7,5 @@
 *
 *********************************************************
 
-Seg fault when walking straight up...
+-O3 flag
+remove -ggdb flag

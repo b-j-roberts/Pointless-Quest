@@ -38,6 +38,14 @@ class World {
     static constexpr Biome_enum biomes_[4] = { Magic_, Forest_, Swamp_, Ocean_ }; 
                                                // Top,    Mid,     Bot,    Liq
     std::unique_ptr<Biome> biomes[4];
+    std::unique_ptr<Cave> cave_;
+
+    //Index is map location divided by 32 (tile width) mapped to Tile object 
+    //  (contains sprite and biome info) in that location
+    // Layer 0 of resources
+    std::vector<std::vector<std::shared_ptr<Tile>>> cave_tile_map_; // TO DO: Use shared_ptr?
+    //location to mapped resource
+    std::vector<std::vector<std::shared_ptr<Resource>>> cave_resource_map_;
 
     //Index is map location divided by 32 (tile width) mapped to Tile object 
     //  (contains sprite and biome info) in that location

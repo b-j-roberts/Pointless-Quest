@@ -9,6 +9,8 @@
 #include "Swamp.h"
 // TO DO : Include the tundra
 
+#include "Cave.h"
+
 template<Biome_enum T> // Primary template
 struct BiomeType;
 
@@ -19,5 +21,6 @@ template<> struct BiomeType<Ocean_> { typedef Ocean type; };
 template<> struct BiomeType<Swamp_> { typedef Swamp type; };
 //template<> struct BiomeType<Tundra> { typedef Tundra type; };
 template<> struct BiomeType<Unocean_> { typedef Old_Ocean type; };
+template<> struct BiomeType<Cave_> { typedef Cave type; };
 
 #endif

@@ -77,7 +77,7 @@ class Animation : public Resource, public Sprite_Obj { // Inherit from resource 
   size_t curr_frame;
   size_t frame_inc;
   const size_t fps;
-  static const size_t framerate; // do I need to have this be a refrence to framerate?
+  static const size_t framerate = 60; // do I need to have this be a refrence to framerate?
 
 public:
 
@@ -88,7 +88,7 @@ public:
 
   
 
-  void update();
+  void set_frames();
 
   void draw(sf::RenderWindow&) const override;
   void transparent_draw(sf::RenderWindow&) const override;

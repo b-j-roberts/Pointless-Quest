@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <cmath> // TO DO : Move
 
-Body tempbody;
+//Body tempbody;
 
 void Body::update(float vel_x, float vel_y, Player& player, const World& world) {
 
@@ -28,6 +28,7 @@ void Body::update(float vel_x, float vel_y, Player& player, const World& world) 
 
   // TO DO : Issue : tunneling
   // TO DO : Issue : Error if spawn on top of resource
+  // TO DO : Issue : no collisions in cave but always collisions from overworld
   for(int j = begin_j; j < end_j; ++j) {
     for(int i = begin_i; i < end_i; ++i) {
       if(world.resource_map_[i][j] && world.resource_map_[i][j]->collision_radius() != 0) { 
@@ -36,7 +37,7 @@ void Body::update(float vel_x, float vel_y, Player& player, const World& world) 
             (pos_y_ - rec_pos.y) * (pos_y_ - rec_pos.y) <= 
             (body_size + world.resource_map_[i][j]->collision_radius()) * 
             (body_size + world.resource_map_[i][j]->collision_radius())) { // Collision
-          world.resource_map_[i][j]->collide();
+          //world.resource_map_[i][j]->collide();
           float center_distance = sqrt((pos_x_ - rec_pos.x) * (pos_x_ - rec_pos.x) + 
                                        (pos_y_ - rec_pos.y) * (pos_y_ - rec_pos.y));
           float overlap = center_distance - body_size - 
@@ -50,27 +51,31 @@ void Body::update(float vel_x, float vel_y, Player& player, const World& world) 
 
   move(shifted_x, shifted_y);
 
+  set_frames();
+
   // somehow transmit movement back to player update?
   player.view_.move(vel_x + shifted_x, vel_y + shifted_y);
 
 }
 
 // Note : Change 25.f to zoom in and out
-Player::Player(float x_scale, int tile_size):
-body_(std::make_unique<Body>(tempbody)), // default body construct
+Player::Player(float x_scale, int tile_size, const Texture_Obj& texture):
+body_(std::make_unique<Body>(texture)), // default body construct
   vel_x_(0),
   vel_y_(0),
   angle_(0), // TO DO : Move to body
   view_(sf::Vector2f(tile_size / 2 + body_->x(), tile_size / 2 + body_->y()), 
-        sf::Vector2f(x_scale * 25.f * tile_size / 3, 25.f * tile_size / 3)) { }
+        sf::Vector2f(x_scale * 25.f * tile_size / 3, 25.f * tile_size / 3)),
+  in_cave_(false) { }
 
-Player::Player(float x_scale, int tile_size, float pos_x, float pos_y):
-  body_(std::make_unique<Body>(tempbody)),
+Player::Player(float x_scale, int tile_size, float pos_x, float pos_y, const Texture_Obj& texture):
+  body_(std::make_unique<Body>(texture)),
   vel_x_(0),
   vel_y_(0),
   angle_(0),
   view_(sf::Vector2f(tile_size / 2 + body_->x(), tile_size / 2 + body_->y()), 
-        sf::Vector2f(x_scale * 25.f * tile_size / 3, 25.f * tile_size / 3)) { }
+        sf::Vector2f(x_scale * 25.f * tile_size / 3, 25.f * tile_size / 3)),
+  in_cave_(false) { }
 
 void Player::update(float l_stick_x, float l_stick_y, float r_stick_x, float r_stick_y, const World& world) {
   vel_x_ = l_stick_x;

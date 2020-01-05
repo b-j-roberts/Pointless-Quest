@@ -396,12 +396,47 @@ void World::generate(size_t width, size_t height,
   // TO DO : Temp
   resource_map_[1000][1000] = nullptr;
 
+
   // Create caves
   
+  cave_ = std::make_unique<Cave>();
+
+  // Cave Layer 0 initialize
+  cave_tile_map_.resize(h);
+  for(size_t i = 0; i < h; ++i) {
+    cave_tile_map_[i] = null_tile_vec;
+  }
+
+  // Cave Layer 1 initialize
+  cave_resource_map_.resize(h);
+  for(int i = 0; i < h; ++i) {
+    cave_resource_map_[i] = null_rec_vec;
+  }
+  
   // TO DO : Think about size
-  std::vector<std::vector<bool>> caves = get_Bounded_Region(width, height, 50000); 
-  // pick between 3 and 5 intrance points and place it on top biomes
-  // populate caves
+  std::vector<std::vector<bool>> cave = get_Bounded_Region(width, height, width * height * .2);
+  cave_->get_Resources(cave, tile_vec, cave_tile_map_, cave_resource_map_);
+
+  // TO DO : pick between 3 and 5 intrance points and place it on top biomes
+  //   make sure no river tiles?
+  size_t cave_entry_x = rand() % cave[0].size();
+  size_t cave_entry_y = rand() % cave.size();
+  while(!cave[cave_entry_y][cave_entry_x]) {
+    cave_entry_x = rand() % cave[0].size();
+    cave_entry_y = rand() % cave.size();
+  }
+  // TO DO : Something here is flipped with the indexes... fix this then fix width, heights...
+  // clear cave resources & main resources
+  for(size_t i = max(0, cave_entry_y - 2); i < min(width - 1, cave_entry_y + 2); ++i) {
+    for(size_t j = max(0, cave_entry_x - 2); j < min(width - 1, cave_entry_x + 2); ++j) {
+      resource_map_[j][i] = nullptr;   
+      cave_resource_map_[j][i] = nullptr;
+      tile_map_[j][i] = std::make_shared<Tile>(Unocean_, tile_vec[Unocean_]); // TO DO : Temp
+      cave_tile_map_[j][i] = std::make_shared<Tile>(Unocean_, tile_vec[Unocean_]);
+    }
+  }
+  std::cout << cave_entry_x * 32 << " " << cave_entry_y * 32 << std::endl;
+  // TO DO : make tiles under and on surface special
 
 }
 
@@ -420,11 +455,21 @@ void World::draw(sf::RenderWindow& window, const Player& player) {
   int begin_j = max(0, center.y - (size.y / 2) - 512) / 32;
   int end_j = min(max(0, (center.y + (size.y / 2) + 512) / 32), world_size_j);
 
+  bool in_cave = player.in_cave();
+
   // Draw Tiles in view
   for(int i = begin_i; i < end_i; ++i) {
     for(int j = begin_j; j < end_j; ++j) { 
-      tile_map_[i][j]->sprite_->setPosition(i * 32, j * 32);
-      window.draw(*(tile_map_[i][j]->sprite_));
+      if(in_cave) { 
+        // TO DO : Change this to selecting tile map and resource map by reference ?
+        if(cave_tile_map_[i][j]) {
+          cave_tile_map_[i][j]->sprite_->setPosition(i * 32, j * 32);
+          window.draw(*(cave_tile_map_[i][j]->sprite_));
+        }
+      } else {
+        tile_map_[i][j]->sprite_->setPosition(i * 32, j * 32);
+        window.draw(*(tile_map_[i][j]->sprite_));
+      }
     }
   }
   
@@ -435,11 +480,21 @@ void World::draw(sf::RenderWindow& window, const Player& player) {
   //Draw Resources in view
   for(int j = begin_j; j < end_j; ++j) {
     for(int i = begin_i; i < end_i; ++i) {
-      if(resource_map_[i][j]) { // ignores nullptr
-        if(resource_map_[i][j]->is_overlapped(player_box)) { // make transparent
-          resource_map_[i][j]->transparent_draw(window);
-        } else {
-          resource_map_[i][j]->draw(window);
+      if(in_cave) {
+        if(cave_resource_map_[i][j]) { // ignores nullptr
+          if(cave_resource_map_[i][j]->is_overlapped(player_box)) { // make transparent
+            cave_resource_map_[i][j]->transparent_draw(window);
+          } else {
+            cave_resource_map_[i][j]->draw(window);
+          }
+        }
+      } else {
+        if(resource_map_[i][j]) { // ignores nullptr
+          if(resource_map_[i][j]->is_overlapped(player_box)) { // make transparent
+            resource_map_[i][j]->transparent_draw(window);
+          } else {
+            resource_map_[i][j]->draw(window);
+          }
         }
       }
     }
@@ -448,7 +503,7 @@ void World::draw(sf::RenderWindow& window, const Player& player) {
 }
 
 bool collision(const Player& player) { 
-	// TO DO
+	// TO DO ?
   return false;
   //run through resources close to player and return true if any resource returns true 
   //  on a call to Resource.collision(player)
