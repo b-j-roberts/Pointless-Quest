@@ -1,6 +1,8 @@
 #ifndef __WORLD_H_INCLUDED__
 #define __WORLD_H_INCLUDED__
 
+#include <array>
+
 #include <stdlib.h>
 
 #include "Player.h"
@@ -11,6 +13,49 @@ class Resource; // Forward Declaration (see into using with class template)
 class Player;
 class Body;
 class Map; // Forward Declare friend
+
+/*
+ 
+
+enum Plane_enum { Overworld_, Underground_ };
+
+// Maybe place struct inside World and make it a class
+template <Plane_enum P>
+struct World_Plane {
+  
+  static std::array possible_top_biomes{ Magic_, Tundra_ }; // TO DO : Volcano 
+  static std::array possible_mid_biomes{ Forest_, Desert_ };
+  static std::array possible_bot_biomes{ Swamp_ }; // TO DO : Beach, Rockys
+  static std::array possible_liq_biomes{ Ocean_, Unocean_ }; // TO DO : Lava
+
+  std::vector<Biome_enum> biome_enums_;
+  std::vector<std::unique_ptr<Biome>> biomes_;
+
+  std::vector<std::vector<std::shared_ptr<Tile>>> tile_map_;
+  std::vector<std::vector<std::shared_ptr<Resource>>> resource_map_;
+
+  // World_Plane():
+    do biome_enums_,
+    do biomes_,
+    size tile_map_, (nullptrs)
+    size resource_map_ (nullptrs) {
+    
+    if constexpr(std::equal_to(P, Overworld_) {
+      get_Biomes(...)
+      do river
+      get_perlins needed for biomes_
+      get_Resources
+    } else if constexpr(std::equal_to(P, Underground_)) {
+      get_bounded_region
+      get_resources
+    }   
+    
+  }
+
+};
+
+
+*/
 
 class World {
   
@@ -35,7 +80,7 @@ class World {
 
     std::vector<std::vector<Biome_enum>> get_Biomes(size_t width, size_t height);
 
-    static constexpr Biome_enum biomes_[4] = { Magic_, Forest_, Swamp_, Ocean_ }; 
+    const Biome_enum biomes_[4] = { Magic_, Tundra_, Swamp_, Ocean_ }; 
                                                // Top,    Mid,     Bot,    Liq
     std::unique_ptr<Biome> biomes[4];
     std::unique_ptr<Cave> cave_;

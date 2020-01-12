@@ -3,27 +3,46 @@
 
 #include "World.h"
 
+#include <map>
+
+// GUI Map that shows surrounding area biomes & resources
 class Map {
 
+  // GUI Map background, window relative location, and size info
   sf::RectangleShape background_;
   size_t pos_x_, pos_y_;
   size_t width_, height_;
 
-  const sf::Color forest_map_color_ = sf::Color(124, 252, 0, 255);
-  const sf::Color ocean_map_color_ = sf::Color(0, 0, 250, 255);
-  const sf::Color magic_map_color_ = sf::Color(125, 0, 125, 255);
-  const sf::Color swamp_map_color_ = sf::Color(0, 128, 128, 255);
-  const sf::Color unocean_map_color_ = sf::Color(102, 51, 0, 255);
-  const sf::Color desert_map_color_ = sf::Color(140, 100, 0, 255);
+  // Biome's Tile Map Colors map
+  const std::map<Biome_enum, sf::Color> tile_colors = {
+    {Forest_,  sf::Color(124, 252, 0, 255)},
+    {Ocean_,   sf::Color(0, 0, 250, 255)},
+    {Magic_,   sf::Color(125, 0, 125, 255)},
+    {Swamp_,   sf::Color(0, 128, 128, 255)},
+    {Unocean_, sf::Color(102, 51, 0, 255)},
+    {Desert_,  sf::Color(140, 100, 0, 255)},
+    {Tundra_,  sf::Color(240, 234, 214, 255)},
+  }; 
 
-  const sf::Color forest_resource_color_ = sf::Color(0, 100, 0, 255);
-  const sf::Color ocean_resource_color_ = sf::Color(0, 191, 255, 255);
-  const sf::Color magic_resource_color_ = sf::Color(255, 20, 147, 255);
-  const sf::Color swamp_resource_color_ = sf::Color(50, 205, 50, 255);
-  const sf::Color unocean_resource_color_ = sf::Color(255, 255, 240, 255);
-  const sf::Color desert_resource_color_ = sf::Color(173, 255, 47, 255);
+  // Biome's Resource Map Colors map
+  const std::map<Biome_enum, sf::Color> resource_colors = {
+    {Forest_,  sf::Color(0, 100, 0, 255)},
+    {Ocean_,   sf::Color(0, 191, 255, 255)},
+    {Magic_,   sf::Color(255, 20, 147, 255)},
+    {Swamp_,   sf::Color(50, 205, 50, 255)},
+    {Unocean_, sf::Color(255, 255, 240, 255)},
+    {Desert_,  sf::Color(173, 255, 47, 255)},
+    {Tundra_,  sf::Color(188, 143, 143, 255)},
+  }; 
+
+  // River Map Color
+  const sf::Color river_color_ = sf::Color(0, 0, 250, 255);
 
 public:
+
+  // Noncopyable
+  Map(const Map&) = delete;
+  Map& operator=(const Map&) = delete;
 
   explicit Map(const Player& player);
 

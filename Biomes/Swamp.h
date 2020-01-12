@@ -7,11 +7,15 @@
 // TO DO : Make circle and rectangle collision and use that for flowers 
 //         and reeds and think about using it for the desert cactuses
 
+
+// Swamp's Resource Forward Declaration
 class Swamp_Reeds;
 class Swamp_Spikes;
 class Swamp_Tree;
 class Swamp_Water;
 
+// Class containing all Forest Swamp Textures & Sprites
+// Contains overriden functions to properly build Swamp biome ( perlins_needed & get_Resources )
 class Swamp : public Biome {
 
   public:
@@ -28,7 +32,9 @@ class Swamp : public Biome {
       swamp_tree_top_(std::make_shared<Sprite_Obj>(31, 110, 1, 1, swamp_tree_top_t_)),
       swamp_water_(std::make_shared<Sprite_Obj>(swamp_water_t_)) {}
 
-    const size_t perlins_needed() override { return 3; }
+    // 2 - Trees (density), Reeds (density) 
+    const size_t perlins_needed() override { return 2; }
+
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
                        const std::vector<std::vector<Biome_enum>>&, 
                        const std::vector<std::shared_ptr<Sprite_Obj>>&,
@@ -60,6 +66,8 @@ class Swamp : public Biome {
 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Swamp_Reeds : public One_Piece {
 
   public:
@@ -73,6 +81,8 @@ class Swamp_Reeds : public One_Piece {
 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Swamp_Spikes : public One_Piece {
 
   public:
@@ -86,6 +96,8 @@ class Swamp_Spikes : public One_Piece {
 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Swamp_Tree : public Two_Piece_Vert {
 
   public:
@@ -100,6 +112,8 @@ class Swamp_Tree : public Two_Piece_Vert {
 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Swamp_Water : public One_Piece {
 
   public:

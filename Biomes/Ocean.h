@@ -3,6 +3,8 @@
 
 // This is blank for now because I dont have any ocean resources!!
 
+// Class containing all Ocean Resource Textures & Sprites
+// Contains overriden functions to properly build Ocean biome ( perlins_needed = 0 & get_Resources )
 class Ocean : public Biome {
 
   public:

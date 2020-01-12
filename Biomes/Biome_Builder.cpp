@@ -4,6 +4,7 @@
 #include "Ocean.h"
 #include "OldOcean.h"
 #include "Swamp.h"
+#include "Tundra.h"
 
 #include "Cave.h"
 
@@ -14,6 +15,8 @@
 //                                (3 - other resources) above player, (-1 - cave) needs each type of
 //                                layer itself 
 //         cutoff bottom of resources in water, so they look submerged
+
+// Contains get_Resources Function for each Biome obj thus bringing compiling of biomes to one file
 
 void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
                            size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
@@ -456,7 +459,7 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
     for(size_t j = 0; j < biomes_map[i].size(); ++j) {
       if(biomes_map[i][j] == Swamp_ && resource_map[i][j] == nullptr && !tile_map[i][j]->is_water_) {
         int rnd = rand() % 100;
-        switch(all_perlin[pos + 2][i][j]) {
+        switch(all_perlin[pos + 1][i][j]) {
           case Top:
             if(rnd > 92) 
               resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
@@ -489,6 +492,76 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
             resource_map[i][j] = nullptr;
           }
         } // TO DO : Think about not doing this twice
+
+      }
+    }
+  }
+
+}
+
+void Tundra::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
+                          size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
+                          const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                          std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map,
+                          const std::vector<std::vector<state>>& river,
+                          std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+
+  // Tiles
+  for(size_t i = 0; i < biomes_map.size(); ++i) {
+    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
+      if(biomes_map[i][j] == Tundra_) {
+        if(river[i][j] == Middle)
+          tile_map[i][j] = std::make_shared<Tile>(Tundra_, tundra_ice_, true);
+        else tile_map[i][j] = std::make_shared<Tile>(Tundra_, tile_vec[Tundra_]);
+      }
+    }
+  }
+
+  //Plantlife
+  for(size_t i = 0; i < biomes_map.size(); ++i) {
+    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
+      if(biomes_map[i][j] == Tundra_ && resource_map[i][j] == nullptr &&
+         !tile_map[i][j]->is_water_) {
+        int rnd = rand() % 100; // based on base 100 scale
+        switch(all_perlin[pos + 1][i][j]) {
+          case Top:
+            if(rnd > 94)
+              resource_map[i][j] = std::make_shared<Tundra_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 90)
+              resource_map[i][j] = std::make_shared<Tundra_Shrub>(i * 32, j * 32, *this);
+            break;
+
+          case Middle:
+            if(rnd > 97)
+              resource_map[i][j] = std::make_shared<Tundra_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 94)
+              resource_map[i][j] = std::make_shared<Tundra_Shrub>(i * 32, j * 32, *this);
+            break;
+
+          case Bottom:
+            if(rnd > 98)
+              resource_map[i][j] = std::make_shared<Tundra_Tree>(i * 32, j * 32, *this);
+            else if(rnd > 97)
+              resource_map[i][j] = std::make_shared<Tundra_Shrub>(i * 32, j * 32, *this);
+            break;
+
+          default: break;
+        }
+
+        // generation range collision
+        if(resource_map[i][j] != nullptr) {
+          size_t gen_rng = resource_map[i][j]->generation_range();
+          if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
+            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
+              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
+                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;
+                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+              }
+            }
+          } else {
+            resource_map[i][j] = nullptr;
+          }
+        } // TO DO : Think about avoiding doing this twice
 
       }
     }

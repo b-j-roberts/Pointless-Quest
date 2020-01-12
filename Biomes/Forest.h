@@ -8,11 +8,15 @@
 //           really oddly when they do their transparent draw funciton
 // TO DO : Is transparent draw function being activated too graciously ?
 
+
+// Forest's Resource Forward Declaration
 class Forest_Bush;
 class Forest_Moss;
 class Forest_Small_Tree;
 class Forest_Tree;
 
+// Class containing all Forest Resource Textures & Sprites
+// Contains overriden functions to properly build Forest biome ( perlins_needed & get_Resources )
 class Forest : public Biome {
 
   public:
@@ -34,7 +38,9 @@ class Forest : public Biome {
       forest_tree_top_(std::make_shared<Sprite_Obj>(63, 89, 1.3, 1.3, forest_tree_top_t_)),
       forest_tree_bot_(std::make_shared<Sprite_Obj>(31, 110, 1, 1, forest_tree_bot_t_)) { }
 
+    // 2 - Tiles (flowers) & Trees (density)
     const size_t perlins_needed() override { return 2; }
+
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
                        const std::vector<std::vector<Biome_enum>>&, 
                        const std::vector<std::shared_ptr<Sprite_Obj>>&,
@@ -69,6 +75,8 @@ class Forest : public Biome {
     friend Forest_Tree;
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Forest_Bush : public Two_Piece_Vert {
 
   public:
@@ -85,6 +93,8 @@ class Forest_Bush : public Two_Piece_Vert {
   // TO DO : Other interface ? 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Forest_Moss : public One_Piece {
 
   public:
@@ -99,7 +109,8 @@ class Forest_Moss : public One_Piece {
 
 };
 
-// TO DO : Fix these so there is a constant method of determining the center 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Forest_Small_Tree : public Two_Piece_Vert {
 
   public:
@@ -114,6 +125,8 @@ class Forest_Small_Tree : public Two_Piece_Vert {
 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Forest_Tree : public Two_Piece_Vert {
 
   public:

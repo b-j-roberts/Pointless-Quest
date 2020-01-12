@@ -53,8 +53,8 @@ int main() {
   tile_vec.push_back(std::make_shared<Sprite_Obj>(swamp_tile_t));
 
   //Load Tundra Tiles
-  //const Texture_Obj tundra_tile_t(tile_size, tile_size, 10, "Biomes/tundra/snowTiles");
-  //tile_vec.push_back(std::make_shared<Sprite_Obj>(tundra_tile_t));
+  const Texture_Obj tundra_tile_t(tile_size, tile_size, 10, "Biomes/tundra/snowTiles");
+  tile_vec.push_back(std::make_shared<Sprite_Obj>(tundra_tile_t));
 
   //Load Old Ocean Tiles
   const Texture_Obj old_ocean_tile_t(tile_size, tile_size, 10, "Biomes/old_ocean/oldoceanTiles");
@@ -81,7 +81,7 @@ int main() {
   World world;
   world.generate(world_size.x, world_size.y, tile_vec); 
 
-  Player player(x_scale, tile_size, ocean_tile_t);
+  Player player(x_scale, tile_size, 1000 * 32, 1000 * 32, ocean_tile_t);
 
   // TO DO : LOG WORLD COMPLETION
   
@@ -205,11 +205,11 @@ int main() {
      */
 
     window.clear();
+    window.setView(player.get_View());
 
     world.draw(window, player);
     map.draw(window, world, player);
 
-    window.setView(player.get_View());
     window.display();
   }
   // Closed Game Loop

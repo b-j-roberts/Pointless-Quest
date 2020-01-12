@@ -4,9 +4,14 @@
 #include "../Resources/Structures.h"
 #include "Biome.h"
 
+
+// Old Ocean's Resource Forward Declaration
 class Old_Ocean_Large_Fish;
 class Old_Ocean_Small_Fish;
 
+// Class containing all Old Ocean Resource Textures & Sprites
+// Contains overriden functions to properly build Old Ocean biome 
+//   ( perlins_needed = 0 & get_Resources )
 class Old_Ocean : public Biome {
 
   public:
@@ -17,7 +22,6 @@ class Old_Ocean : public Biome {
       old_ocean_large_fish_(std::make_shared<Sprite_Obj>(31, 15, 1.2, 1.2, old_ocean_large_fish_t_)),
       old_ocean_small_fish_(std::make_shared<Sprite_Obj>(15, 15, 1, 1, old_ocean_small_fish_t_)) { }
 
-     const size_t perlins_needed() override { return 1; }
      void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
                        const std::vector<std::vector<Biome_enum>>&, 
                        const std::vector<std::shared_ptr<Sprite_Obj>>&,
@@ -40,6 +44,8 @@ class Old_Ocean : public Biome {
     friend Old_Ocean_Small_Fish;
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Old_Ocean_Large_Fish : public One_Piece {
 
   public:
@@ -54,6 +60,8 @@ class Old_Ocean_Large_Fish : public One_Piece {
 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Old_Ocean_Small_Fish : public One_Piece {
 
   public:

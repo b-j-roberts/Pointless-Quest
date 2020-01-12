@@ -4,9 +4,13 @@
 #include "../Resources/Structures.h"
 #include "Biome.h"
 
+
+// Magic's Resource Forward Declaration
 class Magic_Flowers;
 class Magic_Trees;
 
+// Class containing all Magic Resource Textures & Sprites
+// Contains overriden functions to properly build Magic biome ( perlins_needed & get_Resources )
 class Magic : public Biome {
 
   public:
@@ -17,7 +21,9 @@ class Magic : public Biome {
       magic_flowers_(std::make_shared<Sprite_Obj>(15, 31, 1.2, 1.2, magic_flowers_t_)),
       magic_trees_(std::make_shared<Sprite_Obj>(47, 150, 1, 1, magic_trees_t_)) { }
 
+    // 2 - Flowers (density), Trees (density)
     const size_t perlins_needed() override { return 2; }
+
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
                        const std::vector<std::vector<Biome_enum>>&, 
                        const std::vector<std::shared_ptr<Sprite_Obj>>&,
@@ -41,6 +47,8 @@ class Magic : public Biome {
 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Magic_Flowers : public One_Piece {
 
   public:
@@ -54,6 +62,8 @@ class Magic_Flowers : public One_Piece {
 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Magic_Trees : public One_Piece {
 
   public:

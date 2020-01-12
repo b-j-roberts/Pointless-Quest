@@ -6,7 +6,7 @@
 #include <iostream> // TO DO
 
 //static members
-constexpr Biome_enum World::biomes_[4];
+//constexpr Biome_enum World::biomes_[4];
 
 //returns minumum power of mult greater than num
 int get_Min_Power(int num, int mult) {
@@ -341,10 +341,11 @@ void World::generate(size_t width, size_t height,
                      const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec) {
 
   // Loading Biomes Sprites and Textures
-  biomes[0] = std::make_unique<BiomeType<biomes_[0]>::type>();
-  biomes[1] = std::make_unique<BiomeType<biomes_[1]>::type>();
-  biomes[2] = std::make_unique<BiomeType<biomes_[2]>::type>();
-  biomes[3] = std::make_unique<BiomeType<biomes_[3]>::type>();
+  
+  biomes[0] = get_Biome(biomes_[0]);
+  biomes[1] = get_Biome(biomes_[1]);
+  biomes[2] = get_Biome(biomes_[2]);
+  biomes[3] = get_Biome(biomes_[3]);
 
   size_t state_perlins_needed = 0;
   state_perlins_needed += biomes[0]->perlins_needed();
@@ -443,23 +444,11 @@ void World::generate(size_t width, size_t height,
 // Draw part of world in view of player to window
 void World::draw(sf::RenderWindow& window, const Player& player) {
 
-  auto size = player.get_View().getSize();
-  auto center = player.get_View().getCenter();
-
-  const int world_size_i = tile_map_.size();
-  const int world_size_j = tile_map_[0].size();
-
-  int begin_i = max(0, center.x - (size.x / 2) - 512) / 32;
-  int end_i = min(max(0, (center.x + (size.x / 2) + 512) / 32), world_size_i);
-
-  int begin_j = max(0, center.y - (size.y / 2) - 512) / 32;
-  int end_j = min(max(0, (center.y + (size.y / 2) + 512) / 32), world_size_j);
-
   bool in_cave = player.in_cave();
 
   // Draw Tiles in view
-  for(int i = begin_i; i < end_i; ++i) {
-    for(int j = begin_j; j < end_j; ++j) { 
+  for(int i = player.x_range().first; i < player.x_range().second; ++i) {
+    for(int j = player.y_range().first; j < player.y_range().second; ++j) { 
       if(in_cave) { 
         // TO DO : Change this to selecting tile map and resource map by reference ?
         if(cave_tile_map_[i][j]) {
@@ -478,8 +467,8 @@ void World::draw(sf::RenderWindow& window, const Player& player) {
   sf::FloatRect player_box = player.bounding_box();
 
   //Draw Resources in view
-  for(int j = begin_j; j < end_j; ++j) {
-    for(int i = begin_i; i < end_i; ++i) {
+  for(int j = player.y_range().first; j < player.y_range().second; ++j) {
+    for(int i = player.x_range().first; i < player.x_range().second; ++i) {
       if(in_cave) {
         if(cave_resource_map_[i][j]) { // ignores nullptr
           if(cave_resource_map_[i][j]->is_overlapped(player_box)) { // make transparent

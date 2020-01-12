@@ -1,43 +1,26 @@
 #include "Player.h"
-#include <cmath> // TO DO : Move
-
-//Body tempbody;
 
 void Body::update(float vel_x, float vel_y, Player& player, const World& world) {
 
-  move(vel_x, vel_y);// TO DO
-
   // DETECT and Resolve collisions
+
+  move(vel_x, vel_y); // Move into possibly colliding space
+  
   float shifted_x = 0;
   float shifted_y = 0;
-
-  // TO DO : Make this calculate only once per frame
-  auto size = player.get_View().getSize();
-  auto center = player.get_View().getCenter();
-
-  const int world_size_i = world.tile_map_.size();
-  const int world_size_j = world.tile_map_[0].size();
-
-  int begin_i = max(0, center.x - (size.x / 2) - 512) / 32;
-  int end_i = min(max(0, (center.x + (size.x / 2) + 512) / 32), world_size_i);
-
-  int begin_j = max(0, center.y - (size.y / 2) - 512) / 32;
-  int end_j = min(max(0, (center.y + (size.y / 2) + 512) / 32), world_size_j);
-
-  //const float player_radius = 15; // TO DO : Temp
 
   // TO DO : Issue : tunneling
   // TO DO : Issue : Error if spawn on top of resource
   // TO DO : Issue : no collisions in cave but always collisions from overworld
-  for(int j = begin_j; j < end_j; ++j) {
-    for(int i = begin_i; i < end_i; ++i) {
+  // Collision resolution ( resolution vector calculated as (shifted_x, shifted_y) )
+  for(int j = player.x_range_.first; j < player.x_range_.second; ++j) {
+    for(int i = player.y_range_.first; i < player.y_range_.second; ++i) {
       if(world.resource_map_[i][j] && world.resource_map_[i][j]->collision_radius() != 0) { 
         const sf::Vector2f rec_pos = world.resource_map_[i][j]->get_pos();
         if((pos_x_ - rec_pos.x) * (pos_x_ - rec_pos.x) + 
             (pos_y_ - rec_pos.y) * (pos_y_ - rec_pos.y) <= 
             (body_size + world.resource_map_[i][j]->collision_radius()) * 
-            (body_size + world.resource_map_[i][j]->collision_radius())) { // Collision
-          //world.resource_map_[i][j]->collide();
+            (body_size + world.resource_map_[i][j]->collision_radius())) { // Is collision
           float center_distance = sqrt((pos_x_ - rec_pos.x) * (pos_x_ - rec_pos.x) + 
                                        (pos_y_ - rec_pos.y) * (pos_y_ - rec_pos.y));
           float overlap = center_distance - body_size - 
@@ -49,39 +32,50 @@ void Body::update(float vel_x, float vel_y, Player& player, const World& world) 
     }
   }
 
-  move(shifted_x, shifted_y);
+  move(shifted_x, shifted_y); // Move out of colliding space
 
-  set_frames();
-
-  // somehow transmit movement back to player update?
+  // Move view same amount body moved
   player.view_.move(vel_x + shifted_x, vel_y + shifted_y);
 
+  // Update animation frames
+  set_frames();
 }
 
-// Note : Change 25.f to zoom in and out
+
 Player::Player(float x_scale, int tile_size, const Texture_Obj& texture):
-body_(std::make_unique<Body>(texture)), // default body construct
-  vel_x_(0),
-  vel_y_(0),
-  angle_(0), // TO DO : Move to body
+  body_(std::make_unique<Body>(texture)), // default position
   view_(sf::Vector2f(tile_size / 2 + body_->x(), tile_size / 2 + body_->y()), 
-        sf::Vector2f(x_scale * 25.f * tile_size / 3, 25.f * tile_size / 3)),
+        sf::Vector2f(x_scale * zoom_factor_ * tile_size / 3, zoom_factor_ * tile_size / 3)),
   in_cave_(false) { }
+//curr_plane_(Overworld_) { }
 
 Player::Player(float x_scale, int tile_size, float pos_x, float pos_y, const Texture_Obj& texture):
-  body_(std::make_unique<Body>(texture)),
-  vel_x_(0),
-  vel_y_(0),
-  angle_(0),
+  body_(std::make_unique<Body>(texture, pos_x, pos_y)),
   view_(sf::Vector2f(tile_size / 2 + body_->x(), tile_size / 2 + body_->y()), 
-        sf::Vector2f(x_scale * 25.f * tile_size / 3, 25.f * tile_size / 3)),
+        sf::Vector2f(x_scale * zoom_factor_ * tile_size / 3, zoom_factor_ * tile_size / 3)),
   in_cave_(false) { }
+//curr_plane_(Overworld_) { }
 
-void Player::update(float l_stick_x, float l_stick_y, float r_stick_x, float r_stick_y, const World& world) {
-  vel_x_ = l_stick_x;
-  vel_y_ = l_stick_y; // TO DO : Add some slow down effect so no instant stops?
-  angle_ = 0;//angle_2f(r_stick_x, r_stick_y); // TO DO : Create this function
+// Calls body update, which does all necessary updates ( including players view )
+// & calculate new ranges
+void Player::update(float l_stick_x, float l_stick_y, 
+                    float r_stick_x, float r_stick_y, const World& world) {
 
-  body_->update(vel_x_, vel_y_, *this, world); // TO DO
+  body_->update(l_stick_x, l_stick_y, *this, world);
+
+  // Calculate x_range & y_range
+  auto size = view_.getSize();
+  auto center = view_.getCenter();
+
+  const int world_size_x = world.tile_map_.size();
+  const int world_size_y = world.tile_map_[0].size();
+
+  x_range_ = std::make_pair<int, int>(
+                max(0, center.x - (size.x / 2) - 512) / 32,
+                min(max(0, (center.x + (size.x / 2) + 512) / 32), world_size_x));
+
+  y_range_ = std::make_pair<int, int>(
+                max(0, center.y - (size.y / 2) - 512) / 32,
+                min(max(0, (center.y + (size.y / 2) + 512) / 32), world_size_y));
 
 }

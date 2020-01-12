@@ -6,8 +6,12 @@
 
 // TO DO : Add circular base to cactus
 
+
+// Desert's Resource Forward Declaration
 class Desert_Cactus;
 
+// Class containing all Desert Resource Textures & Sprites
+// Contains overriden functions to properly build Desert biome ( perlins_needed & get_Resources )
 class Desert : public Biome {
 
   public:
@@ -16,6 +20,7 @@ class Desert : public Biome {
       desert_cactus_t_(64, 32, 3, "Biomes/desert/Cactus"),
       desert_cactus_(std::make_shared<Sprite_Obj>(15, 57, 1, 1, desert_cactus_t_)) { }
 
+    // 1 - Cactus (density)
     const size_t perlins_needed() override { return 1; }
     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
                        const std::vector<std::vector<Biome_enum>>&, 
@@ -37,6 +42,8 @@ class Desert : public Biome {
 
 };
 
+// Resource Class used to construct resource in world & 
+// Overriden Resource functions for this specific type ( generation_range & collision_radius )
 class Desert_Cactus : public One_Piece {
 
   public:
