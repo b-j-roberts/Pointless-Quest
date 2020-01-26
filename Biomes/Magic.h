@@ -18,19 +18,19 @@ class Magic : public Biome {
     Magic():
       magic_flowers_t_(32, 32, 5, "Biomes/magic/magicFlowers"),
       magic_trees_t_(160, 96, 2, "Biomes/magic/magicTrees"),
-      magic_flowers_(std::make_shared<Sprite_Obj>(15, 31, 1.2, 1.2, magic_flowers_t_)),
-      magic_trees_(std::make_shared<Sprite_Obj>(47, 150, 1, 1, magic_trees_t_)) { }
+      magic_flowers_(std::make_shared<Sprite_Obj>(magic_flowers_t_, 15, 31, 1.2, 1.2)),
+      magic_trees_(std::make_shared<Sprite_Obj>(magic_trees_t_, 47, 150)) { }
 
     // 2 - Flowers (density), Trees (density)
     const size_t perlins_needed() override { return 2; }
 
-    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
-                       const std::vector<std::vector<Biome_enum>>&, 
-                       const std::vector<std::shared_ptr<Sprite_Obj>>&,
-                       std::vector<std::vector<std::shared_ptr<Tile>>>&,
-                       const std::vector<std::vector<state>>&,
-                       std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
-
+    void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
+                             size_t perlins_pos = 0,
+                             const std::vector<std::vector<state>>& river = {{}}) override;
   private:
 	
     Magic(const Magic&);

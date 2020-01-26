@@ -17,32 +17,32 @@
 //         cutoff bottom of resources in water, so they look submerged
 
 // Contains get_Resources Function for each Biome obj thus bringing compiling of biomes to one file
-
-void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
-                           size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
-                           const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                           std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map,
-                           const std::vector<std::vector<state>>& river,
-                           std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Forest::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins,
+                             size_t perlins_pos,
+                             const std::vector<std::vector<state>>& river) {
 
   // Tiles
-  for(size_t i = 0; i < biomes_map.size(); ++i) { // TO DO : Resize tile file
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Forest_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) { // TO DO : Resize tile file
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Forest_) {
         if(river[i][j] == Middle) { // Do river
-          tile_map[i][j] = std::make_shared<Tile>(Forest_, tile_vec[Ocean_], true);
+          tile_map_[i][j] = std::make_shared<Tile>(Forest_, tile_vec[Ocean_], true);
         } else { // Do normal tile
-          switch(all_perlin[pos][i][j]) {
+          switch(perlins[perlins_pos][i][j]) {
             case Top:
-              tile_map[i][j] = std::make_shared<Tile>(Forest_, tile_vec[Forest_]); 
+              tile_map_[i][j] = std::make_shared<Tile>(Forest_, tile_vec[Forest_]); 
               break;
 
             case Middle:
-              tile_map[i][j] = std::make_shared<Tile>(Forest_, rand() % 9, tile_vec[Forest_]);
+              tile_map_[i][j] = std::make_shared<Tile>(Forest_, rand() % 9, tile_vec[Forest_]);
               break;
 
             case Bottom:
-              tile_map[i][j] = std::make_shared<Tile>(Forest_, rand() % 5, tile_vec[Forest_]);
+              tile_map_[i][j] = std::make_shared<Tile>(Forest_, rand() % 5, tile_vec[Forest_]);
               break;
 
             default: break;
@@ -53,60 +53,60 @@ void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
   }
 
   // Tree Layer
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Forest_ && resource_map[i][j] == nullptr && 
-         !tile_map[i][j]->is_water_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Forest_ && resource_map_[i][j] == nullptr && 
+         !tile_map_[i][j]->is_water_) {
         int rnd = rand() % 100; // based on base 100 scale
-        switch(all_perlin[pos + 1][i][j]) {
+        switch(perlins[perlins_pos + 1][i][j]) {
           case Top:
             if(rnd > 95)
-              resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Tree>(j * 32, i * 32, *this);
             else if(rnd > 87) 
-              resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Small_Tree>(j * 32, i * 32, *this);
             else if(rnd > 80) 
-              resource_map[i][j] = std::make_shared<Forest_Bush>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Bush>(j * 32, i * 32, *this);
             else if(rnd > 70) 
-              resource_map[i][j] = std::make_shared<Forest_Moss>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Moss>(j * 32, i * 32, *this);
             break;
 
           case Middle:
             if(rnd > 98) 
-              resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Tree>(j * 32, i * 32, *this);
             else if(rnd > 95) 
-              resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Small_Tree>(j * 32, i * 32, *this);
             else if(rnd > 90) 
-              resource_map[i][j] = std::make_shared<Forest_Bush>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Bush>(j * 32, i * 32, *this);
             else if(rnd > 85) 
-              resource_map[i][j] = std::make_shared<Forest_Moss>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Moss>(j * 32, i * 32, *this);
             break;
 
           case Bottom:
             if(rnd > 98) 
-              resource_map[i][j] = std::make_shared<Forest_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Tree>(j * 32, i * 32, *this);
             else if(rnd > 97) 
-              resource_map[i][j] = std::make_shared<Forest_Small_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Small_Tree>(j * 32, i * 32, *this);
             else if(rnd > 96) 
-              resource_map[i][j] = std::make_shared<Forest_Bush>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Bush>(j * 32, i * 32, *this);
             else if(rnd > 94) 
-              resource_map[i][j] = std::make_shared<Forest_Moss>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Forest_Moss>(j * 32, i * 32, *this);
             break;
 
           default: break;
         }
 
         // generation range collision
-        if(resource_map[i][j] != nullptr) {
-          size_t gen_rng = resource_map[i][j]->generation_range();
+        if(resource_map_[i][j] != nullptr) {
+          size_t gen_rng = resource_map_[i][j]->generation_range();
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
-            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
-              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
-                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
-                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+            for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
+              for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
+                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
           } else {
-            resource_map[i][j] = nullptr;
+            resource_map_[i][j] = nullptr;
           }
         }
 
@@ -116,60 +116,61 @@ void Forest::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
 
 }
 
-void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin,
-                          size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
-                          const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                          std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map,
-                          const std::vector<std::vector<state>>& river,
-                          std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Magic::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins,
+                             size_t perlins_pos,
+                             const std::vector<std::vector<state>>& river) {
 
   // Tiles
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Magic_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Magic_) {
         if(river[i][j] == Middle) 
-          tile_map[i][j] = std::make_shared<Tile>(Magic_, tile_vec[Ocean_], true);
-        else tile_map[i][j] = std::make_shared<Tile>(Magic_, tile_vec[Magic_]);
+          tile_map_[i][j] = std::make_shared<Tile>(Magic_, tile_vec[Ocean_], true);
+        else tile_map_[i][j] = std::make_shared<Tile>(Magic_, tile_vec[Magic_]);
       }
     }
   }
 
   // Flower Layer
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Magic_ && resource_map[i][j] == nullptr && !tile_map[i][j]->is_water_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Magic_ && resource_map_[i][j] == nullptr && !tile_map_[i][j]->is_water_) {
         int rnd = rand() % 100;
-        switch(all_perlin[pos][i][j]) {
+        switch(perlins[perlins_pos][i][j]) {
           case Top:
             if(rnd > 85) 
-              resource_map[i][j] = std::make_shared<Magic_Flowers>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Magic_Flowers>(j * 32, i * 32, *this);
             break;
 
           case Middle:
             if(rnd > 95) 
-              resource_map[i][j] = std::make_shared<Magic_Flowers>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Magic_Flowers>(j * 32, i * 32, *this);
             break;
 
           case Bottom:
             if(rnd > 98) 
-              resource_map[i][j] = std::make_shared<Magic_Flowers>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Magic_Flowers>(j * 32, i * 32, *this);
             break;
 
           default: break;
         }
 
         // generation range collision
-        if(resource_map[i][j] != nullptr) {
-          size_t gen_rng = resource_map[i][j]->generation_range();
+        if(resource_map_[i][j] != nullptr) {
+          size_t gen_rng = resource_map_[i][j]->generation_range();
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
-            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
-              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
-                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
-                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+            for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
+              for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
+                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
           } else {
-            resource_map[i][j] = nullptr;
+            resource_map_[i][j] = nullptr;
           }
         }
 
@@ -178,41 +179,41 @@ void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
   }
 
   // Tree Layer
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Magic_ && resource_map[i][j] == nullptr && !tile_map[i][j]->is_water_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Magic_ && resource_map_[i][j] == nullptr && !tile_map_[i][j]->is_water_) {
         int rnd = rand() % 100;
-        switch(all_perlin[pos + 1][i][j]) {
+        switch(perlins[perlins_pos + 1][i][j]) {
           case Top:
             if(rnd > 90) 
-              resource_map[i][j] = std::make_shared<Magic_Trees>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Magic_Trees>(j * 32, i * 32, *this);
             break;
 
           case Middle:
             if(rnd > 95) 
-              resource_map[i][j] = std::make_shared<Magic_Trees>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Magic_Trees>(j * 32, i * 32, *this);
             break;
 
           case Bottom:
             if(rnd > 98) 
-              resource_map[i][j] = std::make_shared<Magic_Trees>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Magic_Trees>(j * 32, i * 32, *this);
             break;
 
           default: break;
         }
 
         // generation range collision
-        if(resource_map[i][j] != nullptr) {
-          size_t gen_rng = resource_map[i][j]->generation_range();
+        if(resource_map_[i][j] != nullptr) {
+          size_t gen_rng = resource_map_[i][j]->generation_range();
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
-            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
-              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
-                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
-                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+            for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
+              for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
+                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
           } else {
-            resource_map[i][j] = nullptr;
+            resource_map_[i][j] = nullptr;
           }
         } // TO DO : Think about avoiding doing this twice
 
@@ -222,61 +223,62 @@ void Magic::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
 
 }
 
-void Desert::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
-                           size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
-                           const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                           std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map,
-                           const std::vector<std::vector<state>>& river,
-                           std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Desert::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins,
+                             size_t perlins_pos,
+                             const std::vector<std::vector<state>>& river) {
 
   // Tiles
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Desert_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Desert_) {
         if(river[i][j] == Middle) 
-          tile_map[i][j] = std::make_shared<Tile>(Desert_, tile_vec[Ocean_], true);
-        else tile_map[i][j] = std::make_shared<Tile>(Desert_, tile_vec[Desert_]);
+          tile_map_[i][j] = std::make_shared<Tile>(Desert_, tile_vec[Ocean_], true);
+        else tile_map_[i][j] = std::make_shared<Tile>(Desert_, tile_vec[Desert_]);
       }
     }
   }
 
   // Cactus Layer
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Desert_ && resource_map[i][j] == nullptr && 
-         !tile_map[i][j]->is_water_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Desert_ && resource_map_[i][j] == nullptr && 
+         !tile_map_[i][j]->is_water_) {
         int rnd = rand() % 100;
-        switch(all_perlin[pos][i][j]) {
+        switch(perlins[perlins_pos][i][j]) {
           case Top:
             if(rnd > 90) 
-              resource_map[i][j] = std::make_shared<Desert_Cactus>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Desert_Cactus>(j * 32, i * 32, *this);
             break;
 
           case Middle:
             if(rnd > 95) 
-              resource_map[i][j] = std::make_shared<Desert_Cactus>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Desert_Cactus>(j * 32, i * 32, *this);
             break;
 
           case Bottom:
             if(rnd > 98) 
-              resource_map[i][j] = std::make_shared<Desert_Cactus>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Desert_Cactus>(j * 32, i * 32, *this);
             break;
 
           default: break;
         }
 
         // generation range collision
-        if(resource_map[i][j] != nullptr) {
-          size_t gen_rng = resource_map[i][j]->generation_range();
+        if(resource_map_[i][j] != nullptr) {
+          size_t gen_rng = resource_map_[i][j]->generation_range();
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
-            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
-              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
-                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
-                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+            for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
+              for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
+                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
           } else {
-            resource_map[i][j] = nullptr;
+            resource_map_[i][j] = nullptr;
           }
         }
 
@@ -286,74 +288,76 @@ void Desert::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
 
 }
 
-void Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
-                          size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
-                          const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                          std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map,
-                          const std::vector<std::vector<state>>& river,
-                          std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Ocean::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins,
+                             size_t perlins_pos,
+                             const std::vector<std::vector<state>>& river) {
 
   // Tiles
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Ocean_) {
-        tile_map[i][j] = std::make_shared<Tile>(Ocean_, tile_vec[Ocean_], true);
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Ocean_) {
+        tile_map_[i][j] = std::make_shared<Tile>(Ocean_, tile_vec[Ocean_], true);
       }
     }
   }
 
   // There are currently no resources with this biome so just fill map with default resource objects
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Ocean_ && resource_map[i][j] == nullptr) {
+ /* for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Ocean_ && resource_map_[i][j] == nullptr) {
       }
     }
-  }
+  }*/
 
 }
 
-void Old_Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
-                              size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
-                              const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                              std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map,
-                              const std::vector<std::vector<state>>& river,
-                              std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Old_Ocean::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins,
+                             size_t perlins_pos,
+                             const std::vector<std::vector<state>>& river) {
 
   // Tiles 
   // TO DO : Use perlin?
-  for(size_t i = 0; i < biomes_map.size(); ++i) { // TO DO : Fix miscolored old_ocean tile
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Unocean_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) { // TO DO : Fix miscolored old_ocean tile
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Unocean_) {
         if(river[i][j] == Middle) 
-          tile_map[i][j] = std::make_shared<Tile>(Unocean_, tile_vec[Ocean_], true);
-        else tile_map[i][j] = std::make_shared<Tile>(Unocean_, tile_vec[Unocean_]);
+          tile_map_[i][j] = std::make_shared<Tile>(Unocean_, tile_vec[Ocean_], true);
+        else tile_map_[i][j] = std::make_shared<Tile>(Unocean_, tile_vec[Unocean_]);
       }
     }
   }
 
   // Bones Layer (Note : does not use perlin)
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Unocean_ && resource_map[i][j] == nullptr && 
-         !tile_map[i][j]->is_water_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Unocean_ && resource_map_[i][j] == nullptr && 
+         !tile_map_[i][j]->is_water_) {
         int rnd = rand() % 100;
         if(rnd > 98) 
-          resource_map[i][j] = std::make_shared<Old_Ocean_Large_Fish>(i * 32, j * 32, *this);
+          resource_map_[i][j] = std::make_shared<Old_Ocean_Large_Fish>(j * 32, i * 32, *this);
         else if(rnd > 95) 
-          resource_map[i][j] = std::make_shared<Old_Ocean_Small_Fish>(i * 32, j * 32, *this);
+          resource_map_[i][j] = std::make_shared<Old_Ocean_Small_Fish>(j * 32, i * 32, *this);
         
         // generation range collision
-        if(resource_map[i][j] != nullptr) {
-          size_t gen_rng = resource_map[i][j]->generation_range();
+        if(resource_map_[i][j] != nullptr) {
+          size_t gen_rng = resource_map_[i][j]->generation_range();
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
-            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
-              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
-                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
-                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+            for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
+              for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
+                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
           } else {
-            resource_map[i][j] = nullptr;
+            resource_map_[i][j] = nullptr;
           }
         }
 
@@ -363,67 +367,68 @@ void Old_Ocean::get_Resources(const std::vector<std::vector<std::vector<state>>>
 
 }
 
-void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
-                          size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
-                          const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                          std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map,
-                          const std::vector<std::vector<state>>& river,
-                          std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Swamp::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins,
+                             size_t perlins_pos,
+                             const std::vector<std::vector<state>>& river) {
 
   // Tiles
   // TO DO : Perlin?
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Swamp_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Swamp_) {
         if(river[i][j] == Middle) 
-          tile_map[i][j] = std::make_shared<Tile>(Swamp_, swamp_water_, true);
-        else tile_map[i][j] = std::make_shared<Tile>(Swamp_, tile_vec[Swamp_]);
+          tile_map_[i][j] = std::make_shared<Tile>(Swamp_, swamp_water_, true);
+        else tile_map_[i][j] = std::make_shared<Tile>(Swamp_, tile_vec[Swamp_]);
       }
     }
   }
 
   // Trees Layer
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Swamp_ && resource_map[i][j] == nullptr) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Swamp_ && resource_map_[i][j] == nullptr) {
         int rnd = rand() % 100;
-        switch(all_perlin[pos][i][j]) {
+        switch(perlins[perlins_pos][i][j]) {
           case Top:
             if(rnd > 95) 
-              resource_map[i][j] = std::make_shared<Swamp_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Swamp_Tree>(j * 32, i * 32, *this);
             else if(rnd > 91)
-              resource_map[i][j] = std::make_shared<Swamp_Spikes>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Swamp_Spikes>(j * 32, i * 32, *this);
             break;
 
           case Middle:
             if(rnd > 97)
-              resource_map[i][j] = std::make_shared<Swamp_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Swamp_Tree>(j * 32, i * 32, *this);
             else if(rnd > 93)
-              resource_map[i][j] = std::make_shared<Swamp_Spikes>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Swamp_Spikes>(j * 32, i * 32, *this);
             break;
 
           case Bottom:
             if(rnd > 98)
-              resource_map[i][j] = std::make_shared<Swamp_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Swamp_Tree>(j * 32, i * 32, *this);
             else if(rnd > 95)
-              resource_map[i][j] = std::make_shared<Swamp_Spikes>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Swamp_Spikes>(j * 32, i * 32, *this);
             break;
 
           default: break;
         }
 
         // generation range collision
-        if(resource_map[i][j] != nullptr) {
-          size_t gen_rng = resource_map[i][j]->generation_range();
+        if(resource_map_[i][j] != nullptr) {
+          size_t gen_rng = resource_map_[i][j]->generation_range();
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
-            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
-              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
-                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
-                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+            for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
+              for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
+                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
           } else {
-            resource_map[i][j] = nullptr;
+            resource_map_[i][j] = nullptr;
           }
         }
 
@@ -432,13 +437,13 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
   }
   
 /*
-  // Water Layer TO DO : Do an overall river and use tile for corresponding biome in that position
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Swamp_ && resource_map[i][j] == nullptr) {
-        switch(all_perlin[pos + 1][i][j]) {
+  // Water Layer TO DO : Do an overall river and use tile for corresponding biome in that perlins_pos
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Swamp_ && resource_map_[i][j] == nullptr) {
+        switch(perlins[perlins_pos + 1][i][j]) {
           case Top:
-            resource_map[i][j] = std::make_shared<Swamp_Water>(i * 32, j * 32, *this);
+            resource_map_[i][j] = std::make_shared<Swamp_Water>(i * 32, j * 32, *this);
             break;
 //
 //          case Middle:
@@ -455,41 +460,41 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
   }
 */
   // Reeds
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Swamp_ && resource_map[i][j] == nullptr && !tile_map[i][j]->is_water_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Swamp_ && resource_map_[i][j] == nullptr && !tile_map_[i][j]->is_water_) {
         int rnd = rand() % 100;
-        switch(all_perlin[pos + 1][i][j]) {
+        switch(perlins[perlins_pos + 1][i][j]) {
           case Top:
             if(rnd > 92) 
-              resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Swamp_Reeds>(j * 32, i * 32, *this);
             break;
 
           case Middle:
             if(rnd > 96) 
-              resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Swamp_Reeds>(j * 32, i * 32, *this);
             break;
 
           case Bottom:
             if(rnd > 98) 
-              resource_map[i][j] = std::make_shared<Swamp_Reeds>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Swamp_Reeds>(j * 32, i * 32, *this);
             break;
 
           default: break;
         }
 
         // generation range collision
-        if(resource_map[i][j] != nullptr) {
-          size_t gen_rng = resource_map[i][j]->generation_range();
+        if(resource_map_[i][j] != nullptr) {
+          size_t gen_rng = resource_map_[i][j]->generation_range();
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
-            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
-              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
-                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;        
-                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+            for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
+              for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
+                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
           } else {
-            resource_map[i][j] = nullptr;
+            resource_map_[i][j] = nullptr;
           }
         } // TO DO : Think about not doing this twice
 
@@ -499,67 +504,68 @@ void Swamp::get_Resources(const std::vector<std::vector<std::vector<state>>>& al
 
 }
 
-void Tundra::get_Resources(const std::vector<std::vector<std::vector<state>>>& all_perlin, 
-                          size_t pos, const std::vector<std::vector<Biome_enum>>& biomes_map, 
-                          const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                          std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map,
-                          const std::vector<std::vector<state>>& river,
-                          std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map) {
+void Tundra::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins,
+                             size_t perlins_pos,
+                             const std::vector<std::vector<state>>& river) {
 
   // Tiles
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Tundra_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Tundra_) {
         if(river[i][j] == Middle)
-          tile_map[i][j] = std::make_shared<Tile>(Tundra_, tundra_ice_, true);
-        else tile_map[i][j] = std::make_shared<Tile>(Tundra_, tile_vec[Tundra_]);
+          tile_map_[i][j] = std::make_shared<Tile>(Tundra_, tundra_ice_, true);
+        else tile_map_[i][j] = std::make_shared<Tile>(Tundra_, tile_vec[Tundra_]);
       }
     }
   }
 
   //Plantlife
-  for(size_t i = 0; i < biomes_map.size(); ++i) {
-    for(size_t j = 0; j < biomes_map[i].size(); ++j) {
-      if(biomes_map[i][j] == Tundra_ && resource_map[i][j] == nullptr &&
-         !tile_map[i][j]->is_water_) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Tundra_ && resource_map_[i][j] == nullptr &&
+         !tile_map_[i][j]->is_water_) {
         int rnd = rand() % 100; // based on base 100 scale
-        switch(all_perlin[pos + 1][i][j]) {
+        switch(perlins[perlins_pos + 1][i][j]) {
           case Top:
             if(rnd > 94)
-              resource_map[i][j] = std::make_shared<Tundra_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Tundra_Tree>(j * 32, i * 32, *this);
             else if(rnd > 90)
-              resource_map[i][j] = std::make_shared<Tundra_Shrub>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Tundra_Shrub>(j * 32, i * 32, *this);
             break;
 
           case Middle:
             if(rnd > 97)
-              resource_map[i][j] = std::make_shared<Tundra_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Tundra_Tree>(j * 32, i * 32, *this);
             else if(rnd > 94)
-              resource_map[i][j] = std::make_shared<Tundra_Shrub>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Tundra_Shrub>(j * 32, i * 32, *this);
             break;
 
           case Bottom:
             if(rnd > 98)
-              resource_map[i][j] = std::make_shared<Tundra_Tree>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Tundra_Tree>(j * 32, i * 32, *this);
             else if(rnd > 97)
-              resource_map[i][j] = std::make_shared<Tundra_Shrub>(i * 32, j * 32, *this);
+              resource_map_[i][j] = std::make_shared<Tundra_Shrub>(j * 32, i * 32, *this);
             break;
 
           default: break;
         }
 
         // generation range collision
-        if(resource_map[i][j] != nullptr) {
-          size_t gen_rng = resource_map[i][j]->generation_range();
+        if(resource_map_[i][j] != nullptr) {
+          size_t gen_rng = resource_map_[i][j]->generation_range();
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) {
-            for(size_t rng_x = i + 1 - gen_rng; rng_x < i + 1; ++rng_x) {
-              for(size_t rng_y = j + 1 - gen_rng; rng_y < j + 1; ++rng_y) {
-                if(resource_map[i][j] == nullptr || rng_x == i && rng_y == j) continue;
-                if(resource_map[rng_x][rng_y] != nullptr) resource_map[i][j] = nullptr;
+            for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
+              for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
+                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;
+                if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
           } else {
-            resource_map[i][j] = nullptr;
+            resource_map_[i][j] = nullptr;
           }
         } // TO DO : Think about avoiding doing this twice
 
@@ -569,29 +575,32 @@ void Tundra::get_Resources(const std::vector<std::vector<std::vector<state>>>& a
 
 }
 
-void Cave::get_Resources(const std::vector<std::vector<bool>>& cave,
-                         const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                         std::vector<std::vector<std::shared_ptr<Tile>>>& cave_tile_map,
-                         std::vector<std::vector<std::shared_ptr<Resource>>>& cave_resource_map) {
-  // TO DO
+void Cave::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins,
+                             size_t perlins_pos,
+                             const std::vector<std::vector<state>>& river) {
+
   // Tiles 
-  for(size_t i = 0; i < cave.size(); ++i) {
-    for(size_t j = 0; j < cave[i].size(); ++j) {
-      if(cave[i][j]) {
-         cave_tile_map[i][j] = std::make_shared<Tile>(Cave_, tile_vec[Cave_]);
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Cave_) {
+         tile_map_[i][j] = std::make_shared<Tile>(Cave_, tile_vec[Cave_]);
       }
     }
   }
 
   // Resources
-  for(size_t i = 0; i < cave.size(); ++i) {
-    for(size_t j = 0; j < cave[i].size(); ++j) {
-      if(cave[i][j]) {
+  for(size_t i = 0; i < biome_map.size(); ++i) {
+    for(size_t j = 0; j < biome_map[i].size(); ++j) {
+      if(biome_map[i][j] == Cave_) {
         int rnd = rand() % 100;
         if(rnd > 97) 
-          cave_resource_map[i][j] = std::make_shared<Cave_Spike>(i * 32, j * 32, *this);
+          resource_map_[i][j] = std::make_shared<Cave_Spike>(j * 32, i * 32, *this);
         else if(rnd > 95) 
-          cave_resource_map[i][j] = std::make_shared<Cave_Crystal>(i * 32, j * 32, *this);
+          resource_map_[i][j] = std::make_shared<Cave_Crystal>(j * 32, i * 32, *this);
       }
     }
   }

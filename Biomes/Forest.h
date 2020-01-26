@@ -25,28 +25,28 @@ class Forest : public Biome {
       forest_bush_top_t_(32, 32, 3, "Biomes/forest/forestBush", 32),
       forest_bush_bot_t_(32, 32, 2, "Biomes/forest/forestBush"),
       forest_moss_t_(32, 32, 3, "Biomes/forest/forestMoss"),
-      forest_small_tree_top_t_(64, 32, 2, "Biomes/forest/forestSmallTree", 64),
-      forest_small_tree_bot_t_(64, 32, 3, "Biomes/forest/forestSmallTree"),
+      forest_s_tree_top_t_(64, 32, 2, "Biomes/forest/forestSmallTree", 64),
+      forest_s_tree_bot_t_(64, 32, 3, "Biomes/forest/forestSmallTree"),
       forest_tree_top_t_(96, 128, 2, "Biomes/forest/forestTree", 128),
       forest_tree_bot_t_(128, 64, 3, "Biomes/forest/forestTree"),
-      forest_bush_top_(std::make_shared<Sprite_Obj>(15, 25, 1.2, 1.2, forest_bush_top_t_)),
-      forest_bush_bot_(std::make_shared<Sprite_Obj>(16, 25, 1, 1, forest_bush_bot_t_)),
-      forest_moss_(std::make_shared<Sprite_Obj>(15, 15, 1.2, 1.2, forest_moss_t_)),
-      forest_small_tree_top_(std::make_shared<Sprite_Obj>(15, 54, 1.2, 
-                                                          1.2, forest_small_tree_top_t_)),
-      forest_small_tree_bot_(std::make_shared<Sprite_Obj>(15, 52, 1, 1, forest_small_tree_bot_t_)),
-      forest_tree_top_(std::make_shared<Sprite_Obj>(63, 89, 1.3, 1.3, forest_tree_top_t_)),
-      forest_tree_bot_(std::make_shared<Sprite_Obj>(31, 110, 1, 1, forest_tree_bot_t_)) { }
+      forest_bush_top_(std::make_shared<Sprite_Obj>(forest_bush_top_t_, 15, 25, 1.2, 1.2)),
+      forest_bush_bot_(std::make_shared<Sprite_Obj>(forest_bush_bot_t_, 16, 25)),
+      forest_moss_(std::make_shared<Sprite_Obj>(forest_moss_t_, 15, 15, 1.2, 1.2)),
+      forest_s_tree_top_(std::make_shared<Sprite_Obj>(forest_s_tree_top_t_, 15, 54, 1.2, 1.2)),
+      forest_s_tree_bot_(std::make_shared<Sprite_Obj>(forest_s_tree_bot_t_, 15, 52)),
+      forest_tree_top_(std::make_shared<Sprite_Obj>(forest_tree_top_t_, 63, 89, 1.3, 1.3)),
+      forest_tree_bot_(std::make_shared<Sprite_Obj>(forest_tree_bot_t_, 31, 110)) { }
 
     // 2 - Tiles (flowers) & Trees (density)
     const size_t perlins_needed() override { return 2; }
 
-    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
-                       const std::vector<std::vector<Biome_enum>>&, 
-                       const std::vector<std::shared_ptr<Sprite_Obj>>&,
-                       std::vector<std::vector<std::shared_ptr<Tile>>>&,
-                       const std::vector<std::vector<state>>&,
-                       std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
+    void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
+                             size_t perlins_pos = 0,
+                             const std::vector<std::vector<state>>& river = {{}}) override;
 
   private:
 
@@ -56,16 +56,16 @@ class Forest : public Biome {
     Texture_Obj forest_bush_top_t_;
     Texture_Obj forest_bush_bot_t_;
     Texture_Obj forest_moss_t_;
-    Texture_Obj forest_small_tree_top_t_;
-    Texture_Obj forest_small_tree_bot_t_;
+    Texture_Obj forest_s_tree_top_t_;
+    Texture_Obj forest_s_tree_bot_t_;
     Texture_Obj forest_tree_top_t_;
     Texture_Obj forest_tree_bot_t_;
 
     std::shared_ptr<Sprite_Obj> forest_bush_top_;
     std::shared_ptr<Sprite_Obj> forest_bush_bot_;
     std::shared_ptr<Sprite_Obj> forest_moss_;
-    std::shared_ptr<Sprite_Obj> forest_small_tree_top_;
-    std::shared_ptr<Sprite_Obj> forest_small_tree_bot_;
+    std::shared_ptr<Sprite_Obj> forest_s_tree_top_;
+    std::shared_ptr<Sprite_Obj> forest_s_tree_bot_;
     std::shared_ptr<Sprite_Obj> forest_tree_top_;
     std::shared_ptr<Sprite_Obj> forest_tree_bot_;
 
@@ -117,8 +117,8 @@ class Forest_Small_Tree : public Two_Piece_Vert {
 
     Forest_Small_Tree(const float pos_x, const float pos_y, const Forest& forest):
       Two_Piece_Vert(pos_x, pos_y, 0, 51,
-		    forest.forest_small_tree_bot_->get_Ptr(rand() % forest.forest_small_tree_bot_->size()),
-		    forest.forest_small_tree_top_->get_Ptr(rand() % forest.forest_small_tree_top_->size())) { }
+		    forest.forest_s_tree_bot_->get_Ptr(rand() % forest.forest_s_tree_bot_->size()),
+		    forest.forest_s_tree_top_->get_Ptr(rand() % forest.forest_s_tree_top_->size())) { }
 
     virtual const size_t generation_range() const override { return 1; }
     virtual const float collision_radius() const override { return 12; } 

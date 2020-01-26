@@ -18,16 +18,17 @@ class Desert : public Biome {
 
     Desert():
       desert_cactus_t_(64, 32, 3, "Biomes/desert/Cactus"),
-      desert_cactus_(std::make_shared<Sprite_Obj>(15, 57, 1, 1, desert_cactus_t_)) { }
+      desert_cactus_(std::make_shared<Sprite_Obj>(desert_cactus_t_, 15, 57)) { }
 
     // 1 - Cactus (density)
     const size_t perlins_needed() override { return 1; }
-    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
-                       const std::vector<std::vector<Biome_enum>>&, 
-                       const std::vector<std::shared_ptr<Sprite_Obj>>&,
-                       std::vector<std::vector<std::shared_ptr<Tile>>>&,
-                       const std::vector<std::vector<state>>&,
-                       std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
+     void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
+                             size_t perlins_pos = 0,
+                             const std::vector<std::vector<state>>& river = {{}}) override;
 
   private:
 

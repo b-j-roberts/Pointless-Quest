@@ -37,20 +37,22 @@ void Map::draw(sf::RenderWindow& window, const World& world, const Player& playe
 
   // TO DO : do generation_range square for resources instead of single dot
   // TO DO : make different colors for different resources?
-  for(int i = max(0, offset_x), end_i = min(offset_x + width_, world.tile_map_.size()); 
+  const auto& tile_map_ = world.world_.at(player.current_plane())->tile_map_;
+  const auto& resource_map_ = world.world_.at(player.current_plane())->resource_map_;
+  for(int i = max(0, offset_x), end_i = min(offset_x + width_, tile_map_.size()); 
       i < end_i; ++i) {
-    for(int j = max(0, offset_y), end_j = min(offset_y + height_, world.tile_map_[i].size()); 
+    for(int j = max(0, offset_y), end_j = min(offset_y + height_, tile_map_[i].size()); 
         j < end_j; ++j) {
       map_pixel.setPosition(sf::Vector2f(begin_i + pos_x_ + i - offset_x,
                                          begin_j + pos_y_ + j - offset_y));
 
       // According to layer priority, set map color ( resource, water, tile )
-      if(world.resource_map_[i][j]){
-        map_pixel.setFillColor(resource_colors.at(world.tile_map_[i][j]->biome_));
-      } else if(world.tile_map_[i][j]->is_water_) {
+      if(resource_map_[j][i]){
+        map_pixel.setFillColor(resource_colors.at(tile_map_[j][i]->biome_));
+      } else if(tile_map_[j][i]->is_water_) {
         map_pixel.setFillColor(river_color_);
       } else {
-        map_pixel.setFillColor(tile_colors.at(world.tile_map_[i][j]->biome_));
+        map_pixel.setFillColor(tile_colors.at(tile_map_[j][i]->biome_));
       }
 
       window.draw(map_pixel);

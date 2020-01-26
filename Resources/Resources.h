@@ -1,71 +1,77 @@
 #ifndef __RESOURCES_H_INCLUDED__
 #define __RESOURCES_H_INCLUDED__
 
-#include <memory>
-#include <vector>
+#include "../Functions.h"
+
+#include <memory> // shared_ptr
 #include <string>
 
-#include <SFML/Graphics.hpp>
-
 class Sprite_Obj;
-class Texture_Obj;
 
-// Store texture info from a png file inside Resources/
+// Stores textures from a png file inside Resources/
 class Texture_Obj {
  
-  //NOTES: Texture file should be a single row of all textures of a given type, all with the
+  // NOTE: Texture file should be a single row of all textures of a given type, all with the
   //       same size (ie width and height)
 
-  //Disallow default constuction, copy constuction, and copy assignment
-  Texture_Obj() = delete;
-  Texture_Obj(const Texture_Obj&);
-  Texture_Obj& operator= (const Texture_Obj&);
-
+  // height & width of textures
   const size_t height_, width_;
-  const size_t num_;
+  // Each texture has its own vector element
   std::vector<sf::Texture> t_;
-
-  friend class Sprite_Obj;
   
 public:
     
-    //Create a texture object with parameters 
-    //  (height, width, num, name of file w/o .png, height offset (def 0), width offset (def 0))
-    Texture_Obj(const size_t, const size_t, const size_t, std::string, 
-                const size_t = 0, const size_t = 0);
+  // Disallow default constuction, copy constuction, and copy assignment
+  Texture_Obj() = delete;
+  Texture_Obj(const Texture_Obj&) = delete;
+  Texture_Obj& operator= (const Texture_Obj&) = delete;
+
+  // params : height, width, num, name of file w/o .png, height offset(=0), width offset(=0)
+  Texture_Obj(const size_t, const size_t, const size_t, std::string, 
+              const size_t = 0, const size_t = 0);
+
+  friend class Sprite_Obj;
 
 };
 
-// Holds sprites of provided textures
+// Stores actual sf::Sprite's of textures from a Texture_Obj
 class Sprite_Obj {
 
-  //NOTE: This class is a friend of Texture_Obj and holds sprites of provided textures
-  //      Origin should be the connection position, if it has one
-
-  //Disallow default constuction, copy constuction, and copy assignment
-  Sprite_Obj() = delete;
-  Sprite_Obj(const Sprite_Obj&);
-  Sprite_Obj& operator= (const Sprite_Obj&);
+  // NOTES: This class is a friend of Texture_Obj, so directly indexing Texture_Obj given
+  //       
+  //        Origin should be the connection position, if it has one
 
 protected: // TO DO : Is this what I want?
 
+  // Each sprite has a shared_ptr for ease of use
   std::vector<std::shared_ptr<sf::Sprite>> s_;
 
 public:
-  //Create a sprite object with parameters (origin x, origin y, scale x, scale y, texture object)
-  Sprite_Obj(const size_t, const size_t, const double, const double, const Texture_Obj&);
 
-  //Create a sprite object with origin at (0,0) and no scale with parameter (texture object)
-  Sprite_Obj(const Texture_Obj&);
+  // Disallow default constuction, copy constuction, and copy assignment
+  Sprite_Obj() = delete;
+  Sprite_Obj(const Sprite_Obj&) = delete;
+  Sprite_Obj& operator= (const Sprite_Obj&) = delete;
 
-  //Method to get sprite in position (param)
+  // params : texture object, origin x (=0), origin y (=0), scale x (=1), scale y (=1)
+  Sprite_Obj(const Texture_Obj&, const size_t = 0, const size_t = 0, 
+             const double = 1, const double = 1);
+
+  // param : Index position of sprite in s_
+  // Returns this sprite
   std::shared_ptr<sf::Sprite> get_Ptr(const size_t) const;
 
   const size_t size() const { return s_.size(); }
 
 };
 
+// Virtual Class used for polymorphic use of draw, generation, collisions, ...
+// Stores location of any resource in the world (actual pixel location ie not by tile)
 class Resource {
+
+  protected:
+
+    float pos_x_, pos_y_;
 
   public:
 
@@ -73,29 +79,24 @@ class Resource {
       pos_x_(pos_x),
       pos_y_(pos_y) { }
 
+    // Functions for getting resource info & moving resource
     const float x() const { return pos_x_; }
     const float y() const { return pos_y_; }
     void move(float x, float y) { pos_x_ += x; pos_y_ += y; }
 
+    // Virtual functions for drawing normally & transparently to window
     virtual void draw(sf::RenderWindow& window) const { }
     virtual void transparent_draw(sf::RenderWindow& window) const { }
 
-    // width of space needed to place resource
+    // Returns width of space needed to place resource (to the left & up of generation position)
     virtual const size_t generation_range() const { return 1; }
+
+    // Returns radius about origin (pos) of resource in which collisions occur (0=collisionless)
     virtual const float collision_radius() const { return 0.f; }
                                                    
+    // Returns whether given FloatRect overlaps the resource ( used for transparent draw of resource)
     virtual const bool is_overlapped(const sf::FloatRect&) { return false; }
-    virtual const sf::Vector2f get_pos() const { return sf::Vector2f(pos_x_, pos_y_); } // what for?
-
-/* Debug
-    mutable bool collided = false;
-    void collide() const { collided = true; }
-    bool get_collide() const {if(collided) { collided = false; return true; } else { return false; }}
-*/
-  protected:
-
-    float pos_x_, pos_y_;
-
+    
 };
 
 #endif

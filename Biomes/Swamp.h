@@ -26,22 +26,22 @@ class Swamp : public Biome {
       swamp_tree_bot_t_(128, 64, 3, "Biomes/swamp/SwampTreeBottom"),
       swamp_tree_top_t_(128, 64, 2, "Biomes/swamp/SwampTreeTop"),
       swamp_water_t_(32, 32, 10, "Biomes/swamp/SwampWater"),
-      swamp_reeds_(std::make_shared<Sprite_Obj>(15, 28, 1.2, 1.2, swamp_reeds_t_)),
-      swamp_spikes_(std::make_shared<Sprite_Obj>(15, 28, 1, 1, swamp_spikes_t_)),
-      swamp_tree_bot_(std::make_shared<Sprite_Obj>(31, 110, 1, 1, swamp_tree_bot_t_)),
-      swamp_tree_top_(std::make_shared<Sprite_Obj>(31, 110, 1, 1, swamp_tree_top_t_)),
+      swamp_reeds_(std::make_shared<Sprite_Obj>(swamp_reeds_t_, 15, 28, 1.2, 1.2)),
+      swamp_spikes_(std::make_shared<Sprite_Obj>(swamp_spikes_t_, 15, 28)),
+      swamp_tree_bot_(std::make_shared<Sprite_Obj>(swamp_tree_bot_t_, 31, 110)),
+      swamp_tree_top_(std::make_shared<Sprite_Obj>(swamp_tree_top_t_, 31, 110)),
       swamp_water_(std::make_shared<Sprite_Obj>(swamp_water_t_)) {}
 
     // 2 - Trees (density), Reeds (density) 
     const size_t perlins_needed() override { return 2; }
 
-    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
-                       const std::vector<std::vector<Biome_enum>>&, 
-                       const std::vector<std::shared_ptr<Sprite_Obj>>&,
-                       std::vector<std::vector<std::shared_ptr<Tile>>>&,
-                       const std::vector<std::vector<state>>&,
-                       std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
-
+    void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
+                             size_t perlins_pos = 0,
+                             const std::vector<std::vector<state>>& river = {{}}) override;
   private:
 
     Swamp(const Swamp&);

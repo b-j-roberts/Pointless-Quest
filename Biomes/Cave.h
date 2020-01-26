@@ -18,16 +18,16 @@ class Cave : public Biome {
     Cave():
       cave_spike_t_(32, 32, 4, "Biomes/cave/caveSpike"),
       cave_crystal_t_(32, 32, 4, "Biomes/cave/caveCrystals"),
-      cave_spike_(std::make_shared<Sprite_Obj>(16, 26, 1, 1, cave_spike_t_)),
-      cave_crystal_(std::make_shared<Sprite_Obj>(15, 29, 1, 1, cave_crystal_t_)) { }
+      cave_spike_(std::make_shared<Sprite_Obj>(cave_spike_t_, 16, 26)),
+      cave_crystal_(std::make_shared<Sprite_Obj>(cave_crystal_t_, 15, 29)) { }
 
-     // new get_Resources function for caves so we dont have to include cave map in the other 
-     // get resources for the overworld biomes
-     // params : cave_bdd_region, tile_vec, cave_tile_map, cave_resource_map
-     void get_Resources(const std::vector<std::vector<bool>>&,
-                        const std::vector<std::shared_ptr<Sprite_Obj>>&,
-                        std::vector<std::vector<std::shared_ptr<Tile>>>&,
-                        std::vector<std::vector<std::shared_ptr<Resource>>>&);
+     void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
+                             size_t perlins_pos = 0,
+                             const std::vector<std::vector<state>>& river = {{}}) override;
 
   private:
     

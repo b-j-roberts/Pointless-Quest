@@ -3,8 +3,6 @@
 
 #include <SFML/Graphics/View.hpp>
 
-#include "Functions.h"
-
 #include "Resources/Structures.h"
 #include "World.h"
 
@@ -13,10 +11,12 @@
 class Player; // Forward Declaration
 class World; // Forward Declaration
 
+
 // Body class that puts special interface on animation objects related to the player,
 // these include collision detection, player view updating, and the bounding_box
 class Body : public Animation {
   public:
+    const size_t body_size = 15; // TO DO : Temp
 
     // Noncopyable
     Body(const Body&) = delete;
@@ -24,18 +24,17 @@ class Body : public Animation {
 
     // Constructs body animation resource at position specified - default (0, 0)
     // params : (texture_obj holding animation, pos_x, pos_y)
-    Body(const Texture_Obj& player_text, float x = 0, float y = 0): Animation(x, y, player_text) { }
+    Body(const Texture_Obj& player_text, float x = 0, float y = 0): Animation(x, y, player_text, 15, 15) { }
 
     // Update the state of the body ( position, collisions, animation, & even Player view )
     // params : ( vel_x, vel_y, player - with this body, World - for collisions )
     void update(float, float, Player&, const World&);
 
-    const size_t body_size = 15; // TO DO : Temp
-
     // Return FloatRect box which bounds the character ( for transparent draw in world )
     sf::FloatRect bounding_box() const {
       sf::CircleShape body(body_size); // placeholder
-      body.setPosition(pos_x_ + 15, pos_y_ + 15);
+      body.setOrigin(body_size, body_size);
+      body.setPosition(pos_x_, pos_y_);
       return body.getGlobalBounds();
     }
     
@@ -48,6 +47,7 @@ class Body : public Animation {
 // Class which holding the players body, view, and cave status
 class Player {
 
+  Plane_enum curr_plane_;
   public:
 
     // Noncopyable
@@ -74,7 +74,7 @@ class Player {
 
     // TO DO : Debug
     void pos() {
-      std::cout << body_->get_pos().x << " " << body_->get_pos().y << std::endl;
+      std::cout << body_->x() << " " << body_->y() << std::endl;
     }    
 
     const std::pair<int, int>& x_range() const { return x_range_; }
@@ -82,10 +82,10 @@ class Player {
 
     // Cave interface for player 
     // cross() - toggle cave state & in_cave() - if currently in cave
-    void cross() { in_cave_ = !in_cave_; }
-    bool in_cave() const { return in_cave_; }
-    // void set_curr_plane_(Plane p) { curr_plane_ = p; }
-    //Plane current_plane() const { return curr_plane_; }
+    //void cross() { in_cave_ = !in_cave_; }
+    //bool in_cave() const { return in_cave_; }
+    void set_curr_plane(Plane_enum);
+    Plane_enum current_plane() const { return curr_plane_; }
 
   private:
   
@@ -97,8 +97,7 @@ class Player {
     std::unique_ptr<Body> body_;
     sf::View view_;
 
-    bool in_cave_;
-    // Plane curr_plane_;
+    //bool in_cave_;
  
     friend Body;
 

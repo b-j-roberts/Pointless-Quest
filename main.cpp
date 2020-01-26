@@ -1,7 +1,6 @@
 #include <SFML/Window/Joystick.hpp>
 
 #include "Map.h"
-#include "Resources/Structures.h"
 #include "Player.h"
 
 #include <iostream> // TO DO : debug
@@ -78,8 +77,8 @@ int main() {
   sf::Vector2u world_size(2048, 2048);
   //sf::Vector2u world_size(512, 512); TO DO : Why is this seg fault?
 
-  World world;
-  world.generate(world_size.x, world_size.y, tile_vec); 
+  World world(world_size.x, world_size.y, tile_vec);
+  //world.generate(world_size.x, world_size.y, tile_vec); 
 
   Player player(x_scale, tile_size, 1000 * 32, 1000 * 32, ocean_tile_t);
 
@@ -181,9 +180,9 @@ int main() {
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
       player.pos();
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
-      player.cross();
-    }
+    //if(sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+    //  player.cross();
+    //}
 
     /*
      *

@@ -20,20 +20,20 @@ class Tundra : public Biome {
       tundra_shrub_t_(64, 64, 2, "Biomes/tundra/snowShrub"),
       tundra_tree_t_(160, 64, 2, "Biomes/tundra/snowTrees"),
       tundra_ice_t_(32, 32, 6, "Biomes/tundra/ice"),
-      tundra_shrub_(std::make_shared<Sprite_Obj>(32, 60, 1, 1, tundra_shrub_t_)),
-      tundra_tree_(std::make_shared<Sprite_Obj>(32, 146, 1, 1, tundra_tree_t_)),
+      tundra_shrub_(std::make_shared<Sprite_Obj>(tundra_shrub_t_, 32, 60)),
+      tundra_tree_(std::make_shared<Sprite_Obj>(tundra_tree_t_, 32, 14)),
       tundra_ice_(std::make_shared<Sprite_Obj>(tundra_ice_t_)) { }
     
     // 1 - Plantlife (density)
     const size_t perlins_needed() override { return 1; }
 
-    void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
-                       const std::vector<std::vector<Biome_enum>>&, 
-                       const std::vector<std::shared_ptr<Sprite_Obj>>&,
-                       std::vector<std::vector<std::shared_ptr<Tile>>>&,
-                       const std::vector<std::vector<state>>&,
-                       std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
-
+    void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
+                             size_t perlins_pos = 0,
+                             const std::vector<std::vector<state>>& river = {{}}) override;
   private:
 
     Tundra(const Tundra&);

@@ -2,11 +2,13 @@
 
 #include "Resources.h"
 
+#include <algorithm> // transform
+#include <iterator> // back_inserter
+
 Texture_Obj::Texture_Obj(const size_t height, const size_t width, const size_t num, std::string s, 
             		         const size_t height_offset, const size_t width_offset):
   height_(height),
-  width_(width),
-  num_(num) {
+  width_(width) {
   std::vector<sf::Texture> temp_t(num);
   std::string file_path("Resources/" + s + ".png");
   for(size_t i = 0; i < num; i++) {
@@ -17,31 +19,21 @@ Texture_Obj::Texture_Obj(const size_t height, const size_t width, const size_t n
   t_.swap(temp_t);
 }
 
-Sprite_Obj::Sprite_Obj(const size_t orig_x, const size_t orig_y, const double scale_x, 
-                       const double scale_y, const Texture_Obj& t_obj) {
-  std::vector<std::shared_ptr<sf::Sprite>> temp_s(t_obj.num_);
-  for(int i = 0; i < t_obj.num_; i++) {
-    temp_s[i] = std::make_shared<sf::Sprite>(t_obj.t_[i]);
-    temp_s[i]->setOrigin(orig_x,orig_y);
-    temp_s[i]->scale(scale_x, scale_y);
-  }
-  s_.swap(temp_s);
-}
-
-Sprite_Obj::Sprite_Obj(const Texture_Obj& t_obj) {
-  std::vector<std::shared_ptr<sf::Sprite>> temp_s(t_obj.num_);
-  for(int i = 0; i < t_obj.num_; i++) {
-    temp_s[i] = std::make_shared<sf::Sprite>(t_obj.t_[i]);
-    temp_s[i]->setOrigin(0,0);
-  }
-  s_.swap(temp_s);
+Sprite_Obj::Sprite_Obj(const Texture_Obj& t_obj, const size_t orig_x, const size_t orig_y, 
+                       const double scale_x, const double scale_y) {
+  std::transform(t_obj.t_.begin(), t_obj.t_.end(), std::back_inserter(s_), [&](const auto& txtr){
+    std::shared_ptr<sf::Sprite> ret = std::make_shared<sf::Sprite>(txtr);
+    ret->setOrigin(orig_x, orig_y);
+    ret->scale(scale_x, scale_y);
+    return ret;
+  });
 }
 
 std::shared_ptr<sf::Sprite> Sprite_Obj::get_Ptr(const size_t i) const {
   if(i < s_.size())  return s_[i];
   else if(s_.size() != 0)  return s_[0];
-  else {
+  else { // TO DO : runtime_error
     std::cout << "IndexError: in get_Ptr(const int): index " << i 
-              << " beyond size " << size() << std::endl;
+              << " beyond size " << s_.size() << std::endl;
   }
 }

@@ -22,6 +22,8 @@ class Map {
     {Unocean_, sf::Color(102, 51, 0, 255)},
     {Desert_,  sf::Color(140, 100, 0, 255)},
     {Tundra_,  sf::Color(240, 234, 214, 255)},
+
+    {Cave_,    sf::Color(73, 23, 23)}
   }; 
 
   // Biome's Resource Map Colors map
@@ -33,6 +35,8 @@ class Map {
     {Unocean_, sf::Color(255, 255, 240, 255)},
     {Desert_,  sf::Color(173, 255, 47, 255)},
     {Tundra_,  sf::Color(188, 143, 143, 255)},
+
+    {Cave_,    sf::Color(65, 118, 159)}
   }; 
 
   // River Map Color

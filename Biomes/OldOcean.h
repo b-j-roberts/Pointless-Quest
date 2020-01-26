@@ -19,16 +19,23 @@ class Old_Ocean : public Biome {
     Old_Ocean():
       old_ocean_large_fish_t_(32, 64, 2, "Biomes/old_ocean/largeFishBones"),
       old_ocean_small_fish_t_(32, 32, 2, "Biomes/old_ocean/smallFishBones"),
-      old_ocean_large_fish_(std::make_shared<Sprite_Obj>(31, 15, 1.2, 1.2, old_ocean_large_fish_t_)),
-      old_ocean_small_fish_(std::make_shared<Sprite_Obj>(15, 15, 1, 1, old_ocean_small_fish_t_)) { }
+      old_ocean_large_fish_(std::make_shared<Sprite_Obj>(old_ocean_large_fish_t_, 31, 15, 1.2, 1.2)),
+      old_ocean_small_fish_(std::make_shared<Sprite_Obj>(old_ocean_small_fish_t_, 15, 15)) { }
 
-     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
+/*     void get_Resources(const std::vector<std::vector<std::vector<state>>>&, size_t,
                        const std::vector<std::vector<Biome_enum>>&, 
                        const std::vector<std::shared_ptr<Sprite_Obj>>&,
                        std::vector<std::vector<std::shared_ptr<Tile>>>&,
                        const std::vector<std::vector<state>>&,
                        std::vector<std::vector<std::shared_ptr<Resource>>>&) override;
-
+*/
+    void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
+                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
+                             const std::vector<std::vector<Biome_enum>>& biome_map,
+                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
+                             size_t perlins_pos = 0,
+                             const std::vector<std::vector<state>>& river = {{}}) override;
   private:
     
     Old_Ocean(const Old_Ocean&);
