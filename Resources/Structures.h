@@ -64,15 +64,18 @@ class Animation : public Resource, public Sprite_Obj {
 
   // TO DO : Think about using percents instead of overrall frame counting in case
   //         one needs to skip frames to get timing right (if runs super slow)
-
-  // Current drawn frame, range : [0, s_.size() - 1]
-  size_t curr_frame; 
+  
   // Holds how many set_frames called since last curr_frame update, range : [0, (framerate/fps) - 1]
-  size_t frame_inc;  
-  // Stores deired fps of Animation
-  const size_t fps;
+  size_t frame_inc_;  
+  // Stores desired fps of Animation
+  const size_t fps_;
   // Framerate of overall system (ie based on number of calls to set_frames() / second)
-  static const size_t framerate = 60; // TO DO
+  static const size_t framerate_ = 60; // TO DO
+
+protected:
+  
+  // Current drawn frame, range : [0, s_.size() - 1]
+  size_t curr_frame_;
 
 public:
 

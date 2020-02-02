@@ -1,8 +1,7 @@
 #ifndef __BIOMES_H_INCLUDED__
 #define __BIOMES_H_INCLUDED__
 
-#include <memory> // TO DO
-
+// Load all biome headers
 #include "Forest.h"
 #include "Magic.h"
 #include "Desert.h"
@@ -13,6 +12,7 @@
 
 #include "Cave.h"
 
+// Load passed Biome's Texture_Objs & Sprite_Objs & return created Biome Object
 static std::unique_ptr<Biome> get_Biome(const Biome_enum b) {
   switch(b) {
     case Forest_:
@@ -27,7 +27,7 @@ static std::unique_ptr<Biome> get_Biome(const Biome_enum b) {
       return std::make_unique<Swamp>();
     case Tundra_:
       return std::make_unique<Tundra>();
-    case Unocean_:
+    case Old_Ocean_:
       return std::make_unique<Old_Ocean>();
     case Cave_:
       return std::make_unique<Cave>();

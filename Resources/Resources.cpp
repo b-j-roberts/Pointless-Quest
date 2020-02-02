@@ -37,3 +37,5 @@ std::shared_ptr<sf::Sprite> Sprite_Obj::get_Ptr(const size_t i) const {
               << " beyond size " << s_.size() << std::endl;
   }
 }
+
+std::shared_ptr<sf::Sprite> Sprite_Obj::get_rand_Ptr() const { return s_[rand() % s_.size()]; }

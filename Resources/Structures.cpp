@@ -69,24 +69,24 @@ Animation::Animation(const float pos_x, const float pos_y,
                      const double scale_x, const double scale_y):  
   Resource(pos_x, pos_y),
   Sprite_Obj(t_obj, orig_x, orig_y, scale_x, scale_y),
-  curr_frame(0),
-  frame_inc(0),
-  fps(5) // TO DO
+  curr_frame_(0),
+  frame_inc_(0),
+  fps_(5) // TO DO
   { }
 
 void Animation::set_frames() {
-  if(++frame_inc == framerate / fps) {
-    frame_inc = 0;
-    ++curr_frame;
+  if(++frame_inc_ == framerate_ / fps_) {
+    frame_inc_ = 0;
+    ++curr_frame_;
   } 
-  if(curr_frame == s_.size()) curr_frame = 0;
+  if(curr_frame_ == s_.size()) curr_frame_ = 0;
 }
 
 void Animation::draw(sf::RenderWindow& window) const {
   // TO DO : Move this position setter into new Resource function
-  s_[curr_frame]->setPosition(pos_x_, pos_y_); 
+  s_[curr_frame_]->setPosition(pos_x_, pos_y_); 
 
-  window.draw(*s_[curr_frame]);
+  window.draw(*s_[curr_frame_]);
 
   // TO DO : Temp for collision circles
   sf::CircleShape body(15);
@@ -103,15 +103,15 @@ void Animation::draw(sf::RenderWindow& window) const {
 
 void Animation::transparent_draw(sf::RenderWindow& window) const {
   // TO DO : Move this position setter into new Resource function
-  s_[curr_frame]->setPosition(pos_x_, pos_y_);
+  s_[curr_frame_]->setPosition(pos_x_, pos_y_);
 
   // Make Transparent
-  s_[curr_frame]->setColor(sf::Color(255, 255, 255, 100));
-  window.draw(*s_[curr_frame]);
+  s_[curr_frame_]->setColor(sf::Color(255, 255, 255, 100));
+  window.draw(*s_[curr_frame_]);
   // Reset
-  s_[curr_frame]->setColor(sf::Color(255, 255, 255, 255));
+  s_[curr_frame_]->setColor(sf::Color(255, 255, 255, 255));
 }
 
 const bool Animation::is_overlapped(const sf::FloatRect& rect) {
-  return s_[curr_frame]->getGlobalBounds().intersects(rect);
+  return s_[curr_frame_]->getGlobalBounds().intersects(rect);
 }

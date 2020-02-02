@@ -3,12 +3,10 @@
 
 #include "World.h"
 
-#include <map>
-
 // GUI Map that shows surrounding area biomes & resources
 class Map {
 
-  // GUI Map background, window relative location, and size info
+  // GUI Map background, view relative location, and size info
   sf::RectangleShape background_;
   size_t pos_x_, pos_y_;
   size_t width_, height_;
@@ -19,7 +17,7 @@ class Map {
     {Ocean_,   sf::Color(0, 0, 250, 255)},
     {Magic_,   sf::Color(125, 0, 125, 255)},
     {Swamp_,   sf::Color(0, 128, 128, 255)},
-    {Unocean_, sf::Color(102, 51, 0, 255)},
+    {Old_Ocean_, sf::Color(102, 51, 0, 255)},
     {Desert_,  sf::Color(140, 100, 0, 255)},
     {Tundra_,  sf::Color(240, 234, 214, 255)},
 
@@ -32,7 +30,7 @@ class Map {
     {Ocean_,   sf::Color(0, 191, 255, 255)},
     {Magic_,   sf::Color(255, 20, 147, 255)},
     {Swamp_,   sf::Color(50, 205, 50, 255)},
-    {Unocean_, sf::Color(255, 255, 240, 255)},
+    {Old_Ocean_, sf::Color(255, 255, 240, 255)},
     {Desert_,  sf::Color(173, 255, 47, 255)},
     {Tundra_,  sf::Color(188, 143, 143, 255)},
 
@@ -48,10 +46,10 @@ public:
   Map(const Map&) = delete;
   Map& operator=(const Map&) = delete;
 
-  explicit Map(const Player& player);
+  explicit Map(const Player&);
 
-  void draw(sf::RenderWindow& window, const World& world, const Player& player);
-
+  // Draw map gui element to screen ( 1 pixel per tile )
+  void draw(sf::RenderWindow&, const World&, const Player&);
 };
 
 #endif

@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics/View.hpp>
 
-#include "Resources/Structures.h"
 #include "World.h"
 
 #include <iostream> // TO DO
@@ -12,95 +11,75 @@ class Player; // Forward Declaration
 class World; // Forward Declaration
 
 
-// Body class that puts special interface on animation objects related to the player,
-// these include collision detection, player view updating, and the bounding_box
+// Special Interface on Animation class for player
 class Body : public Animation {
-  public:
-    const size_t body_size = 15; // TO DO : Temp
 
-    // Noncopyable
-    Body(const Body&) = delete;
-    Body& operator=(const Body&) = delete;
+  float angle_ = 0; // TO DO : Useless atm
 
-    // Constructs body animation resource at position specified - default (0, 0)
-    // params : (texture_obj holding animation, pos_x, pos_y)
-    Body(const Texture_Obj& player_text, float x = 0, float y = 0): Animation(x, y, player_text, 15, 15) { }
+public:
 
-    // Update the state of the body ( position, collisions, animation, & even Player view )
-    // params : ( vel_x, vel_y, player - with this body, World - for collisions )
-    void update(float, float, Player&, const World&);
+  const size_t body_size = 15; // TO DO : Temp
 
-    // Return FloatRect box which bounds the character ( for transparent draw in world )
-    sf::FloatRect bounding_box() const {
-      sf::CircleShape body(body_size); // placeholder
-      body.setOrigin(body_size, body_size);
-      body.setPosition(pos_x_, pos_y_);
-      return body.getGlobalBounds();
-    }
-    
-  private:
+  // Noncopyable
+  Body(const Body&) = delete;
+  Body& operator=(const Body&) = delete;
 
-    float angle_ = 0; // TO DO : Useless atm
+  // params : texture_obj holding animation, pos_x, pos_y
+  Body(const Texture_Obj& player_text, float x = 0, float y = 0):
+    Animation(x, y, player_text, 15 /* TO DO */, 15 /* TO DO */) { }
 
+  // Update w/ the following : position, collisions, animation, & even Player view
+  // params : vel_x, vel_y, player - with this body, World - for collisions
+  void update(float, float, Player&, const World&);
+
+  // Return box which bounds the character ( for transparent draw in world )
+  sf::FloatRect bounding_box() const { return s_[curr_frame_]->getGlobalBounds(); }
 };
 
 // Class which holding the players body, view, and cave status
 class Player {
 
+  const float zoom_factor_ = 25.f;
+  std::unique_ptr<Body> body_;
+  sf::View view_;
+
+  // Range & Plane info for more efficient drawing to window
+  std::pair<int, int> x_range_;
+  std::pair<int, int> y_range_;
   Plane_enum curr_plane_;
-  public:
 
-    // Noncopyable
-    Player(const Player&) = delete;
-    Player& operator=(const Player&) = delete;
+public:
 
-    // Constructs player at position (0, 0)
-    // params : (x_scale, tilesize, texture_obj holding animation)
-    Player(float, int, const Texture_Obj&);
+  // Noncopyable
+  Player(const Player&) = delete;
+  Player& operator=(const Player&) = delete;
 
-    // Constructs player at position specified
-    // params : (x_scale, tile_size, pos_x, pos_y, texture_obj holding animation)
-    Player(float, int, float, float, const Texture_Obj&);
+  // params : x_scale, tilesize, texture_obj holding animation, pos_x = 0, pos_y = 0
+  Player(float, int, const Texture_Obj&, float = 0, float = 0);
 
-    // TO DO : angle
-    // Update the state of the player ( position, collisions, view, animation frames ) 
-    // params : ( vel_x, vel_y, angle_x, angle_y, world - for collisions )
-    void update(float, float, float, float, const World&);
-    
-    void draw(sf::RenderWindow& window) const { body_->draw(window); }
+  // Get Player info
+  const sf::View& get_View() const { return view_; }
+  sf::FloatRect bounding_box() const { return body_->bounding_box(); }
+  const std::pair<int, int>& x_range() const { return x_range_; }
+  const std::pair<int, int>& y_range() const { return y_range_; }
+  Plane_enum current_plane() const { return curr_plane_; }
 
-    const sf::View& get_View() const { return view_; }
-    sf::FloatRect bounding_box() const { return body_->bounding_box(); }
+  // Change Player curr_plane_
+  void set_curr_plane(Plane_enum p) { curr_plane_ = p; }
 
-    // TO DO : Debug
-    void pos() {
-      std::cout << body_->x() << " " << body_->y() << std::endl;
-    }    
-
-    const std::pair<int, int>& x_range() const { return x_range_; }
-    const std::pair<int, int>& y_range() const { return y_range_; }
-
-    // Cave interface for player 
-    // cross() - toggle cave state & in_cave() - if currently in cave
-    //void cross() { in_cave_ = !in_cave_; }
-    //bool in_cave() const { return in_cave_; }
-    void set_curr_plane(Plane_enum);
-    Plane_enum current_plane() const { return curr_plane_; }
-
-  private:
-  
-    const float zoom_factor_ = 25.f;
-
-    std::pair<int, int> x_range_;
-    std::pair<int, int> y_range_;
-
-    std::unique_ptr<Body> body_;
-    sf::View view_;
-
-    //bool in_cave_;
+  // TO DO : angle
+  // Calls body_->update(...) & updates drawing ranges
+  // params : vel_x, vel_y, angle_x, angle_y, world - for collisions
+  void update(float, float, float, float, const World&);
  
-    friend Body;
+  void draw(sf::RenderWindow& window) const { body_->draw(window); }
 
+  friend Body;
+
+  // TO DO : Debug
+  void pos() {
+    std::cout << body_->x() << " " << body_->y() << std::endl;
+  }
 };
 
 #endif

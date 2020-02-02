@@ -1,61 +1,65 @@
 #ifndef __DESERT_H_INCLUDED__
 #define __DESERT_H_INCLUDED__
 
-#include "../Resources/Structures.h"
 #include "Biome.h"
 
-// TO DO : Add circular base to cactus
+// TO DO : Add circular base to cactus or Create collision for rectangles and circles
 
 
 // Desert's Resource Forward Declaration
 class Desert_Cactus;
 
 // Class containing all Desert Resource Textures & Sprites
-// Contains overriden functions to properly build Desert biome ( perlins_needed & get_Resources )
+// Overriden Biome functions to properly build Desert biome ( perlins_needed & get_Resources )
 class Desert : public Biome {
 
-  public:
+  // Desert's Texture Objects
+  const Texture_Obj desert_tile_t_;
+  const Texture_Obj desert_water_t_;
+  const Texture_Obj desert_cactus_t_;
 
-    Desert():
-      desert_cactus_t_(64, 32, 3, "Biomes/desert/Cactus"),
-      desert_cactus_(std::make_shared<Sprite_Obj>(desert_cactus_t_, 15, 57)) { }
+  // Desert's Sprite Objects
+  std::shared_ptr<Sprite_Obj> desert_tile_;
+  std::shared_ptr<Sprite_Obj> desert_water_;
+  std::shared_ptr<Sprite_Obj> desert_cactus_;
 
-    // 1 - Cactus (density)
-    const size_t perlins_needed() override { return 1; }
-     void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
-                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
-                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                             const std::vector<std::vector<Biome_enum>>& biome_map,
-                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
-                             size_t perlins_pos = 0,
-                             const std::vector<std::vector<state>>& river = {{}}) override;
+public:
 
-  private:
+  Desert(const Desert&) = delete;
+  Desert& operator= (const Desert&) = delete;
 
-    Desert(const Desert&);
-    Desert& operator= (const Desert&);
+  Desert():
+    desert_tile_t_(32, 32, 10, "Biomes/desert/sandTiles"),
+    desert_water_t_(32, 32, 4, "Biomes/ocean/waterTiles"),
+    desert_cactus_t_(64, 32, 3, "Biomes/desert/Cactus"),
+    desert_tile_(std::make_shared<Sprite_Obj>(desert_tile_t_)),
+    desert_water_(std::make_shared<Sprite_Obj>(desert_water_t_)),
+    desert_cactus_(std::make_shared<Sprite_Obj>(desert_cactus_t_, 15, 57)) { }
 
-    Texture_Obj desert_cactus_t_;
+  // Biome function overrides
+  // 1 - Cactus (density)
+  const size_t perlins_needed() override { return 1; }
+  // Implimented in ./Biome_Builder.cpp
+  void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
+                     std::vector<std::vector<std::shared_ptr<Resource>>>&,
+                     const std::vector<std::vector<Biome_enum>>&,
+                     const std::vector<std::vector<std::vector<state>>>&, size_t,
+                     const std::vector<std::vector<state>>&) override;
 
-    std::shared_ptr<Sprite_Obj> desert_cactus_;
-
-    friend Desert_Cactus;
-
+  friend Desert_Cactus;
 };
 
-// Resource Class used to construct resource in world & 
-// Overriden Resource functions for this specific type ( generation_range & collision_radius )
-class Desert_Cactus : public One_Piece {
+// Final Resource Class used to construct resource in world
+class Desert_Cactus final : public One_Piece {
 
-  public:
+public:
 
-    Desert_Cactus(const float pos_x, const float pos_y, const Desert& desert):
-      One_Piece(pos_x, pos_y,
-	              desert.desert_cactus_->get_Ptr(rand() % desert.desert_cactus_->size())) { }
+  Desert_Cactus(const float pos_x, const float pos_y, const Desert& desert):
+    One_Piece(pos_x, pos_y, desert.desert_cactus_->get_rand_Ptr()) { }
 
-    virtual const size_t generation_range() const override { return 1; }
-    virtual const float collision_radius() const override { return 8; } 
-
+  // Overridden Resource Functions
+  const size_t generation_range() const override { return 1; }
+  const float collision_radius() const override { return 8; } 
 };
 
 

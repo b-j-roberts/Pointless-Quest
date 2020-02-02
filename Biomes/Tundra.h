@@ -1,100 +1,99 @@
 #ifndef __TUNDRA_H_INCLUDED__
 #define __TUNDRA_H_INCLUDED__
 
-#include "../Resources/Structures.h"
 #include "Biome.h"
 
 
-// Forest's Resource Forward Declaration
+// Tundra's Resource Forward Declaration
 class Tundra_Shrub;
 class Tundra_Tree;
 class Tundra_Ice;
 
 // Class containing all Forest Resource Textures & Sprites
-// Contains overriden functions to properly build Forest biome ( perlins_needed & get_Resources )
+// Overriden Biome functions to properly build Forest biome ( perlins_needed & get_Resources )
 class Tundra : public Biome {
 
-  public:
-	
-    Tundra():
-      tundra_shrub_t_(64, 64, 2, "Biomes/tundra/snowShrub"),
-      tundra_tree_t_(160, 64, 2, "Biomes/tundra/snowTrees"),
-      tundra_ice_t_(32, 32, 6, "Biomes/tundra/ice"),
-      tundra_shrub_(std::make_shared<Sprite_Obj>(tundra_shrub_t_, 32, 60)),
-      tundra_tree_(std::make_shared<Sprite_Obj>(tundra_tree_t_, 32, 14)),
-      tundra_ice_(std::make_shared<Sprite_Obj>(tundra_ice_t_)) { }
-    
-    // 1 - Plantlife (density)
-    const size_t perlins_needed() override { return 1; }
+  // Tundra's Texture Objects
+  const Texture_Obj tundra_tile_t_;
+  const Texture_Obj tundra_shrub_t_;
+  const Texture_Obj tundra_tree_t_;
+  const Texture_Obj tundra_ice_t_;
 
-    void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
-                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
-                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                             const std::vector<std::vector<Biome_enum>>& biome_map,
-                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
-                             size_t perlins_pos = 0,
-                             const std::vector<std::vector<state>>& river = {{}}) override;
-  private:
+  // Tundra's Sprite Objects
+  std::shared_ptr<Sprite_Obj> tundra_tile_;
+  std::shared_ptr<Sprite_Obj> tundra_shrub_;
+  std::shared_ptr<Sprite_Obj> tundra_tree_;
+  std::shared_ptr<Sprite_Obj> tundra_ice_;
 
-    Tundra(const Tundra&);
-    Tundra& operator= (const Tundra&);
+public:
 
-    Texture_Obj tundra_shrub_t_;
-    Texture_Obj tundra_tree_t_;
-    Texture_Obj tundra_ice_t_;
+  Tundra(const Tundra&) = delete;
+  Tundra& operator= (const Tundra&) = delete;
 
-    std::shared_ptr<Sprite_Obj> tundra_shrub_;
-    std::shared_ptr<Sprite_Obj> tundra_tree_;
-    std::shared_ptr<Sprite_Obj> tundra_ice_;
+  Tundra():
+    tundra_tile_t_(32, 32, 10, "Biomes/tundra/snowTiles"),
+    tundra_shrub_t_(64, 64, 2, "Biomes/tundra/snowShrub"),
+    tundra_tree_t_(160, 64, 2, "Biomes/tundra/snowTrees"),
+    tundra_ice_t_(32, 32, 6, "Biomes/tundra/ice"),
+    tundra_tile_(std::make_shared<Sprite_Obj>(tundra_tile_t_)),
+    tundra_shrub_(std::make_shared<Sprite_Obj>(tundra_shrub_t_, 32, 60)),
+    tundra_tree_(std::make_shared<Sprite_Obj>(tundra_tree_t_, 32, 146)),
+    tundra_ice_(std::make_shared<Sprite_Obj>(tundra_ice_t_)) { }
+  
+  // Biome function overrides
+  // 1 - Plantlife (density)
+  const size_t perlins_needed() override { return 1; }
+  // Implimented in ./Biome_Builder.cpp
+  void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
+                     std::vector<std::vector<std::shared_ptr<Resource>>>&,
+                     const std::vector<std::vector<Biome_enum>>&,
+                     const std::vector<std::vector<std::vector<state>>>&, size_t,
+                     const std::vector<std::vector<state>>&) override;
 
-    friend Tundra_Shrub;
-    friend Tundra_Tree;
-    friend Tundra_Ice;
+  friend Tundra_Shrub;
+  friend Tundra_Tree;
+  friend Tundra_Ice;
 };
 
-// Resource Class used to construct resource in world & 
-// Overriden Resource functions for this specific type ( generation_range & collision_radius )
-class Tundra_Shrub : public One_Piece {
+// Final Resource Class used to construct resource in world
+class Tundra_Shrub final : public One_Piece {
 
-  public:
+public:
 
-    Tundra_Shrub(const float pos_x, const float pos_y, const Tundra& tundra):
-      One_Piece(pos_x, pos_y,
-	              tundra.tundra_shrub_->get_Ptr(rand() % tundra.tundra_shrub_->size())) { }
- 
-    virtual const size_t generation_range() const override { return 2; } 
-    virtual const float collision_radius() const override { return 8; }// TO DO : Test all of these 
+  Tundra_Shrub(const float pos_x, const float pos_y, const Tundra& tundra):
+    One_Piece(pos_x, pos_y, tundra.tundra_shrub_->get_rand_Ptr()) { }
 
+  // Overridden Resource Functions
+  const size_t generation_range() const override { return 2; } 
+  // TO DO : Test this
+  const float collision_radius() const override { return 8; } 
 };
 
-// Resource Class used to construct resource in world & 
-// Overriden Resource functions for this specific type ( generation_range & collision_radius )
-class Tundra_Tree : public One_Piece {
+// Final Resource Class used to construct resource in world
+class Tundra_Tree final : public One_Piece {
 
-  public:
+public:
 
-    Tundra_Tree(const float pos_x, const float pos_y, const Tundra& tundra):
-      One_Piece(pos_x, pos_y,
-	              tundra.tundra_tree_->get_Ptr(rand() % tundra.tundra_tree_->size())) { }
- 
-    virtual const size_t generation_range() const override { return 2; } 
-    virtual const float collision_radius() const override { return 20; } 
+  Tundra_Tree(const float pos_x, const float pos_y, const Tundra& tundra):
+    One_Piece(pos_x, pos_y, tundra.tundra_tree_->get_rand_Ptr()) { }
 
+  // Overridden Resource Functions
+  const size_t generation_range() const override { return 2; } 
+  // TO DO : Test this
+  const float collision_radius() const override { return 16; } 
 };
 
-// Resource Class used to construct resource in world & 
-// Overriden Resource functions for this specific type ( generation_range & collision_radius )
-class Tundra_Ice : public One_Piece {
+// Final Resource Class used to construct resource in world
+class Tundra_Ice final : public One_Piece {
 
-  public:
+public:
 
-    Tundra_Ice(const float pos_x, const float pos_y, const Tundra& tundra):
-      One_Piece(pos_x, pos_y,
-	              tundra.tundra_ice_->get_Ptr(rand() % tundra.tundra_ice_->size())) { }
- 
-    virtual const size_t generation_range() const override { return 1; } 
-    virtual const float collision_radius() const override { return 0; } 
+  Tundra_Ice(const float pos_x, const float pos_y, const Tundra& tundra):
+    One_Piece(pos_x, pos_y, tundra.tundra_ice_->get_rand_Ptr()) { }
 
+  // Overridden Resource Functions
+  const size_t generation_range() const override { return 2; } 
+  const float collision_radius() const override { return 0; } 
 };
 
 #endif

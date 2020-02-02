@@ -1,7 +1,6 @@
 #ifndef __MAGIC_H_INCLUDED__
 #define __MAGIC_H_INCLUDED__
 
-#include "../Resources/Structures.h"
 #include "Biome.h"
 
 
@@ -10,71 +9,74 @@ class Magic_Flowers;
 class Magic_Trees;
 
 // Class containing all Magic Resource Textures & Sprites
-// Contains overriden functions to properly build Magic biome ( perlins_needed & get_Resources )
+// Overriden Biome functions to properly build Magic biome ( perlins_needed & get_Resources )
 class Magic : public Biome {
 
-  public:
+  // Magic's Texture Objects
+  const Texture_Obj magic_tile_t_;
+  const Texture_Obj magic_water_t_;
+  const Texture_Obj magic_flowers_t_;
+  const Texture_Obj magic_trees_t_;
 
-    Magic():
-      magic_flowers_t_(32, 32, 5, "Biomes/magic/magicFlowers"),
-      magic_trees_t_(160, 96, 2, "Biomes/magic/magicTrees"),
-      magic_flowers_(std::make_shared<Sprite_Obj>(magic_flowers_t_, 15, 31, 1.2, 1.2)),
-      magic_trees_(std::make_shared<Sprite_Obj>(magic_trees_t_, 47, 150)) { }
+  // Magic's Sprite Objects
+  std::shared_ptr<Sprite_Obj> magic_tile_;
+  std::shared_ptr<Sprite_Obj> magic_water_;
+  std::shared_ptr<Sprite_Obj> magic_flowers_;
+  std::shared_ptr<Sprite_Obj> magic_trees_;
 
-    // 2 - Flowers (density), Trees (density)
-    const size_t perlins_needed() override { return 2; }
+public:
 
-    void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
-                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
-                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                             const std::vector<std::vector<Biome_enum>>& biome_map,
-                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}},
-                             size_t perlins_pos = 0,
-                             const std::vector<std::vector<state>>& river = {{}}) override;
-  private:
-	
-    Magic(const Magic&);
-    Magic& operator= (const Magic&);
+  Magic(const Magic&) = delete;
+  Magic& operator= (const Magic&) = delete;
 
-    Texture_Obj magic_flowers_t_;
-    Texture_Obj magic_trees_t_;
+  Magic():
+    magic_tile_t_(32, 32, 7, "Biomes/magic/magicTiles"),
+    magic_water_t_(32, 32, 4, "Biomes/ocean/waterTiles"),
+    magic_flowers_t_(32, 32, 5, "Biomes/magic/magicFlowers"),
+    magic_trees_t_(160, 96, 2, "Biomes/magic/magicTrees"),
+    magic_tile_(std::make_shared<Sprite_Obj>(magic_tile_t_)),
+    magic_water_(std::make_shared<Sprite_Obj>(magic_water_t_)),
+    magic_flowers_(std::make_shared<Sprite_Obj>(magic_flowers_t_, 15, 31, 1.2, 1.2)),
+    magic_trees_(std::make_shared<Sprite_Obj>(magic_trees_t_, 47, 150)) { }
 
-    std::shared_ptr<Sprite_Obj> magic_flowers_;
-    std::shared_ptr<Sprite_Obj> magic_trees_;
+  // Biome function overrides
+  // 2 - Flowers (density), Trees (density)
+  const size_t perlins_needed() override { return 2; }
+  // Implimented in ./Biome_Builder.cpp
+  void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
+                     std::vector<std::vector<std::shared_ptr<Resource>>>&,
+                     const std::vector<std::vector<Biome_enum>>&,
+                     const std::vector<std::vector<std::vector<state>>>&, size_t,
+                     const std::vector<std::vector<state>>&) override;
 
-    friend Magic_Flowers;
-    friend Magic_Trees;
-
+  friend Magic_Flowers;
+  friend Magic_Trees;
 };
 
-// Resource Class used to construct resource in world & 
-// Overriden Resource functions for this specific type ( generation_range & collision_radius )
-class Magic_Flowers : public One_Piece {
+// Final Resource Class used to construct resource in world
+class Magic_Flowers final : public One_Piece {
 
-  public:
-	
-    Magic_Flowers(const float pos_x, const float pos_y, const Magic& magic):
-      One_Piece(pos_x, pos_y,
-                magic.magic_flowers_->get_Ptr(rand() % magic.magic_flowers_->size())) { }
+public:
 
-    virtual const size_t generation_range() const override { return 1; }
-    virtual const float collision_radius() const override { return 3; } 
+  Magic_Flowers(const float pos_x, const float pos_y, const Magic& magic):
+    One_Piece(pos_x, pos_y, magic.magic_flowers_->get_rand_Ptr()) { }
 
+  // Overridden Resource Functions
+  const size_t generation_range() const override { return 1; }
+  const float collision_radius() const override { return 3; } 
 };
 
-// Resource Class used to construct resource in world & 
-// Overriden Resource functions for this specific type ( generation_range & collision_radius )
-class Magic_Trees : public One_Piece {
+// Final Resource Class used to construct resource in world
+class Magic_Trees final : public One_Piece {
 
-  public:
-	
-    Magic_Trees(const float pos_x, const float pos_y, const Magic& magic):
-      One_Piece(pos_x, pos_y,
-                magic.magic_trees_->get_Ptr(rand() % magic.magic_trees_->size())) { }
+public:
 
-    virtual const size_t generation_range() const override { return 2; }
-    virtual const float collision_radius() const override { return 10; } 
+  Magic_Trees(const float pos_x, const float pos_y, const Magic& magic):
+    One_Piece(pos_x, pos_y, magic.magic_trees_->get_rand_Ptr()) { }
 
+  // Overridden Resource Functions
+  const size_t generation_range() const override { return 2; }
+  const float collision_radius() const override { return 10; } 
 };
 
 #endif

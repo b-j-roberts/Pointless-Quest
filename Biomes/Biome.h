@@ -1,21 +1,15 @@
 #ifndef __BIOME_H_INCLUDED__
 #define __BIOME_H_INCLUDED__
 
-#include "../Functions.h"
+#include "../Resources/Structures.h"
 
-// level - used for perlin splitting of biomes and resource density areas
-//enum state { Top, Middle, Bottom };
+// Used for indexing particular biomes
+enum Biome_enum {  Forest_ = 0, Desert_, Magic_, Ocean_, Swamp_, Tundra_, Old_Ocean_, Cave_, None_ };
 
-// enum used to map to biome & store biome info in objects
-// maps to location in tile_vec (TO DO : This will change)
-// TO DO : change Unocean_
-enum Biome_enum {  Forest_ = 0, Desert_ = 1, Magic_ = 2, Ocean_ = 3, 
-                   Swamp_ = 4, Tundra_ = 5, Unocean_ = 6, Cave_ = 7,
-                   None_};
-
+// Used for indexing particular planes
 enum Plane_enum { Overworld_ = 0, Underground_ };
 
-// Layer 0 Resource - (32, 32) storing ( biome info, if water tile, tiles sprite )
+// Layer 0 Resource - (32, 32) storing ( biome info, if water tile, pointer to tile's sprite )
 struct Tile {
 
   const Biome_enum biome_;
@@ -27,7 +21,7 @@ struct Tile {
   Tile(Biome_enum biome, std::shared_ptr<Sprite_Obj> sprite_obj, bool is_water = false):
     biome_(biome),
     is_water_(is_water),
-    sprite_(sprite_obj->get_Ptr(rand() % sprite_obj->size())) { }
+    sprite_(sprite_obj->get_rand_Ptr()) { }
 
   // Construct tile from passed index in Sprite_Obj ( used when want specific tile subset )
   Tile(Biome_enum biome, size_t tile_id, 
@@ -39,24 +33,23 @@ struct Tile {
 };
 
 // Virtual Base Class for Biomes
-// Contains : perlins_needed , which is number of perlins needed to properly generate biome
-//            get_Resources  , which builds the biome ( tiles, resources, river ) from perlins*
-//                             * - some biomes dont use perlins
 class Biome {
 
 public:
 
   Biome() { }
 
+  // Returns number of perlins needed to generate this biome in World::generate function
   virtual const size_t perlins_needed() { return 0; }
-  // TO DO : Remove default args
-  virtual void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_map_,
-                             std::vector<std::vector<std::shared_ptr<Resource>>>& resource_map_,
-                             const std::vector<std::shared_ptr<Sprite_Obj>>& tile_vec,
-                             const std::vector<std::vector<Biome_enum>>& biome_map,
-                             const std::vector<std::vector<std::vector<state>>>& perlins = {{{}}}, 
-                             size_t perlins_pos = 0,
-                             const std::vector<std::vector<state>>& river = {{}}) { }
+
+  // Builds biome ( tiles, resources, river, ... ) from perlins ( if needed )
+  // params : World_Plane::tile_map_, World_Plane::resource_map_, biome_map, all perlins,
+  //          position in all perlins vector, river ( stored in Mid state ) 
+  virtual void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
+                             std::vector<std::vector<std::shared_ptr<Resource>>>&,
+                             const std::vector<std::vector<Biome_enum>>&,
+                             const std::vector<std::vector<std::vector<state>>>&, size_t,
+                             const std::vector<std::vector<state>>&) { }
 };
 
 #endif

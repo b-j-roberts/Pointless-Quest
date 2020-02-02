@@ -58,8 +58,9 @@ public:
              const double = 1, const double = 1);
 
   // param : Index position of sprite in s_
-  // Returns this sprite
   std::shared_ptr<sf::Sprite> get_Ptr(const size_t) const;
+  // Returns ptr to random index position
+  std::shared_ptr<sf::Sprite> get_rand_Ptr() const;
 
   const size_t size() const { return s_.size(); }
 

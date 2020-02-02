@@ -67,8 +67,8 @@ bool is_under(double x, double y, const point_3D& bl) {
 // TO DO : Test & possibly replace this not so great perlin generator
 std::vector<std::vector<double>> sudo_perlin_2D(size_t width, size_t height) {
 
-  std::vector<double> empty_vec(width + 1, 0);
-  std::vector<std::vector<double>> ret(height + 1, empty_vec);
+  std::vector<double> empty_vec(width, 0);
+  std::vector<std::vector<double>> ret(height, empty_vec);
 
   double factor = 4;
 
