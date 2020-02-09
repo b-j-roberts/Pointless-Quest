@@ -4,7 +4,7 @@
 
 #include <iostream> // TO DO : debug
 
-int main() {
+int main(int argc, char** argv) {
 
   srand(time(NULL));
 
@@ -18,14 +18,17 @@ int main() {
 
 
   // World Generation & Resource Loading
-  sf::Vector2u world_size(2048, 2048);
-  //sf::Vector2u world_size(512, 512); //TO DO : Why is this seg fault?
+  size_t world_scale = 2;
+  // TO DO : TEMP
+  if(argc > 1) world_scale = std::stoi(argv[1]);
+  sf::Vector2u world_size(world_scale * 1024, world_scale * 1024);
   World world(world_size.x, world_size.y);
 
   // Player Creation & Resource Loading
   // TO DO : This is a temporary texture loading for player
   const Texture_Obj player_texture(32, 32, 4, "Biomes/ocean/waterTiles");
-  Player player(x_scale, 32 /* tile_size */, player_texture, 1000 * 32, 1000 * 32);
+  Player player(x_scale, 32 /* tile_size */, player_texture, 
+                world_size.x * 32 / 2, world_size.y * 32 / 2);
 
   // GUI Creation
   Map map(player);

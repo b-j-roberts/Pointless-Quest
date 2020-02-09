@@ -2,6 +2,8 @@
 
 #include <numeric> // accumulate
 
+#include <future>
+
 void World_Plane::draw(sf::RenderWindow& window, const Player& player) const {
   
   // TILES
@@ -49,13 +51,25 @@ void World_Plane::generate(const size_t width, const size_t height) {
   // Generate all Planes perlins needed
   typedef std::vector<std::vector<state>> state_perlin;
   state_perlin river;
-  if(need_river()) { river = get_States(width, height, 0.70, 0.68); }
+  if(need_river()) river = get_States(width, height, 0.70, 0.68); 
+  //std::future<state_perlin> fut_riv;
+  //if(need_river()) fut_riv = std::async(std::launch::async, get_States, width, height, 0.70, 0.68); 
   size_t state_perlins_needed = std::accumulate(biomes_.begin(), biomes_.end(), 0,
                                 [&](size_t a, const auto& b){ return a + b->perlins_needed(); });
-  std::vector<state_perlin> all_perlin;
+  /*std::vector<state_perlin> all_perlin;
   for(int i = 0; i < state_perlins_needed; ++i) {
     all_perlin.emplace_back(get_States(width, height, 0.75, 0.50)); // TO DO : cut_offs are temp
+  }*/
+  // TO DO : Think about this
+  std::vector<state_perlin> all_perlin;
+  std::vector<std::future<state_perlin>> fut_perlin;
+  for(int i = 0; i < state_perlins_needed; ++i) {
+    fut_perlin.emplace_back(std::async(std::launch::async, get_States, width, height, .75, .5));
   }
+  for(int i = 0; i < state_perlins_needed; ++i) {
+    all_perlin.emplace_back(fut_perlin[i].get()); // TO DO : cut_offs are temp
+  }
+  //if(need_river()) river = fut_riv.get();
 
   // Call get_Resources ( fill tile_map_ & resource_map_ ) on each of biomes_ w/ info generated above
   size_t pos = 0;
@@ -63,9 +77,19 @@ void World_Plane::generate(const size_t width, const size_t height) {
     biome->get_Resources(tile_map_, resource_map_, biomes_map, all_perlin, pos, river);
     pos += biome->perlins_needed();
   }
+  /*size_t pos = 0;
+  std::future<void> resource_gen[4];
+  size_t gen_pos = 0;
+  for(auto& biome : biomes_) {
+    resource_gen[gen_pos++] = std::async(std::launch::async, &Biome::get_Resources, *biome, tile_map_, resource_map_, biomes_map, all_perlin, pos, river);
+    pos += biome->perlins_needed();
+  }
+  for(int i = 0; i < gen_pos; ++i) resource_gen[i].get();*/
+ // auto a = std::async(std::launch::async, &Biome::get_Resources, *biomes_[0], tile_map_, resource_map_, biomes_map, all_perlin, 0, river);
+ // a.get();
 
   // TO DO : Temp
-  resource_map_[1000][1000] = nullptr;
+  resource_map_[height / 2][width / 2] = nullptr;
 }
 
 
@@ -74,7 +98,7 @@ std::vector<std::vector<Biome_enum>> Overworld::get_Biome_Map(size_t width, size
   // TO DO : Use get_Min_Power on width and height
 
   // Generate tile_heights map ( used to determine biomes in position )
-  std::vector<std::vector<double>> tile_heights = sudo_perlin_2D(width, height);
+  auto tile_heights = sudo_perlin_2D(width, height);
   normalize_2D(tile_heights);
   add_noise(tile_heights, 1, 300);
 
@@ -142,7 +166,7 @@ World::World(const size_t width, const size_t height) {
   planes_[Overworld_] = get_Plane(Overworld_, width, height);
   planes_[Underground_] = get_Plane(Underground_, width, height);
 
-  cities_[Overworld_] = std::make_unique<First_City>(width, height);
+  cities_[Overworld_] = std::make_unique<City_Plane>(width, height);
 
   // Cave entry
 /*  // TO DO : Fix all of this
@@ -168,4 +192,5 @@ World::World(const size_t width, const size_t height) {
 // Call draw function for correct plane
 void World::draw(sf::RenderWindow& window, const Player& player) const {
   planes_.at(player.current_plane())->draw(window, player);
+  cities_.at(player.current_plane())->draw(window, player);
 }

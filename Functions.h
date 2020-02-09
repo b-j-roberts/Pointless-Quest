@@ -43,7 +43,7 @@ enum state { Top, Middle, Bottom };
 
 // TO DO : Must be a power of 2 as of now
 // Return a perlin-ish 2D vector with width & height as specified
-std::vector<std::vector<double>> sudo_perlin_2D(size_t width, size_t height);
+std::vector<std::vector<double>> sudo_perlin_2D(int width, int height);
 
 // Linearly scale 2D vector, such that max value is 1
 void normalize_2D(std::vector<std::vector<double>>& vec);

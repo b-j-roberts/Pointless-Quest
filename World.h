@@ -11,7 +11,7 @@
 class Player;
 class Body;
 class Map;
-
+class City_Plane;
 
 // Virtual Class for a Worlds Plane w/ Biome_emuns, Biomes, tile_map, & resource_map
 struct World_Plane {
@@ -52,7 +52,7 @@ struct Overworld : public World_Plane {
   const std::vector<std::vector<Biome_enum>>& possible_biomes() override {
     static const std::vector<std::vector<Biome_enum>> possible_biomes_ = {
       { Magic_, Tundra_ }, // TO DO : Volcano  // top
-      { Forest_, Desert_ }, // TO DO : Plains  // mid
+      { Forest_, Desert_}, // TO DO : Plains  // mid
       { Swamp_ }, // TO DO : Beach, Rockys     // bot
       { Ocean_, Old_Ocean_ } // TO DO : Lava   // liq
     };
@@ -87,7 +87,7 @@ std::unique_ptr<World_Plane> get_Plane(Plane_enum, const size_t, const size_t);
 class World {
   
   std::map<Plane_enum, std::unique_ptr<World_Plane>> planes_;
-  std::map<Plane_enum, std::unique_ptr<City>> cities_;
+  std::map<Plane_enum, std::unique_ptr<City_Plane>> cities_;
   
 public:
 

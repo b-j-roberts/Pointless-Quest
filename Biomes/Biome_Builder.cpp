@@ -316,7 +316,7 @@ void Old_Ocean::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& t
   for(size_t i = 0; i < biome_map.size(); ++i) {
     for(size_t j = 0; j < biome_map[i].size(); ++j) {
       if(biome_map[i][j] == Old_Ocean_) {
-        if(river[i][j] == Middle) 
+        if(river[i][j] == Middle)
           tile_map_[i][j] = std::make_shared<Tile>(Old_Ocean_, old_ocean_water_, true);
         else tile_map_[i][j] = std::make_shared<Tile>(Old_Ocean_, old_ocean_tile_);
       }

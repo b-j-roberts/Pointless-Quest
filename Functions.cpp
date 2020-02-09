@@ -24,7 +24,7 @@ double angle2f(const sf::Vector2f& vec) {
                        (-1 * atan(vec.y / vec.y) * 180 / PI) + 180; 
   } 
 }
-
+/*
 // helper : struct to hold 3D point with flipped y ( for logical reasons )
 struct point_3D {
 
@@ -65,7 +65,7 @@ bool is_under(double x, double y, const point_3D& bl) {
 }
 
 // TO DO : Test & possibly replace this not so great perlin generator
-std::vector<std::vector<double>> sudo_perlin_2D(size_t width, size_t height) {
+std::vector<std::vector<double>> old_perlin_2D(size_t width, size_t height) {
 
   std::vector<double> empty_vec(width, 0);
   std::vector<std::vector<double>> ret(height, empty_vec);
@@ -123,6 +123,52 @@ std::vector<std::vector<double>> sudo_perlin_2D(size_t width, size_t height) {
 
   return ret;
 
+}*/
+
+std::vector<std::vector<double>> sudo_perlin_2D(int width, int height) {
+
+  // TO DO : Test this with viewer
+  // Note : Requires square & power of 2?
+
+  std::vector<std::vector<double>> ret(height, std::vector<double>(width, 0));
+  
+  // Create random seed 2d vector
+  // TO DO : Transform?
+  std::vector<std::vector<double>> seed(height, std::vector<double>(width, 0.f));
+  for(int i = 0; i < height; ++i) {
+    for(int j = 0; j < width; ++j) {
+      seed[i][j] = (rand() % 100);
+    }
+  }
+
+
+  for(int i = 0; i < height; ++i) {
+    for(int j = 0; j < width; ++j) {
+      float scale = 1.f;
+      int pitch = width;
+      while(pitch > 0) { // TO DO : Change this min to some variable for biasing
+        // Take advantage of int rounding to get boundary values for interpolation
+        int x_1 = (j / pitch) * pitch;
+        int y_1 = (i / pitch) * pitch;
+        int x_2 = (x_1 + pitch) % width; // wrapping
+        int y_2 = (y_1 + pitch) % height;
+        // Get relative position in each coordinate of current point
+        float curr_x = (float)(j - x_1) / (float)pitch;
+        float curr_y = (float)(i - y_1) / (float)pitch;
+        // Interpolate 'top' and 'bottom' x values for y interpolation
+        float x_top = (1.f - curr_x) * seed[y_1][x_1] + curr_x * seed[y_1][x_2];
+        float x_bot = (1.f - curr_x) * seed[y_2][x_1] + curr_x * seed[y_2][x_2];
+        // Increase return by scaled Interpolated y value
+        ret[i][j] += (curr_y * (x_bot - x_top) +  x_top) * scale;
+        // TO DO : Scale accumulator for making max val 1?
+        scale /= 2; // TO DO : Change this to some bias variable
+        pitch /= 2;
+      }
+    }
+  }
+
+  return ret;
+
 }
 
 // helper : return max value in 2D vector
@@ -156,11 +202,11 @@ std::vector<std::vector<state>> get_States(size_t width, size_t height,
                                            double top_percent_cut, double bot_percent_cut) {
 
   // Create Normalized 2D perlin
-  std::vector<std::vector<double>> tile_heights = sudo_perlin_2D(width, height);
+  auto tile_heights = sudo_perlin_2D(width, height);
   normalize_2D(tile_heights);
 
   // Get cutoff values by flattening, sorting, and indexing percent cuts
-  std::vector<double> all_heights(width * height + 1);
+  std::vector<double> all_heights;
   for(const auto& v : tile_heights) {
     all_heights.insert(all_heights.end(), v.begin(), v.end());
   }
@@ -170,14 +216,17 @@ std::vector<std::vector<state>> get_States(size_t width, size_t height,
 
   // Create return vector from tile_heights, states based on cutoff values
   std::vector<std::vector<state>> ret(height);
+  int top_count = 0;
+  int mid_count = 0;
+  int bot_count = 0;
   for(size_t i = 0; i < height; ++i) {
     std::transform(tile_heights[i].begin(), tile_heights[i].end(), std::back_inserter(ret[i]),
         [&](auto val){
-          if(val > top_cutoff) return Top;
-          else if(val > bot_cutoff) return Middle;
-          else return Bottom;
+          if(val > top_cutoff) { ++top_count; return Top; }
+          else if(val > bot_cutoff) { ++mid_count; return Middle; }
+          else { ++bot_count; return Bottom; }
         });
-  } 
+  }
 
   return ret;
 }

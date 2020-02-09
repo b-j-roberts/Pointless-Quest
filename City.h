@@ -1,41 +1,45 @@
 #ifndef __CITY_H_INCLUDED__
 #define __CITY_H_INCLUDED__
 
-#include "Resources/Structures.h"
+//#include "Resources/Structures.h"
+#include "Player.h"
 
-class City {
+class Player; // FORWARD DECL
+
+class Wall_Horizontal;
+class Wall_Vertical;
+class City;
+
+class City_Plane {
+
+  std::vector<std::unique_ptr<City>> cities_;
 
   std::vector<std::vector<bool>> city_land_; // true - if is city block
   // TO DO : Change so that we can have vertical and horizontal in same position
-  std::vector<std::vector<std::shared_ptr<sf::Sprite>>> city_walls_;
-
-  virtual std::shared_ptr<sf::Sprite> get_horz_wall() { }
-  virtual std::shared_ptr<sf::Sprite> get_vert_wall() { }
+  std::vector<std::vector<std::shared_ptr<Resource>>> city_horz_walls_;
+  std::vector<std::vector<std::shared_ptr<Resource>>> city_vert_walls_;
 
 public:
 
-  City(const size_t width, const size_t height):
-    city_land_(get_Bounded_Region(width, height, width * height * .01),
-    city_walls_(height, std::vector<std::shared_ptr<sf::Sprite>>(width, nullptr)) { 
-    this->generate();
-    }
+  City_Plane(const size_t width, const size_t height):
+    city_land_(get_Bounded_Region(width, height, width * height * .01)),
+    city_horz_walls_(height, std::vector<std::shared_ptr<Resource>>(width, nullptr)),
+    city_vert_walls_(height, std::vector<std::shared_ptr<Resource>>(width, nullptr)) { 
+    this->generate(width, height); }
 
-  void generate() {
-    // TO DO : Pass city_land_ to get Bounded instead?
-    smooth_Bounded_Edges(city_land_);
-    for(size_t i = 0; i < height; ++i) {
-      for(size_t j = 0; j < width; ++j) {
-        if(city_land_[i][j] && is_Bounded_Edge(city_land_[i][j], i, j)) {
-         /* Insert correct walls here */ 
-           if(!city_land_[i+1][j] || !city_land_[i-1][j]) city_walls_(this->get_horz_wall());
-           else city_walls_(this->get_vert_wall());
+  void generate(size_t width, size_t height);
+  void draw(sf::RenderWindow&, const Player&);
 
-         /* maybe make center of x (horizontal) & y (vertical) for origin so that we may have unique?*/
-        }
-      }
-    }
+};
 
-  }
+class City {
+
+public:
+
+  City() { }
+
+  virtual std::shared_ptr<Resource> get_horz_wall(int, int) { }
+  virtual std::shared_ptr<Resource> get_vert_wall(int, int) { }
 
 };
 
@@ -44,25 +48,45 @@ class First_City : public City {
   Texture_Obj wall_horz_t_;
   Texture_Obj wall_vert_t_;
 
-  Sprite_Obj wall_horz_;
-  Sprite_Obj wall_vert_;
-
-  std::shared_ptr<sf::Sprite> get_horz_wall() override {
-    return wall_horz_.get_rand_Ptr();
-  }
-  std::shared_ptr<sf::Sprite> get_vert_wall() override {
-    return wall_vert_.get_rand_Ptr();
-  }
+  std::shared_ptr<Sprite_Obj> wall_horz_;
+  std::shared_ptr<Sprite_Obj> wall_vert_;
 
 public:
 
-  First_City(const size_t width, const size_t height):
-    City(width, height),
+  First_City():
     wall_horz_t_(64, 32, 3, "Citys/city_1_wall"),
-    wall_vert_t_(32, 4, 3, "Citys/city_1_wall_vert"),
-    wall_horz_(std::make_shared<Sprite_Obj>(wall_horz_t_, 15, 63)),
-    wall_vert_(std::make_shared<Sprite_Obj>(wall_vert_t_, 2, 15)) { }
+    wall_vert_t_(96, 4, 2, "Citys/city_1_wall_vert"),
+    wall_horz_(std::make_shared<Sprite_Obj>(wall_horz_t_, 0, 32)),
+    wall_vert_(std::make_shared<Sprite_Obj>(wall_vert_t_, 3, 64)) { }
 
-}; 
+
+  std::shared_ptr<Resource> get_horz_wall(int x, int y) override;
+  std::shared_ptr<Resource> get_vert_wall(int x, int y) override;
+
+  friend Wall_Horizontal;
+  friend Wall_Vertical;
+};
+
+class Wall_Horizontal final : public One_Piece {
+
+public:
+
+  Wall_Horizontal(const float pos_x, const float pos_y, const First_City& city):
+    One_Piece(pos_x, pos_y, city.wall_horz_->get_rand_Ptr()) { }
+
+  // TO DO : Overridden Resource Funtions
+
+};
+
+class Wall_Vertical final : public One_Piece {
+
+public:
+
+  Wall_Vertical(const float pos_x, const float pos_y, const First_City& city):
+    One_Piece(pos_x, pos_y, city.wall_vert_->get_rand_Ptr()) { }
+
+  // TO DO : Overridden Resource Funtions
+
+};
 
 #endif
