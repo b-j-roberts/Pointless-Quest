@@ -27,6 +27,7 @@ public:
   Texture_Obj& operator= (const Texture_Obj&) = delete;
 
   // params : height, width, num, name of file w/o .png, height offset(=0), width offset(=0)
+  // TO DO : Swap width & height
   Texture_Obj(const size_t, const size_t, const size_t, std::string, 
               const size_t = 0, const size_t = 0);
 

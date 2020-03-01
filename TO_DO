@@ -1,9 +1,7 @@
 Figure out octives & scaling factors for certain kinds of features ( Perlin )
 Make City
-make sure loops loop thru rows then columns
 floats to double?
 futures and speeding sudo_Perlin_2D
-check get_Ptr & get_rand_Ptr
 
 clean :
   City & World City part
