@@ -70,35 +70,32 @@ public:
 // Virtual Class used for polymorphic use of draw, generation, collisions, ...
 // Stores location of any resource in the world (actual pixel location ie not by tile)
 class Resource {
+protected:
 
-  protected:
+  float pos_x_, pos_y_;
 
-    float pos_x_, pos_y_;
+public:
 
-  public:
+  Resource(float pos_x, float pos_y):
+    pos_x_(pos_x),
+    pos_y_(pos_y) { }
 
-    Resource(float pos_x, float pos_y):
-      pos_x_(pos_x),
-      pos_y_(pos_y) { }
+  // Functions for getting resource info & moving resource
+  const float x() const { return pos_x_; }
+  const float y() const { return pos_y_; }
+  void move(float x, float y) { pos_x_ += x; pos_y_ += y; }
 
-    // Functions for getting resource info & moving resource
-    const float x() const { return pos_x_; }
-    const float y() const { return pos_y_; }
-    void move(float x, float y) { pos_x_ += x; pos_y_ += y; }
+  // Virtual functions for drawing normally & transparently to window
+  virtual void draw(sf::RenderWindow& window) const { }
+  virtual void transparent_draw(sf::RenderWindow& window) const { }
 
-    // Virtual functions for drawing normally & transparently to window
-    virtual void draw(sf::RenderWindow& window) const { }
-    virtual void transparent_draw(sf::RenderWindow& window) const { }
-
-    // Returns width of space needed to place resource (to the left & up of generation position)
-    virtual const size_t generation_range() const { return 1; }
-
-    // Returns radius about origin (pos) of resource in which collisions occur (0=collisionless)
-    virtual const float collision_radius() const { return 0.f; }
-                                                   
-    // Returns whether given FloatRect overlaps the resource ( used for transparent draw of resource)
-    virtual const bool is_overlapped(const sf::FloatRect&) { return false; }
-    
+  // Returns width of space needed to place resource (to the left & up of generation position)
+  virtual const size_t generation_range() const { return 1; }
+  // Returns radius about origin (pos) of resource in which collisions occur (0=collisionless)
+  virtual const float collision_radius() const { return 0.f; }
+  // Returns whether given FloatRect overlaps the resource ( used for transparent draw of resource)
+  virtual const bool is_overlapped(const sf::FloatRect&) { return false; }
+  
 };
 
 #endif
