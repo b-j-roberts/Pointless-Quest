@@ -2,6 +2,7 @@ Figure out octives & scaling factors for certain kinds of features ( Perlin )
 Make City
 floats to double?
 futures and speeding sudo_Perlin_2D
+fix header ifndef statements
 
 clean :
   City & World City part
