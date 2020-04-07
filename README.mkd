@@ -16,7 +16,10 @@
 
 ## A couple screenshots
 
-![OLD OCEAN SCREENSHOT](https://github.com/b-j-roberts/Pointless-Quest/raw/master/demo/pq_1.png|height=800)
-![SWAMP SCREENSHOT](https://github.com/b-j-roberts/Pointless-Quest/raw/master/demo/pq_2.png|height=800)
+![OLD OCEAN SCREENSHOT](https://github.com/b-j-roberts/Pointless-Quest/raw/master/demo/pq_1.png | height=800)
+![SWAMP SCREENSHOT](https://github.com/b-j-roberts/Pointless-Quest/raw/master/demo/pq_2.png | height=800)
+
+### NOTE : Red circle is your collision radius ( temporary test circle )
+### NOTE : Blue square has animated frames ( temporary test square, taking place of player art - which is not done yet )
 
 ---
