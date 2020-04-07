@@ -27,18 +27,18 @@
 ## Features
 * Biome Generation ( Perlin Random Generator ) with rough transitions
 * Current Biomes ( map chooses 4 semi-randomly to place in world at generation time ) :
---*Forest
---*Desert
---*Swamp
---*Ocean
---*Old Ocean
---*Tundra
---*Cave
---*Magic
+  *Forest
+  *Desert
+  *Swamp
+  *Ocean
+  *Old Ocean
+  *Tundra
+  *Cave
+  *Magic
 * Resources go see through when theatening view of player ( some tweaks need to be done here )
 * Collisions with resources
 * River & Lake Generation
 * Minimap
 * City wall generation ( only 1 city and wall drawing is incomplete )
 
-### This project is on hold, I was aiming too ambitiously for my "First Game"
+### This project is on hold, I was aiming too ambitiously for my "First Game", however I am very happy with where the project is now
