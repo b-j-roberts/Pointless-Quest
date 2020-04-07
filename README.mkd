@@ -11,8 +11,7 @@
 
 #### This is a screencap of the current state of the game! NOTE : Motions are sped up for the viewer!
 
-#### It demonstrates collisions, alpha'd overlaps, the minimap, 
-#### different biomes and generation features ( such as rivers, rough biome borders, and multipiece resources )
+#### It demonstrates collisions, alpha'd overlaps, the minimap, different biomes and generation features ( such as rivers, rough biome borders, and multipiece resources )
 
 ## A couple screenshots
 
