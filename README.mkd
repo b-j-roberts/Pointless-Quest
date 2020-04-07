@@ -41,4 +41,4 @@
 * Minimap
 * City wall generation ( only 1 city and wall drawing is incomplete )
 
-### This project is on hold, I was aiming too ambitiously for my "First Game"
+### This project is on hold, I was aiming too ambitiously for my "First Game", however I am very happy with where the project is now
