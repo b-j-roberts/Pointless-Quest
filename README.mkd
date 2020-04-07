@@ -25,6 +25,7 @@
 
 ## Features
 * Biome Generation ( Perlin Random Generator ) with rough transitions
+* Resource Clustering ( Based on Perlin Random Numbers )
 * Current Biomes ( map chooses 4 semi-randomly to place in world at generation time ) :
   * Forest
   * Desert
