@@ -44,8 +44,8 @@ class Player {
   sf::View view_;
 
   // Range & Plane info for more efficient drawing to window
-  std::pair<int, int> x_range_;
-  std::pair<int, int> y_range_;
+  std::pair<size_t, size_t> x_range_;
+  std::pair<size_t, size_t> y_range_;
   Plane_enum curr_plane_;
 
 public:
@@ -60,8 +60,8 @@ public:
   // Get Player info
   const sf::View& get_View() const { return view_; }
   sf::FloatRect bounding_box() const { return body_->bounding_box(); }
-  const std::pair<int, int>& x_range() const { return x_range_; }
-  const std::pair<int, int>& y_range() const { return y_range_; }
+  const std::pair<size_t, size_t>& x_range() const { return x_range_; }
+  const std::pair<size_t, size_t>& y_range() const { return y_range_; }
   Plane_enum current_plane() const { return curr_plane_; }
 
   // Change Player curr_plane_

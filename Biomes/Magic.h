@@ -39,7 +39,7 @@ public:
     magic_flowers_(std::make_shared<Sprite_Obj>(magic_flowers_t_, 15, 31, 1.2, 1.2)),
     magic_trees_(std::make_shared<Sprite_Obj>(magic_trees_t_, 47, 150)) { }
 
-  ~Magic() = default;
+  ~Magic() override = default;
 
   // Biome function overrides
   // 2 - Flowers (density), Trees (density)

@@ -36,7 +36,7 @@ public:
     desert_water_(std::make_shared<Sprite_Obj>(desert_water_t_)),
     desert_cactus_(std::make_shared<Sprite_Obj>(desert_cactus_t_, 15, 57)) { }
 
-  ~Desert() = default;
+  ~Desert() override = default;
 
   // Biome function overrides
   // 1 - Cactus (density)

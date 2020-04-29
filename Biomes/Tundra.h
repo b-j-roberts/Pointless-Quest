@@ -39,6 +39,8 @@ public:
     tundra_shrub_(std::make_shared<Sprite_Obj>(tundra_shrub_t_, 32, 60)),
     tundra_tree_(std::make_shared<Sprite_Obj>(tundra_tree_t_, 32, 146)),
     tundra_ice_(std::make_shared<Sprite_Obj>(tundra_ice_t_)) { }
+
+  ~Tundra() override = default;
   
   // Biome function overrides
   // 1 - Plantlife (density)
@@ -49,8 +51,6 @@ public:
                      const std::vector<std::vector<Biome_enum>>&,
                      const std::vector<std::vector<std::vector<state>>>&, size_t,
                      const std::vector<std::vector<state>>&) override;
-
-  ~Tundra() = default;
 
   friend Tundra_Shrub;
   friend Tundra_Tree;

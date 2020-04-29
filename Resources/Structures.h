@@ -1,4 +1,4 @@
-#ifndef STRUCTURES_H_
+#ifndef STRUCTURES_H
 #define STRUCTURES_H
 
 #include "Resources.h"
@@ -18,6 +18,7 @@ public:
   One_Piece() = delete;
   One_Piece(const One_Piece&) = delete;
   One_Piece& operator= (const One_Piece&) = delete;
+  ~One_Piece() override = default;
 
   // params : pos_x, pos_y, shared_ptr to sprite, angle of resource (clockwise?)
   One_Piece(const float, const float, std::shared_ptr<sf::Sprite>, const float angle = 0);
@@ -45,6 +46,7 @@ public:
   Two_Piece_Vert() = delete;
   Two_Piece_Vert(const Two_Piece_Vert&);
   Two_Piece_Vert& operator= (const Two_Piece_Vert&);
+  ~Two_Piece_Vert() override = default;
 
   // params : pos_x, pos_y, top_offset_x, top_offset_y, bot sprite, top sprite 
   Two_Piece_Vert(const float, const float, const float, const float, 
@@ -82,6 +84,7 @@ public:
   // params : pos x , pos y , constructor from Sprite Object
   Animation(const float, const float, 
             const Texture_Obj&, const float=0, const float=0, const double=1, const double=1);
+  ~Animation() override = default;
 
   // Update animation frame info
   void set_frames();

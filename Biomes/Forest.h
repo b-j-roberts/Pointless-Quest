@@ -65,7 +65,7 @@ public:
     forest_tree_top_(std::make_shared<Sprite_Obj>(forest_tree_top_t_, 63, 89, 1.3, 1.3)),
     forest_tree_bot_(std::make_shared<Sprite_Obj>(forest_tree_bot_t_, 31, 110)) { }
 
-  ~Forest() = default;
+  ~Forest() override = default;
 
   // Biome function overrides
   // 2 - Tiles (flowers) & Plantlife (density)

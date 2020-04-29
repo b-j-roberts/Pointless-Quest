@@ -57,13 +57,14 @@ public:
   // params : texture object, origin x (=0), origin y (=0), scale x (=1), scale y (=1)
   Sprite_Obj(const Texture_Obj&, const size_t = 0, const size_t = 0, 
              const double = 1, const double = 1);
+  virtual ~Sprite_Obj() = default;
 
   // param : Index position of sprite in s_
   std::shared_ptr<sf::Sprite> get_Ptr(const size_t) const;
   // Returns ptr to random index position
   std::shared_ptr<sf::Sprite> get_rand_Ptr() const;
 
-  const size_t size() const { return s_.size(); }
+  size_t size() const { return s_.size(); }
 
 };
 
@@ -80,14 +81,16 @@ public:
     pos_x_(pos_x),
     pos_y_(pos_y) { }
 
+  virtual ~Resource() = default;
+
   // Functions for getting resource info & moving resource
-  const float x() const { return pos_x_; }
-  const float y() const { return pos_y_; }
+  float x() const { return pos_x_; }
+  float y() const { return pos_y_; }
   void move(float x, float y) { pos_x_ += x; pos_y_ += y; }
 
   // Virtual functions for drawing normally & transparently to window
-  virtual void draw(sf::RenderWindow& window) const { }
-  virtual void transparent_draw(sf::RenderWindow& window) const { }
+  virtual void draw(sf::RenderWindow& window) const = 0;
+  virtual void transparent_draw(sf::RenderWindow& window) const = 0;
 
   // Returns width of space needed to place resource (to the left & up of generation position)
   virtual size_t generation_range() const { return 1; }

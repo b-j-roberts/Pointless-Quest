@@ -49,7 +49,7 @@ public:
     swamp_tree_top_(std::make_shared<Sprite_Obj>(swamp_tree_top_t_, 31, 110)),
     swamp_water_(std::make_shared<Sprite_Obj>(swamp_water_t_)) {}
 
-  ~Swamp() = default;
+  ~Swamp() override = default;
 
   // Biome function overrides
   // 2 - Trees (density), Reeds (density) 

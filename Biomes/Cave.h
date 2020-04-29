@@ -1,4 +1,4 @@
-#ifndef CAVE_H_
+#ifndef CAVE_H
 #define CAVE_H
 
 #include "Biome.h"

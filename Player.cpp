@@ -14,8 +14,8 @@ void Body::update(float vel_x, float vel_y, Player& player, const World& world) 
   // Collision resolution ( resolution vector calculated as (shifted_x, shifted_y) )
   const auto& rec_map = world.planes_.at(player.curr_plane_)->resource_map_;
   auto sq = [](float val){ return val * val; };
-  for(int j = player.x_range_.first; j < player.x_range_.second; ++j) {
-    for(int i = player.y_range_.first; i < player.y_range_.second; ++i) {
+  for(size_t j = player.x_range_.first; j < player.x_range_.second; ++j) {
+    for(size_t i = player.y_range_.first; i < player.y_range_.second; ++i) {
       if(rec_map[i][j] && rec_map[i][j]->collision_radius() != 0) { // Ignore nullptr & 0 radius
         const sf::Vector2f rec_pos = sf::Vector2f(rec_map[i][j]->x(), rec_map[i][j]->y());
         if(sq((pos_x_ - rec_pos.x)) + sq((pos_y_ - rec_pos.y)) <= 
@@ -59,10 +59,10 @@ void Player::update(float l_stick_x, float l_stick_y,
   const int world_size_x = world.planes_.at(curr_plane_)->tile_map_[0].size();
   const int world_size_y = world.planes_.at(curr_plane_)->tile_map_.size();
   // Set draw range to be full view + 16 tiles in any direction ( accounting for boundaries )
-  x_range_ = std::make_pair<int, int>(
+  x_range_ = std::make_pair<size_t, size_t>(
                 max(0, center.x - (size.x / 2) - 512) / 32,
                 min(max(0, (center.x + (size.x / 2) + 512) / 32), world_size_x));
-  y_range_ = std::make_pair<int, int>(
+  y_range_ = std::make_pair<size_t, size_t>(
                 max(0, center.y - (size.y / 2) - 512) / 32,
                 min(max(0, (center.y + (size.y / 2) + 512) / 32), world_size_y));
 }

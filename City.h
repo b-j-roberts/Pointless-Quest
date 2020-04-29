@@ -37,6 +37,7 @@ class City {
 public:
 
   City() { }
+  virtual ~City() = default;
 
   virtual std::shared_ptr<Resource> get_horz_wall(int, int) { }
   virtual std::shared_ptr<Resource> get_vert_wall(int, int) { }
@@ -58,6 +59,7 @@ public:
     wall_vert_t_(96, 4, 2, "Citys/city_1_wall_vert"),
     wall_horz_(std::make_shared<Sprite_Obj>(wall_horz_t_, 0, 32)),
     wall_vert_(std::make_shared<Sprite_Obj>(wall_vert_t_, 3, 64)) { }
+  ~First_City() override = default;
 
 
   std::shared_ptr<Resource> get_horz_wall(int x, int y) override;
@@ -73,6 +75,7 @@ public:
 
   Wall_Horizontal(const float pos_x, const float pos_y, const First_City& city):
     One_Piece(pos_x, pos_y, city.wall_horz_->get_rand_Ptr()) { }
+  ~Wall_Horizontal() override = default;
 
   // TO DO : Overridden Resource Funtions
 
@@ -84,6 +87,7 @@ public:
 
   Wall_Vertical(const float pos_x, const float pos_y, const First_City& city):
     One_Piece(pos_x, pos_y, city.wall_vert_->get_rand_Ptr()) { }
+  ~Wall_Vertical() override = default;
 
   // TO DO : Overridden Resource Funtions
 

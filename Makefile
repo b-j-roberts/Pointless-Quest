@@ -1,5 +1,5 @@
 COMPILER := clang++
-CLANG_WARNS := -Weverything -Wextra -Wno-c++98-compat -Wno-padded -Wno-global-constructors -Wno-switch-enum -Wno-shorten-64-to-32
+CLANG_WARNS := -Weverything -Wextra -Wno-c++98-compat -Wno-padded -Wno-global-constructors -Wno-switch-enum -Wno-shorten-64-to-32 -Wno-weak-vtables
 
 VERSION := -std=c++1z
 FLAGS := -O3 -fPIC

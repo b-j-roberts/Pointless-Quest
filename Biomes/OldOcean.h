@@ -39,7 +39,7 @@ public:
     old_ocean_large_fish_(std::make_shared<Sprite_Obj>(old_ocean_large_fish_t_, 31, 15, 1.2, 1.2)),
     old_ocean_small_fish_(std::make_shared<Sprite_Obj>(old_ocean_small_fish_t_, 15, 15)) { }
 
-  ~Old_Ocean() = default;
+  ~Old_Ocean() override = default;
 
   // Biome function overrides
   // Implimented in ./Biome_Builder.cpp

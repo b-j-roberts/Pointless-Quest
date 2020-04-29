@@ -26,6 +26,7 @@ struct World_Plane {
   World_Plane(const size_t width, const size_t height): 
     tile_map_(height, std::vector<std::shared_ptr<Tile>>(width, nullptr)),
     resource_map_(height, std::vector<std::shared_ptr<Resource>>(width, nullptr)) { }
+  virtual ~World_Plane() = default;
 
   // Draw part of World_Plane (tile & resource map) inside player's range ( & draw player )
   void draw(sf::RenderWindow&, const Player&) const;
@@ -34,11 +35,11 @@ struct World_Plane {
     
   // Virtual functions for specific world plane
   // Determines which biomes are possible for this plane
-  virtual const std::vector<std::vector<Biome_enum>>& possible_biomes() { };
+  virtual const std::vector<std::vector<Biome_enum>>& possible_biomes() = 0;
   // Determines if a river is needed for this plane
-  virtual bool need_river() { };
+  virtual bool need_river() = 0;
   // Determines how to generate biomes_map for get_Resource function call
-  virtual std::vector<std::vector<Biome_enum>> get_Biome_Map(size_t width, size_t height) { };
+  virtual std::vector<std::vector<Biome_enum>> get_Biome_Map(size_t width, size_t height) = 0;
 
   // TO DO : Layers
 };
@@ -47,6 +48,7 @@ struct Overworld : public World_Plane {
   
   Overworld(const size_t width, const size_t height):
     World_Plane(width, height) { this->generate(width, height); }
+  ~Overworld() override = default;
 
   // World_Plane overrides
   const std::vector<std::vector<Biome_enum>>& possible_biomes() override {
@@ -67,6 +69,7 @@ struct Underground : public World_Plane {
   // TO DO : Cave entry things ( do in world object ) 
   Underground(const size_t width, const size_t height):
     World_Plane(width, height) { this->generate(width, height); }   
+  ~Underground() override = default;
 
   // World_Plane overrides
   const std::vector<std::vector<Biome_enum>>& possible_biomes() override {
