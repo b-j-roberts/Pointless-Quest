@@ -1,5 +1,5 @@
-#ifndef __OLDOCEAN_H_INCLUDED__
-#define __OLDOCEAN_H_INCLUDED__
+#ifndef OLDOCEAN_H
+#define OLDOCEAN_H
 
 #include "Biome.h"
 
@@ -39,6 +39,8 @@ public:
     old_ocean_large_fish_(std::make_shared<Sprite_Obj>(old_ocean_large_fish_t_, 31, 15, 1.2, 1.2)),
     old_ocean_small_fish_(std::make_shared<Sprite_Obj>(old_ocean_small_fish_t_, 15, 15)) { }
 
+  ~Old_Ocean() = default;
+
   // Biome function overrides
   // Implimented in ./Biome_Builder.cpp
   void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
@@ -60,8 +62,8 @@ public:
     One_Piece(pos_x, pos_y, old_ocean.old_ocean_large_fish_->get_rand_Ptr(), rand() % 360) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 2; }
-  const float collision_radius() const override { return 0; } 
+  size_t generation_range() const override { return 2; }
+  float collision_radius() const override { return 0; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -73,8 +75,8 @@ public:
     One_Piece(pos_x, pos_y, old_ocean.old_ocean_small_fish_->get_rand_Ptr(), rand() % 360) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 1; }
-  const float collision_radius() const override { return 0; } 
+  size_t generation_range() const override { return 1; }
+  float collision_radius() const override { return 0; } 
 };
 
 #endif

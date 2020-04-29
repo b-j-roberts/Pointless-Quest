@@ -1,5 +1,5 @@
-#ifndef __MAGIC_H_INCLUDED__
-#define __MAGIC_H_INCLUDED__
+#ifndef MAGIC_H
+#define MAGIC_H
 
 #include "Biome.h"
 
@@ -39,9 +39,11 @@ public:
     magic_flowers_(std::make_shared<Sprite_Obj>(magic_flowers_t_, 15, 31, 1.2, 1.2)),
     magic_trees_(std::make_shared<Sprite_Obj>(magic_trees_t_, 47, 150)) { }
 
+  ~Magic() = default;
+
   // Biome function overrides
   // 2 - Flowers (density), Trees (density)
-  const size_t perlins_needed() override { return 2; }
+  size_t perlins_needed() override { return 2; }
   // Implimented in ./Biome_Builder.cpp
   void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
                      std::vector<std::vector<std::shared_ptr<Resource>>>&,
@@ -62,8 +64,8 @@ public:
     One_Piece(pos_x, pos_y, magic.magic_flowers_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 1; }
-  const float collision_radius() const override { return 3; } 
+  size_t generation_range() const override { return 1; }
+  float collision_radius() const override { return 3; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -75,8 +77,8 @@ public:
     One_Piece(pos_x, pos_y, magic.magic_trees_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 2; }
-  const float collision_radius() const override { return 10; } 
+  size_t generation_range() const override { return 2; }
+  float collision_radius() const override { return 10; } 
 };
 
 #endif

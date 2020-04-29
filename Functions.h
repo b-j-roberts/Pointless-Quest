@@ -1,5 +1,5 @@
-#ifndef __FUNCTIONS_H_INCLUDED__
-#define __FUNCTIONS_H_INCLUDED__
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
 // TO DO : Learn make files so I can move all unneccesary header librarys into .cpp files
 #include <cmath> // atan & sqrt ( in other translation units ) // TO DO

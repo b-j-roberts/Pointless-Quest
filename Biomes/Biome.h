@@ -1,5 +1,5 @@
-#ifndef __BIOME_H_INCLUDED__
-#define __BIOME_H_INCLUDED__
+#ifndef BIOME_H
+#define BIOME_H
 
 #include "../Resources/Structures.h"
 
@@ -37,10 +37,11 @@ class Biome {
 
 public:
 
-  Biome() { }
+  Biome() = default;
+  virtual ~Biome() = default;
 
   // Returns number of perlins needed to generate this biome in World::generate function
-  virtual const size_t perlins_needed() { return 0; }
+  virtual size_t perlins_needed() { return 0; }
 
   // Builds biome ( tiles, resources, river, ... ) from perlins ( if needed )
   // params : World_Plane::tile_map_, World_Plane::resource_map_, biome_map, all perlins,

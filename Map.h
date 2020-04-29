@@ -1,5 +1,5 @@
-#ifndef __MAP_H_INCLUDED__
-#define __MAP_H_INCLUDED__
+#ifndef MAP_H
+#define MAP_H
 
 #include "World.h"
 

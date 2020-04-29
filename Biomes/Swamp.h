@@ -1,5 +1,5 @@
-#ifndef __SWAMP_H_INCLUDED__
-#define __SWAMP_H_INCLUDED__
+#ifndef SWAMP_H
+#define SWAMP_H
 
 #include "Biome.h"
 
@@ -49,9 +49,11 @@ public:
     swamp_tree_top_(std::make_shared<Sprite_Obj>(swamp_tree_top_t_, 31, 110)),
     swamp_water_(std::make_shared<Sprite_Obj>(swamp_water_t_)) {}
 
+  ~Swamp() = default;
+
   // Biome function overrides
   // 2 - Trees (density), Reeds (density) 
-  const size_t perlins_needed() override { return 2; }
+  size_t perlins_needed() override { return 2; }
   // Implimented in ./Biome_Builder.cpp
   void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
                      std::vector<std::vector<std::shared_ptr<Resource>>>&,
@@ -74,8 +76,8 @@ public:
     One_Piece(pos_x, pos_y, swamp.swamp_reeds_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 1; }
-  const float collision_radius() const override { return 4; } 
+  size_t generation_range() const override { return 1; }
+  float collision_radius() const override { return 4; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -87,8 +89,8 @@ public:
     One_Piece(pos_x, pos_y, swamp.swamp_spikes_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 1; }
-  const float collision_radius() const override { return 5; } 
+  size_t generation_range() const override { return 1; }
+  float collision_radius() const override { return 5; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -101,8 +103,8 @@ public:
                    swamp.swamp_tree_top_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 2; }
-  const float collision_radius() const override { return 17; } 
+  size_t generation_range() const override { return 2; }
+  float collision_radius() const override { return 17; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -114,8 +116,8 @@ public:
     One_Piece(pos_x, pos_y, swamp.swamp_water_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 1; }
-  const float collision_radius() const override { return 0; } 
+  size_t generation_range() const override { return 1; }
+  float collision_radius() const override { return 0; } 
 };
 
 #endif

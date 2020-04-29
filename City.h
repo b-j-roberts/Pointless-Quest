@@ -1,5 +1,5 @@
-#ifndef __CITY_H_INCLUDED__
-#define __CITY_H_INCLUDED__
+#ifndef CITY_H
+#define CITY_H
 
 //#include "Resources/Structures.h"
 #include "Player.h"

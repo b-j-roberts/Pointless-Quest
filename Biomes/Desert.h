@@ -1,5 +1,5 @@
-#ifndef __DESERT_H_INCLUDED__
-#define __DESERT_H_INCLUDED__
+#ifndef DESERT_H
+#define DESERT_H
 
 #include "Biome.h"
 
@@ -36,9 +36,11 @@ public:
     desert_water_(std::make_shared<Sprite_Obj>(desert_water_t_)),
     desert_cactus_(std::make_shared<Sprite_Obj>(desert_cactus_t_, 15, 57)) { }
 
+  ~Desert() = default;
+
   // Biome function overrides
   // 1 - Cactus (density)
-  const size_t perlins_needed() override { return 1; }
+  size_t perlins_needed() override { return 1; }
   // Implimented in ./Biome_Builder.cpp
   void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
                      std::vector<std::vector<std::shared_ptr<Resource>>>&,
@@ -58,8 +60,8 @@ public:
     One_Piece(pos_x, pos_y, desert.desert_cactus_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 1; }
-  const float collision_radius() const override { return 8; } 
+  size_t generation_range() const override { return 1; }
+  float collision_radius() const override { return 8; } 
 };
 
 

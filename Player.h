@@ -1,5 +1,5 @@
-#ifndef __PLAYER_H_INCLUDED__
-#define __PLAYER_H_INCLUDED__
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include <SFML/Graphics/View.hpp>
 

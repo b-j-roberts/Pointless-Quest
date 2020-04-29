@@ -1,5 +1,5 @@
-#ifndef __BIOMES_H_INCLUDED__
-#define __BIOMES_H_INCLUDED__
+#ifndef BIOMES_H
+#define BIOMES_H
 
 // Load all biome headers
 #include "Forest.h"

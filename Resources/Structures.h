@@ -1,5 +1,5 @@
-#ifndef __STRUCTURES_H_INCLUDED__
-#define __STRUCTURES_H_INCLUDED__
+#ifndef STRUCTURES_H_
+#define STRUCTURES_H
 
 #include "Resources.h"
 
@@ -25,7 +25,7 @@ public:
   // Resource Overrides
   void draw(sf::RenderWindow&) const override;
   void transparent_draw(sf::RenderWindow&) const override;
-  const bool is_overlapped(const sf::FloatRect&) override; // TO DO : Make const (so do update)
+  bool is_overlapped(const sf::FloatRect&) override; // TO DO : Make const (so do update)
 
 };
 
@@ -53,7 +53,7 @@ public:
   // Resource Overrides
   void draw(sf::RenderWindow&) const override;
   void transparent_draw(sf::RenderWindow&) const override;
-  const bool is_overlapped(const sf::FloatRect&) override;
+  bool is_overlapped(const sf::FloatRect&) override;
 
 };
 
@@ -89,7 +89,7 @@ public:
   // Resource overrides
   void draw(sf::RenderWindow&) const override;
   void transparent_draw(sf::RenderWindow&) const override;
-  const bool is_overlapped(const sf::FloatRect&) override;
+  bool is_overlapped(const sf::FloatRect&) override;
 
 };
 

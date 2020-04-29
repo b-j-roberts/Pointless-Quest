@@ -1,5 +1,5 @@
-#ifndef __CAVE_H_INCLUDED__
-#define __CAVE_H_INCLUDED__
+#ifndef CAVE_H_
+#define CAVE_H
 
 #include "Biome.h"
 
@@ -35,6 +35,8 @@ public:
     cave_spike_(std::make_shared<Sprite_Obj>(cave_spike_t_, 16, 26)),
     cave_crystal_(std::make_shared<Sprite_Obj>(cave_crystal_t_, 15, 29)) { }
 
+  ~Cave() override = default;
+
   // Biome function overrides
   // Implimented in ./Biome_Builder.cpp
   void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
@@ -56,9 +58,9 @@ public:
     One_Piece(pos_x, pos_y, cave.cave_spike_->get_rand_Ptr()) { }
 
   // Overriden Resource Functions
-  const size_t generation_range() const override { return 1; }
+  size_t generation_range() const override { return 1; }
   // TO DO : Test this
-  const float collision_radius() const override { return 7; } 
+  float collision_radius() const override { return 7; } 
 };
 
 // Final Resource Class used to construct resource in world 
@@ -70,9 +72,9 @@ public:
     One_Piece(pos_x, pos_y, cave.cave_crystal_->get_rand_Ptr()) { }
 
   // Overriden Resource Functions
-  const size_t generation_range() const override { return 1; }
+  size_t generation_range() const override { return 1; }
   // TO DO : Test this
-  const float collision_radius() const override { return 5; }
+  float collision_radius() const override { return 5; }
 };
 
 #endif

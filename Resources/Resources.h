@@ -1,5 +1,5 @@
-#ifndef __RESOURCES_H_INCLUDED__
-#define __RESOURCES_H_INCLUDED__
+#ifndef RESOURCES_H
+#define RESOURCES_H
 
 #include "../Functions.h"
 
@@ -90,11 +90,11 @@ public:
   virtual void transparent_draw(sf::RenderWindow& window) const { }
 
   // Returns width of space needed to place resource (to the left & up of generation position)
-  virtual const size_t generation_range() const { return 1; }
+  virtual size_t generation_range() const { return 1; }
   // Returns radius about origin (pos) of resource in which collisions occur (0=collisionless)
-  virtual const float collision_radius() const { return 0.f; }
+  virtual float collision_radius() const { return 0.f; }
   // Returns whether given FloatRect overlaps the resource ( used for transparent draw of resource)
-  virtual const bool is_overlapped(const sf::FloatRect&) { return false; }
+  virtual bool is_overlapped(const sf::FloatRect&) { return false; }
   
 };
 

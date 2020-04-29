@@ -1,5 +1,5 @@
-#ifndef __OCEAN_H_INCLUDED__
-#define __OCEAN_H_INCLUDED__
+#ifndef OCEAN_H
+#define OCEAN_H
 
 // Class containing all Ocean Resource Textures & Sprites
 // Overriden Biome functions to properly build Ocean biome ( perlins_needed = 0 & get_Resources )
@@ -19,6 +19,8 @@ public:
   Ocean():
     ocean_tile_t_(32, 32, 4, "Biomes/ocean/waterTiles"),
     ocean_tile_(std::make_shared<Sprite_Obj>(ocean_tile_t_)) { }
+
+  ~Ocean() = default;
 
   // Biome function overrides
   // Implimented in ./Biome_Builder.cpp

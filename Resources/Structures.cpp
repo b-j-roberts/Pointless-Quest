@@ -18,7 +18,7 @@ void One_Piece::transparent_draw(sf::RenderWindow& window) const {
   sprite_->setColor(sf::Color(255, 255, 255, 255));
 }
 
-const bool One_Piece::is_overlapped(const sf::FloatRect& rect) {
+bool One_Piece::is_overlapped(const sf::FloatRect& rect) {
   // TO DO : Move position and rotation to a set_sprite function?
   //         => make this function const
   sprite_->setPosition(pos_x_, pos_y_);
@@ -53,7 +53,7 @@ void Two_Piece_Vert::transparent_draw(sf::RenderWindow& window) const {
   top_->setColor(sf::Color(255, 255, 255, 255));
 }
 
-const bool Two_Piece_Vert::is_overlapped(const sf::FloatRect& rect) {
+bool Two_Piece_Vert::is_overlapped(const sf::FloatRect& rect) {
   // TO DO : Move position to a set_sprite function?
   //         => make this function const
   bot_->setPosition(pos_x_, pos_y_);
@@ -112,6 +112,6 @@ void Animation::transparent_draw(sf::RenderWindow& window) const {
   s_[curr_frame_]->setColor(sf::Color(255, 255, 255, 255));
 }
 
-const bool Animation::is_overlapped(const sf::FloatRect& rect) {
+bool Animation::is_overlapped(const sf::FloatRect& rect) {
   return s_[curr_frame_]->getGlobalBounds().intersects(rect);
 }

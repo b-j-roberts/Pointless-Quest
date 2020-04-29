@@ -1,5 +1,5 @@
-#ifndef __TUNDRA_H_INCLUDED__
-#define __TUNDRA_H_INCLUDED__
+#ifndef TUNDRA_H
+#define TUNDRA_H
 
 #include "Biome.h"
 
@@ -42,13 +42,15 @@ public:
   
   // Biome function overrides
   // 1 - Plantlife (density)
-  const size_t perlins_needed() override { return 1; }
+  size_t perlins_needed() override { return 1; }
   // Implimented in ./Biome_Builder.cpp
   void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
                      std::vector<std::vector<std::shared_ptr<Resource>>>&,
                      const std::vector<std::vector<Biome_enum>>&,
                      const std::vector<std::vector<std::vector<state>>>&, size_t,
                      const std::vector<std::vector<state>>&) override;
+
+  ~Tundra() = default;
 
   friend Tundra_Shrub;
   friend Tundra_Tree;
@@ -64,9 +66,9 @@ public:
     One_Piece(pos_x, pos_y, tundra.tundra_shrub_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 2; } 
+  size_t generation_range() const override { return 2; } 
   // TO DO : Test this
-  const float collision_radius() const override { return 8; } 
+  float collision_radius() const override { return 8; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -78,9 +80,9 @@ public:
     One_Piece(pos_x, pos_y, tundra.tundra_tree_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 2; } 
+  size_t generation_range() const override { return 2; } 
   // TO DO : Test this
-  const float collision_radius() const override { return 16; } 
+  float collision_radius() const override { return 16; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -92,8 +94,8 @@ public:
     One_Piece(pos_x, pos_y, tundra.tundra_ice_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 2; } 
-  const float collision_radius() const override { return 0; } 
+  size_t generation_range() const override { return 2; } 
+  float collision_radius() const override { return 0; } 
 };
 
 #endif

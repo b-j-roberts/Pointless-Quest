@@ -1,5 +1,5 @@
-#ifndef __FOREST_H_INCLUDED__
-#define __FOREST_H_INCLUDED__
+#ifndef FOREST_H
+#define FOREST_H
 
 #include "Biome.h"
 
@@ -65,9 +65,11 @@ public:
     forest_tree_top_(std::make_shared<Sprite_Obj>(forest_tree_top_t_, 63, 89, 1.3, 1.3)),
     forest_tree_bot_(std::make_shared<Sprite_Obj>(forest_tree_bot_t_, 31, 110)) { }
 
+  ~Forest() = default;
+
   // Biome function overrides
   // 2 - Tiles (flowers) & Plantlife (density)
-  const size_t perlins_needed() override { return 2; }
+  size_t perlins_needed() override { return 2; }
   // Implimented in ./Biome_Builder.cpp
   void get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>&,
                      std::vector<std::vector<std::shared_ptr<Resource>>>&,
@@ -91,8 +93,8 @@ public:
                    forest.forest_bush_top_->get_rand_Ptr()) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 1; }
-  const float collision_radius() const override { return 10; } 
+  size_t generation_range() const override { return 1; }
+  float collision_radius() const override { return 10; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -104,8 +106,8 @@ public:
     One_Piece(pos_x, pos_y, forest.forest_moss_->get_rand_Ptr(), rand() % 360) { }
 
   // Overridden Resource Functions
-  const size_t generation_range() const override { return 1; }
-  const float collision_radius() const override { return 0; } 
+  size_t generation_range() const override { return 1; }
+  float collision_radius() const override { return 0; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -118,8 +120,8 @@ public:
                    forest.forest_s_tree_top_->get_rand_Ptr()) { }
 
   // Overriden Resource Functions
-  const size_t generation_range() const override { return 1; }
-  const float collision_radius() const override { return 12; } 
+  size_t generation_range() const override { return 1; }
+  float collision_radius() const override { return 12; } 
 };
 
 // Final Resource Class used to construct resource in world
@@ -132,8 +134,8 @@ public:
                    forest.forest_tree_top_->get_rand_Ptr()) { }
 
   // Overriden Resource Functions
-  const size_t generation_range() const override { return 2; }
-  const float collision_radius() const override { return 19; } 
+  size_t generation_range() const override { return 2; }
+  float collision_radius() const override { return 19; } 
 };
 
 #endif
