@@ -31,7 +31,6 @@ void City_Plane::generate(size_t width, size_t height) {
       }
     }
   }
-
 }
 
 void City_Plane::draw(sf::RenderWindow& window, const Player& player) {

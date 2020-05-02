@@ -1,5 +1,8 @@
 #include "Player.h"
 
+#include <cmath> // sqrt
+#include <algorithm> // min & max
+
 void Body::update(float vel_x, float vel_y, Player& player, const World& world) {
 
   // Move Resource into possibly colliding position
@@ -13,17 +16,17 @@ void Body::update(float vel_x, float vel_y, Player& player, const World& world) 
   // TO DO : Issue : Error if spawn on top of resource ( divide by 0 )
   // Collision resolution ( resolution vector calculated as (shifted_x, shifted_y) )
   const auto& rec_map = world.planes_.at(player.curr_plane_)->resource_map_;
-  auto sq = [](float val){ return val * val; };
+  auto sq = [](float val) -> float { return val * val; };
   for(size_t j = player.x_range_.first; j < player.x_range_.second; ++j) {
     for(size_t i = player.y_range_.first; i < player.y_range_.second; ++i) {
-      if(rec_map[i][j] && rec_map[i][j]->collision_radius() != 0) { // Ignore nullptr & 0 radius
+      if(rec_map[i][j] && rec_map[i][j]->collision_radius() > 0.f) { // Ignore nullptr & 0 radius
         const sf::Vector2f rec_pos = sf::Vector2f(rec_map[i][j]->x(), rec_map[i][j]->y());
-        if(sq((pos_x_ - rec_pos.x)) + sq((pos_y_ - rec_pos.y)) <= 
+        if(sq(pos_x_ - rec_pos.x) + sq(pos_y_ - rec_pos.y) <= 
            sq(body_size + rec_map[i][j]->collision_radius())) { // If is collision
-          float center_distance = sqrt((pos_x_ - rec_pos.x) * (pos_x_ - rec_pos.x) + 
-                                       (pos_y_ - rec_pos.y) * (pos_y_ - rec_pos.y));
-          float overlap = center_distance - body_size - 
-                          rec_map[i][j]->collision_radius();
+          float center_distance = static_cast<float>(sqrt(static_cast<double>(
+                                      sq(pos_x_ - rec_pos.x) + sq(pos_y_ - rec_pos.y)
+                                  )));
+          float overlap = center_distance - body_size - rec_map[i][j]->collision_radius();
           shifted_x -= overlap * (pos_x_ - rec_pos.x) / center_distance; // shift by x overlap
           shifted_y -= overlap * (pos_y_ - rec_pos.y) / center_distance; // shift by y overlap
         }
@@ -56,13 +59,17 @@ void Player::update(float l_stick_x, float l_stick_y,
   // Calculate x_range & y_range
   auto size = view_.getSize();
   auto center = view_.getCenter();
-  const int world_size_x = world.planes_.at(curr_plane_)->tile_map_[0].size();
-  const int world_size_y = world.planes_.at(curr_plane_)->tile_map_.size();
+  size_t world_size_x = world.planes_.at(curr_plane_)->tile_map_[0].size();
+  size_t world_size_y = world.planes_.at(curr_plane_)->tile_map_.size();
   // Set draw range to be full view + 16 tiles in any direction ( accounting for boundaries )
-  x_range_ = std::make_pair<size_t, size_t>(
-                max(0, center.x - (size.x / 2) - 512) / 32,
-                min(max(0, (center.x + (size.x / 2) + 512) / 32), world_size_x));
-  y_range_ = std::make_pair<size_t, size_t>(
-                max(0, center.y - (size.y / 2) - 512) / 32,
-                min(max(0, (center.y + (size.y / 2) + 512) / 32), world_size_y));
+  // TO DO : Issue if calculation is outside map range ( negatives loop )
+  x_range_.first = std::max(0ul, static_cast<unsigned long>(center.x - (size.x / 2) - 512)) / 32;
+  x_range_.second = std::min(
+                        std::max(0ul, static_cast<unsigned long>(center.x + (size.x / 2) + 512) / 32),
+                        world_size_x);
+  
+  y_range_.first = std::max(0ul, static_cast<unsigned long>(center.y - (size.y / 2) - 512)) / 32;
+  y_range_.second =  std::min(
+                         std::max(0ul, static_cast<unsigned long>(center.y + (size.y / 2) + 512) / 32),
+                         world_size_y);
 }

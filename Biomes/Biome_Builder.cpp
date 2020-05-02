@@ -45,8 +45,6 @@ void Forest::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile
             case Bottom:
               tile_map_[i][j] = std::make_shared<Tile>(Forest_, rand() % 5, forest_tile_);
               break;
-
-            default: break;
           }
         }
       }
@@ -92,8 +90,6 @@ void Forest::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile
             else if(rnd > 94) 
               resource_map_[i][j] = std::make_shared<Forest_Moss>(j * 32, i * 32, *this);
             break;
-
-          default: break;
         }
 
         // generation range collision
@@ -102,7 +98,7 @@ void Forest::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) { // Prevents indexing outside of world
             for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
               for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
-                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[i][j] == nullptr || (rng_x == j && rng_y == i)) continue;        
                 if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
@@ -155,8 +151,6 @@ void Magic::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_
             if(rnd > 98) 
               resource_map_[i][j] = std::make_shared<Magic_Flowers>(j * 32, i * 32, *this);
             break;
-
-          default: break;
         }
 
         // generation range collision
@@ -165,7 +159,7 @@ void Magic::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) { // Prevents generation outside of world
             for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
               for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
-                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[i][j] == nullptr || (rng_x == j && rng_y == i)) continue;        
                 if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
@@ -199,8 +193,6 @@ void Magic::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_
             if(rnd > 98) 
               resource_map_[i][j] = std::make_shared<Magic_Trees>(j * 32, i * 32, *this);
             break;
-
-          default: break;
         }
 
         // generation range collision
@@ -209,7 +201,7 @@ void Magic::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) { // Prevents generation outside of world
             for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
               for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
-                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[i][j] == nullptr || (rng_x == j && rng_y == i)) continue;        
                 if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
@@ -262,8 +254,6 @@ void Desert::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile
             if(rnd > 98) 
               resource_map_[i][j] = std::make_shared<Desert_Cactus>(j * 32, i * 32, *this);
             break;
-
-          default: break;
         }
 
         // generation range collision
@@ -272,7 +262,7 @@ void Desert::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) { // Prevents generation outside of world
             for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
               for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
-                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[i][j] == nullptr || (rng_x == j && rng_y == i)) continue;        
                 if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
@@ -340,7 +330,7 @@ void Old_Ocean::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& t
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) { // Prevents generation outside of world
             for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
               for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
-                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[i][j] == nullptr || (rng_x == j && rng_y == i)) continue;        
                 if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
@@ -399,8 +389,6 @@ void Swamp::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_
             else if(rnd > 95)
               resource_map_[i][j] = std::make_shared<Swamp_Spikes>(j * 32, i * 32, *this);
             break;
-
-          default: break;
         }
 
         // generation range collision
@@ -409,7 +397,7 @@ void Swamp::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) { // Prevents generation outside of world
             for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
               for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
-                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[i][j] == nullptr || (rng_x == j && rng_y == i)) continue;        
                 if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
@@ -445,8 +433,6 @@ void Swamp::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_
             if(rnd > 98) 
               resource_map_[i][j] = std::make_shared<Swamp_Reeds>(j * 32, i * 32, *this);
             break;
-
-          default: break;
         }
 
         // generation range collision
@@ -455,7 +441,7 @@ void Swamp::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile_
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) { // Prevents generation outside of world
             for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
               for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
-                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;        
+                if(resource_map_[i][j] == nullptr || (rng_x == j && rng_y == i)) continue;        
                 if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }
@@ -514,8 +500,6 @@ void Tundra::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile
             else if(rnd > 97)
               resource_map_[i][j] = std::make_shared<Tundra_Shrub>(j * 32, i * 32, *this);
             break;
-
-          default: break;
         }
 
         // generation range collision
@@ -524,7 +508,7 @@ void Tundra::get_Resources(std::vector<std::vector<std::shared_ptr<Tile>>>& tile
           if(i + 1 >= gen_rng && j + 1 >= gen_rng) { // Prevents generation outside of world
             for(size_t rng_x = j + 1 - gen_rng; rng_x < j + 1; ++rng_x) {
               for(size_t rng_y = i + 1 - gen_rng; rng_y < i + 1; ++rng_y) {
-                if(resource_map_[i][j] == nullptr || rng_x == j && rng_y == i) continue;
+                if(resource_map_[i][j] == nullptr || (rng_x == j && rng_y == i)) continue;
                 if(resource_map_[rng_x][rng_y] != nullptr) resource_map_[i][j] = nullptr;
               }
             }

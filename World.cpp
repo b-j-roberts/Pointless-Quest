@@ -7,8 +7,8 @@
 void World_Plane::draw(sf::RenderWindow& window, const Player& player) const {
   
   // TILES
-  for(int i = player.x_range().first; i < player.x_range().second; ++i) {
-    for(int j = player.y_range().first; j < player.y_range().second; ++j) {
+  for(size_t i = player.x_range().first; i < player.x_range().second; ++i) {
+    for(size_t j = player.y_range().first; j < player.y_range().second; ++j) {
       tile_map_[j][i]->sprite_->setPosition(i * 32, j * 32);
       window.draw(*(tile_map_[j][i]->sprite_));
     }
@@ -19,8 +19,8 @@ void World_Plane::draw(sf::RenderWindow& window, const Player& player) const {
   sf::FloatRect player_box = player.bounding_box();
   
   // RESOURCES
-  for(int j = player.y_range().first; j < player.y_range().second; ++j) {
-    for(int i = player.x_range().first; i < player.x_range().second; ++i) {
+  for(size_t j = player.y_range().first; j < player.y_range().second; ++j) {
+    for(size_t i = player.x_range().first; i < player.x_range().second; ++i) {
       if(resource_map_[j][i]) { // ignores nullptr
         if(resource_map_[j][i]->is_overlapped(player_box)) { // make transparent
           resource_map_[j][i]->transparent_draw(window);
@@ -37,8 +37,9 @@ void World_Plane::generate(const size_t width, const size_t height) {
 
   // Create biome_enums_ vector by selecting random biomes in each section
   std::transform(possible_biomes().begin(), possible_biomes().end(),
-                 std::back_inserter(biome_enums_),
-                 [](std::vector<Biome_enum> bv) { return bv[rand() % bv.size()]; });
+                 std::back_inserter(biome_enums_), [](std::vector<Biome_enum> bv){ 
+                   return bv[static_cast<size_t>(rand()) % bv.size()];
+                 });
 
   // Create biomes_ vector
   std::transform(biome_enums_.begin(), biome_enums_.end(), std::back_inserter(biomes_),
@@ -54,7 +55,7 @@ void World_Plane::generate(const size_t width, const size_t height) {
   if(need_river()) river = get_States(width, height, 0.70, 0.68); 
   //std::future<state_perlin> fut_riv;
   //if(need_river()) fut_riv = std::async(std::launch::async, get_States, width, height, 0.70, 0.68); 
-  size_t state_perlins_needed = std::accumulate(biomes_.begin(), biomes_.end(), 0,
+  size_t state_perlins_needed = std::accumulate(biomes_.begin(), biomes_.end(), 0ul,
                                 [&](size_t a, const auto& b){ return a + b->perlins_needed(); });
   /*std::vector<state_perlin> all_perlin;
   for(int i = 0; i < state_perlins_needed; ++i) {
@@ -63,10 +64,10 @@ void World_Plane::generate(const size_t width, const size_t height) {
   // TO DO : Think about this
   std::vector<state_perlin> all_perlin;
   std::vector<std::future<state_perlin>> fut_perlin;
-  for(int i = 0; i < state_perlins_needed; ++i) {
+  for(size_t i = 0; i < state_perlins_needed; ++i) {
     fut_perlin.emplace_back(std::async(std::launch::async, get_States, width, height, .75, .5));
   }
-  for(int i = 0; i < state_perlins_needed; ++i) {
+  for(size_t i = 0; i < state_perlins_needed; ++i) {
     all_perlin.emplace_back(fut_perlin[i].get()); // TO DO : cut_offs are temp
   }
   //if(need_river()) river = fut_riv.get();
@@ -103,25 +104,25 @@ std::vector<std::vector<Biome_enum>> Overworld::get_Biome_Map(size_t width, size
   add_noise(tile_heights, 1, 300);
 
   // Percent cuts for each biome 'level'
-  double top_percent_cut = .75;
-  double mid_percent_cut = .40;
-  double bottom_percent_cut = .15;
+  float top_percent_cut = .75f;
+  float mid_percent_cut = .40f;
+  float bottom_percent_cut = .15f;
 
   //get cutoff values ( flatten, sort, index percent cut )
-  std::vector<double> all_heights;
+  std::vector<float> all_heights;
   for(const auto& row : tile_heights) {
     all_heights.insert(all_heights.end(), row.begin(), row.end());
   }
   std::sort(all_heights.begin(), all_heights.end());
-  double top_cutoff = all_heights[width * height * top_percent_cut];
-  double mid_cutoff = all_heights[width * height * mid_percent_cut];
-  double bottom_cutoff = all_heights[width * height * bottom_percent_cut];
+  float top_cutoff = all_heights[static_cast<size_t>(width * height * top_percent_cut)];
+  float mid_cutoff = all_heights[static_cast<size_t>(width * height * mid_percent_cut)];
+  float bottom_cutoff = all_heights[static_cast<size_t>(width * height * bottom_percent_cut)];
 
   // Build return Biome_Map ( transform tile_heights based on cutoffs
   std::vector<std::vector<Biome_enum>> ret(height);
   size_t row_num = 0;
   for(const auto& row : tile_heights) {
-    std::transform(row.begin(), row.end(), std::back_inserter(ret[row_num]), [&](double val){
+    std::transform(row.begin(), row.end(), std::back_inserter(ret[row_num]), [&](float val){
       if(val > top_cutoff) return biome_enums_[0];
       else if(val > mid_cutoff) return biome_enums_[1];
       else if(val > bottom_cutoff) return biome_enums_[2];
@@ -136,7 +137,7 @@ std::vector<std::vector<Biome_enum>> Overworld::get_Biome_Map(size_t width, size
 std::vector<std::vector<Biome_enum>> Underground::get_Biome_Map(size_t width, size_t height) {
 
   // Generate Bounded Cave region & transform into returned Biome_Map
-  auto cave_region = get_Bounded_Region(width, height, width * height * .2); // TO DO : Think #
+  auto cave_region = get_Bounded_Region(width, height, width * height / 5); // TO DO : Think #
   std::vector<std::vector<Biome_enum>> ret(height);
   size_t row_num = 0;
   for(const auto& row : cave_region) {
@@ -160,7 +161,7 @@ std::unique_ptr<World_Plane> get_Plane(Plane_enum p, const size_t width, const s
 
 World::World(const size_t width, const size_t height) {
  
-https://www.realtor.com/realestateandhomes-detail/18041-Starboard-Dr_Houston_TX_77058_M76603-21843?view=qv  // Generate Planes
+  // Generate Planes
   planes_[Overworld_] = get_Plane(Overworld_, width, height);
   planes_[Underground_] = get_Plane(Underground_, width, height);
 

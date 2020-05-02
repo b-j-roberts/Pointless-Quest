@@ -12,16 +12,6 @@
  * Utility Functions
  */
 
-// max & min template functions
-template <typename T1, typename T2>
-decltype(auto) max(T1 a, T2 b) {
-  return (a < b ? b : a);
-}
-template <typename T1, typename T2>
-decltype(auto) min(T1 a, T2 b) {
-  return (a > b ? b : a);
-}
-
 // Returns the minimum power of mult greater than num
 int get_Min_Power(int num, int mult);
 

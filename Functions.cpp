@@ -1,6 +1,6 @@
 #include "Functions.h"
 
-#include <algorithm> // sort, transform, max_element
+#include <algorithm> // sort, transform, max_element, min & max
 #include <iterator> // back_inserter
 
 #include <stdexcept> // runtime_error
@@ -174,18 +174,18 @@ std::vector<std::vector<double>> sudo_perlin_2D(int width, int height) {
 // helper : return max value in 2D vector
 template <typename T>
 T max_2D(const std::vector<std::vector<T>>& vec) {
-  T max(0);
+  T max_val(0);
   for(const auto& v : vec) {
     auto v_max = std::max_element(v.begin(), v.end());
-    if(*v_max > max) max = *v_max;
+    if(*v_max > max_val) max_val = *v_max;
   }
-  return max;
+  return max_val;
 }
 
 void normalize_2D(std::vector<std::vector<double>>& vec) {
-  double max = max_2D(vec);
+  double max_val = max_2D(vec);
   for(auto& v : vec) {
-    std::transform(v.begin(), v.end(), v.begin(), [max](auto val){ return val / max; });
+    std::transform(v.begin(), v.end(), v.begin(), [max_val](auto val){ return val / max_val; });
   }
 }
 
@@ -246,18 +246,18 @@ std::vector<std::vector<bool>> get_Bounded_Region(size_t width, size_t height, s
   std::vector<std::vector<bool>> ret(height, false_vec);
 
   // Pick random starting point
-  int x = rand() % (width - 2) + 1; // NOTE : this prevents corners ( see below note )
-  int y = rand() % (height - 2) + 1;
+  size_t x = rand() % (width - 2) + 1; // NOTE : this prevents corners ( see below note )
+  size_t y = rand() % (height - 2) + 1;
 
   ret[y][x] = true;
 
   size_t bounded_count = 1;
 
   // Note : min 1 & max -2 because we dont want to have to check for indexing errors
-  int min_i = max(1, x - 1);
-  int min_j = max(1, y - 1);
-  int max_i = min(width - 2, x + 1);
-  int max_j = min(height - 2, y + 1);
+  size_t min_i = std::max(1ul, x - 1);
+  size_t min_j = std::max(1ul, y - 1);
+  size_t max_i = std::min(width - 2, x + 1);
+  size_t max_j = std::min(height - 2, y + 1);
 
   while(bounded_count < low_bound) {
     for(size_t i = min_i; i <= max_i; ++i) {
@@ -272,10 +272,10 @@ std::vector<std::vector<bool>> get_Bounded_Region(size_t width, size_t height, s
           size_t chance = rand() % 4;
           if(chance < possible) {
             ret[j][i] = true;
-            if(j == min_j) min_j = max(1, j - 1);
-            else if(j == max_j) max_j = min(height - 2, j + 1);
-            else if(i == min_i) min_i = max(1, i - 1);
-            else if(i == max_i) max_i = min(width - 2, i + 1);
+            if(j == min_j) min_j = std::max(1ul, j - 1);
+            else if(j == max_j) max_j = std::min(height - 2, j + 1);
+            else if(i == min_i) min_i = std::max(1ul, i - 1);
+            else if(i == max_i) max_i = std::min(width - 2, i + 1);
             ++bounded_count;
           }
         }

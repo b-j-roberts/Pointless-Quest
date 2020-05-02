@@ -6,7 +6,7 @@
 
 int main(int argc, char** argv) {
 
-  srand(time(NULL));
+  srand(time(nullptr));
 
   // Window
   sf::VideoMode desktop = sf::VideoMode().getDesktopMode();
@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
   // World Generation & Resource Loading
   size_t world_scale = 2;
   // TO DO : TEMP
-  if(argc > 1) world_scale = std::stoi(argv[1]);
+  if(argc > 1) world_scale = std::stoul(argv[1]);
   sf::Vector2u world_size(world_scale * 1024, world_scale * 1024);
   World world(world_size.x, world_size.y);
 
@@ -55,19 +55,19 @@ int main(int argc, char** argv) {
     // Prevent slight joystick drift
     if(is_l_x) {
       l_stick.x = sf::Joystick::getAxisPosition(0, sf::Joystick::X);
-      if(l_stick.x < .07 && l_stick.x > -0.07) l_stick.x = 0;
+      if(l_stick.x < .07f && l_stick.x > -0.07f) l_stick.x = 0;
     }
     if(is_l_y) {
       l_stick.y = sf::Joystick::getAxisPosition(0, sf::Joystick::Y);
-      if(l_stick.y < .07 && l_stick.y > -0.07) l_stick.y = 0;
+      if(l_stick.y < .07f && l_stick.y > -0.07f) l_stick.y = 0;
     }
     if(is_r_x) {
       r_stick.x = sf::Joystick::getAxisPosition(0, sf::Joystick::Z);
-      if(r_stick.x < .07 && r_stick.x > -0.07) r_stick.x = 0;
+      if(r_stick.x < .07f && r_stick.x > -0.07f) r_stick.x = 0;
     }
     if(is_r_y) {
       r_stick.y = sf::Joystick::getAxisPosition(0, sf::Joystick::R);
-      if(r_stick.y < .07 && r_stick.y > -0.07) r_stick.y = 0;
+      if(r_stick.y < .07f && r_stick.y > -0.07f) r_stick.y = 0;
     }
 
     // Other Input (Keyboard or window)

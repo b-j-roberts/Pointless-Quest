@@ -20,7 +20,7 @@ public:
     ocean_tile_t_(32, 32, 4, "Biomes/ocean/waterTiles"),
     ocean_tile_(std::make_shared<Sprite_Obj>(ocean_tile_t_)) { }
 
-  ~Ocean() = default;
+  ~Ocean() override = default;
 
   // Biome function overrides
   // Implimented in ./Biome_Builder.cpp

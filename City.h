@@ -22,14 +22,14 @@ class City_Plane {
 public:
 
   City_Plane(const size_t width, const size_t height):
-    city_land_(get_Bounded_Region(width, height, width * height * .01)),
+    city_land_(get_Bounded_Region(width, height, static_cast<size_t>(width * height * .01))),
     city_horz_walls_(height, std::vector<std::shared_ptr<Resource>>(width, nullptr)),
     city_vert_walls_(height, std::vector<std::shared_ptr<Resource>>(width, nullptr)) { 
-    this->generate(width, height); }
+    this->generate(width, height);
+  }
 
   void generate(size_t width, size_t height);
   void draw(sf::RenderWindow&, const Player&);
-
 };
 
 class City {
@@ -39,8 +39,8 @@ public:
   City() { }
   virtual ~City() = default;
 
-  virtual std::shared_ptr<Resource> get_horz_wall(int, int) { }
-  virtual std::shared_ptr<Resource> get_vert_wall(int, int) { }
+  virtual std::shared_ptr<Resource> get_horz_wall(int, int) = 0;
+  virtual std::shared_ptr<Resource> get_vert_wall(int, int) = 0;
 
 };
 
@@ -90,7 +90,6 @@ public:
   ~Wall_Vertical() override = default;
 
   // TO DO : Overridden Resource Funtions
-
 };
 
 #endif
