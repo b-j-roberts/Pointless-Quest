@@ -5,8 +5,8 @@
 #include <algorithm> // transform
 #include <iterator> // back_inserter
 
-Texture_Obj::Texture_Obj(const size_t height, const size_t width, const size_t num, std::string s, 
-            		         const size_t height_offset, const size_t width_offset):
+Texture_Obj::Texture_Obj(size_t height, size_t width, size_t num, std::string s, 
+            		         size_t height_offset, size_t width_offset):
   height_(height),
   width_(width) {
   std::vector<sf::Texture> temp_t(num);
@@ -19,8 +19,8 @@ Texture_Obj::Texture_Obj(const size_t height, const size_t width, const size_t n
   t_.swap(temp_t);
 }
 
-Sprite_Obj::Sprite_Obj(const Texture_Obj& t_obj, const size_t orig_x, const size_t orig_y, 
-                       const double scale_x, const double scale_y) {
+Sprite_Obj::Sprite_Obj(const Texture_Obj& t_obj, size_t orig_x, size_t orig_y, 
+                       float scale_x, float scale_y) {
   std::transform(t_obj.t_.begin(), t_obj.t_.end(), std::back_inserter(s_), [&](const auto& txtr){
     std::shared_ptr<sf::Sprite> ret = std::make_shared<sf::Sprite>(txtr);
     ret->setOrigin(orig_x, orig_y);
@@ -29,13 +29,16 @@ Sprite_Obj::Sprite_Obj(const Texture_Obj& t_obj, const size_t orig_x, const size
   });
 }
 
-std::shared_ptr<sf::Sprite> Sprite_Obj::get_Ptr(const size_t i) const {
+std::shared_ptr<sf::Sprite> Sprite_Obj::get_Ptr(size_t i) const {
   if(i < s_.size())  return s_[i];
   else if(s_.size() != 0)  return s_[0];
   else { // TO DO : runtime_error
     std::cout << "IndexError: in get_Ptr(const int): index " << i 
               << " beyond size " << s_.size() << std::endl;
+    return s_[i % s_.size()]; // TO DO
   }
 }
 
-std::shared_ptr<sf::Sprite> Sprite_Obj::get_rand_Ptr() const { return s_[rand() % s_.size()]; }
+std::shared_ptr<sf::Sprite> Sprite_Obj::get_rand_Ptr() const { 
+  return s_[static_cast<size_t>(rand()) % s_.size()]; 
+}

@@ -15,8 +15,8 @@
 // Returns the minimum power of mult greater than num
 int get_Min_Power(int num, int mult);
 
-// Returns double angle (clockwise) created by Vector2f passed in
-double angle2f(const sf::Vector2f& vec);
+// Returns float angle (clockwise) created by Vector2f passed in
+float angle2f(const sf::Vector2f& vec);
 
 
 /*
@@ -33,15 +33,15 @@ enum state { Top, Middle, Bottom };
 
 // TO DO : Must be a power of 2 as of now
 // Return a perlin-ish 2D vector with width & height as specified
-std::vector<std::vector<double>> sudo_perlin_2D(int width, int height);
+std::vector<std::vector<float>> sudo_perlin_2D(size_t width, size_t height);
 
 // Linearly scale 2D vector, such that max value is 1
-void normalize_2D(std::vector<std::vector<double>>& vec);
+void normalize_2D(std::vector<std::vector<float>>& vec);
 // Adds random noise to all elements in vec ranging from [-factor/scale , factor/scale]
-void add_noise(std::vector<std::vector<double>>& vec, int factor, int scale);
+void add_noise(std::vector<std::vector<float>>& vec, int factor, int scale);
 // Creates a normalized perlin with states, how many of each state determined by cut percents
 std::vector<std::vector<state>> get_States(size_t width, size_t height,
-                                           double top_percent_cut, double bot_percent_cut);
+                                           float top_percent_cut, float bot_percent_cut);
 
 
 /*

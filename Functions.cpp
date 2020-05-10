@@ -6,7 +6,7 @@
 #include <stdexcept> // runtime_error
 #include <string> // string ( used for runtime_error )
 
-static const double PI = 3.14159265;
+static const float PI = 3.14159265f;
 
 int get_Min_Power(int num, int mult) {
   int ret = mult;
@@ -16,12 +16,13 @@ int get_Min_Power(int num, int mult) {
   return ret;
 }
 
-double angle2f(const sf::Vector2f& vec) {
-  if(vec.x == 0) {
+float angle2f(const sf::Vector2f& vec) {
+  if(vec.x < 0.001f && vec.x > -.001f) {
     return vec.y < 0 ? 90 : 270; 
   } else {
-    return vec.x < 0 ? -1 * atan(vec.y / vec.x) * 180 / PI : 
-                       (-1 * atan(vec.y / vec.y) * 180 / PI) + 180; 
+    return vec.x < 0 ?
+        -1.f * static_cast<float>(atan(static_cast<double>(vec.y / vec.x))) * 180.f / PI : 
+        (-1.f * static_cast<float>(atan(static_cast<double>(vec.y / vec.y))) * 180.f / PI) + 180.f; 
   } 
 }
 /*
@@ -125,36 +126,36 @@ std::vector<std::vector<double>> old_perlin_2D(size_t width, size_t height) {
 
 }*/
 
-std::vector<std::vector<double>> sudo_perlin_2D(int width, int height) {
+std::vector<std::vector<float>> sudo_perlin_2D(size_t width, size_t height) {
 
   // TO DO : Test this with viewer
   // Note : Requires square & power of 2?
 
-  std::vector<std::vector<double>> ret(height, std::vector<double>(width, 0));
+  std::vector<std::vector<float>> ret(height, std::vector<float>(width, 0));
   
   // Create random seed 2d vector
   // TO DO : Transform?
-  std::vector<std::vector<double>> seed(height, std::vector<double>(width, 0.f));
-  for(int i = 0; i < height; ++i) {
-    for(int j = 0; j < width; ++j) {
+  std::vector<std::vector<float>> seed(height, std::vector<float>(width, 0.f));
+  for(size_t i = 0; i < height; ++i) {
+    for(size_t j = 0; j < width; ++j) {
       seed[i][j] = (rand() % 100);
     }
   }
 
 
-  for(int i = 0; i < height; ++i) {
-    for(int j = 0; j < width; ++j) {
+  for(size_t i = 0; i < height; ++i) {
+    for(size_t j = 0; j < width; ++j) {
       float scale = 1.f;
-      int pitch = width;
+      size_t pitch = width;
       while(pitch > 0) { // TO DO : Change this min to some variable for biasing
         // Take advantage of int rounding to get boundary values for interpolation
-        int x_1 = (j / pitch) * pitch;
-        int y_1 = (i / pitch) * pitch;
-        int x_2 = (x_1 + pitch) % width; // wrapping
-        int y_2 = (y_1 + pitch) % height;
+        size_t x_1 = (j / pitch) * pitch;
+        size_t y_1 = (i / pitch) * pitch;
+        size_t x_2 = (x_1 + pitch) % width; // wrapping
+        size_t y_2 = (y_1 + pitch) % height;
         // Get relative position in each coordinate of current point
-        float curr_x = (float)(j - x_1) / (float)pitch;
-        float curr_y = (float)(i - y_1) / (float)pitch;
+        float curr_x = static_cast<float>(j - x_1) / static_cast<float>(pitch);
+        float curr_y = static_cast<float>(i - y_1) / static_cast<float>(pitch);
         // Interpolate 'top' and 'bottom' x values for y interpolation
         float x_top = (1.f - curr_x) * seed[y_1][x_1] + curr_x * seed[y_1][x_2];
         float x_bot = (1.f - curr_x) * seed[y_2][x_1] + curr_x * seed[y_2][x_2];
@@ -182,37 +183,37 @@ T max_2D(const std::vector<std::vector<T>>& vec) {
   return max_val;
 }
 
-void normalize_2D(std::vector<std::vector<double>>& vec) {
-  double max_val = max_2D(vec);
+void normalize_2D(std::vector<std::vector<float>>& vec) {
+  float max_val = max_2D(vec);
   for(auto& v : vec) {
     std::transform(v.begin(), v.end(), v.begin(), [max_val](auto val){ return val / max_val; });
   }
 }
 
-void add_noise(std::vector<std::vector<double>>& vec, int factor, int scale) {
+void add_noise(std::vector<std::vector<float>>& vec, int factor, int scale) {
   int rand_mod = 2 * factor + 1;
   for(auto& v : vec) {
     std::transform(v.begin(), v.end(), v.begin(), [&](auto val){ 
-        return val + ((float)(rand() % rand_mod) - factor) / scale; 
+        return val + static_cast<float>((rand() % rand_mod) - factor) / scale; 
     });
   }
 }
 
 std::vector<std::vector<state>> get_States(size_t width, size_t height,
-                                           double top_percent_cut, double bot_percent_cut) {
+                                           float top_percent_cut, float bot_percent_cut) {
 
   // Create Normalized 2D perlin
   auto tile_heights = sudo_perlin_2D(width, height);
   normalize_2D(tile_heights);
 
   // Get cutoff values by flattening, sorting, and indexing percent cuts
-  std::vector<double> all_heights;
+  std::vector<float> all_heights;
   for(const auto& v : tile_heights) {
     all_heights.insert(all_heights.end(), v.begin(), v.end());
   }
   std::sort(all_heights.begin(), all_heights.end());
-  double top_cutoff = all_heights[width * height * top_percent_cut];
-  double bot_cutoff = all_heights[width * height * bot_percent_cut];
+  float top_cutoff = all_heights[static_cast<size_t>(width * height * top_percent_cut)];
+  float bot_cutoff = all_heights[static_cast<size_t>(width * height * bot_percent_cut)];
 
   // Create return vector from tile_heights, states based on cutoff values
   std::vector<std::vector<state>> ret(height);
@@ -246,8 +247,9 @@ std::vector<std::vector<bool>> get_Bounded_Region(size_t width, size_t height, s
   std::vector<std::vector<bool>> ret(height, false_vec);
 
   // Pick random starting point
-  size_t x = rand() % (width - 2) + 1; // NOTE : this prevents corners ( see below note )
-  size_t y = rand() % (height - 2) + 1;
+  // NOTE : this prevents corners ( see below note )
+  size_t x = static_cast<size_t>(rand()) % (width - 2) + 1; 
+  size_t y = static_cast<size_t>(rand()) % (height - 2) + 1;
 
   ret[y][x] = true;
 
@@ -288,7 +290,7 @@ std::vector<std::vector<bool>> get_Bounded_Region(size_t width, size_t height, s
 }
 
 // helper : returns true if there is only one true element adjacent to vec[i][j]
-bool one_adjacent(const std::vector<std::vector<bool>>& vec, int i, int j) {
+static bool one_adjacent(const std::vector<std::vector<bool>>& vec, size_t i, size_t j) {
   int count = 0;
   if(vec[i-1][j]) ++count;
   if(vec[i+1][j]) ++count;
@@ -299,23 +301,23 @@ bool one_adjacent(const std::vector<std::vector<bool>>& vec, int i, int j) {
 
 void smooth_Bounded_Edges(std::vector<std::vector<bool>>& vec) {
   // Comes at shoots on all 4 angles so that no matter which way they face they will be removed
-  for(int i = 1; i < vec.size() - 1; ++i) {
-    for(int j = 1; j < vec[i].size() - 1; ++j) {
+  for(size_t i = 1; i < vec.size() - 1; ++i) {
+    for(size_t j = 1; j < vec[i].size() - 1; ++j) {
       if(vec[i][j] && one_adjacent(vec, i, j)) vec[i][j] = false; 
     }
   }
-  for(int i = vec.size(); i > 0; --i) {
-    for(int j = vec[i].size(); j > 0; --j) {
+  for(size_t i = vec.size(); i > 0; --i) {
+    for(size_t j = vec[i].size(); j > 0; --j) {
       if(vec[i][j] && one_adjacent(vec, i, j)) vec[i][j] = false; 
     }
   }
-  for(int i = 1; i < vec[0].size() - 1; ++i) {
-    for(int j = 1; j < vec.size() - 1; ++j) {
+  for(size_t i = 1; i < vec[0].size() - 1; ++i) {
+    for(size_t j = 1; j < vec.size() - 1; ++j) {
       if(vec[j][i] && one_adjacent(vec, j, i)) vec[j][i] = false; 
     }
   }
-  for(int i = vec[0].size() - 1; i > 0; --i) {
-    for(int j = vec.size() - 1; j > 0; --j) {
+  for(size_t i = vec[0].size() - 1; i > 0; --i) {
+    for(size_t j = vec.size() - 1; j > 0; --j) {
       if(vec[j][i] && one_adjacent(vec, j, i)) vec[j][i] = false; 
     }
   }

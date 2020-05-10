@@ -52,7 +52,7 @@ void World_Plane::generate(const size_t width, const size_t height) {
   // Generate all Planes perlins needed
   typedef std::vector<std::vector<state>> state_perlin;
   state_perlin river;
-  if(need_river()) river = get_States(width, height, 0.70, 0.68); 
+  if(need_river()) river = get_States(width, height, 0.70f, 0.68f); 
   //std::future<state_perlin> fut_riv;
   //if(need_river()) fut_riv = std::async(std::launch::async, get_States, width, height, 0.70, 0.68); 
   size_t state_perlins_needed = std::accumulate(biomes_.begin(), biomes_.end(), 0ul,

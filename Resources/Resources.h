@@ -28,11 +28,9 @@ public:
 
   // params : height, width, num, name of file w/o .png, height offset(=0), width offset(=0)
   // TO DO : Swap width & height
-  Texture_Obj(const size_t, const size_t, const size_t, std::string, 
-              const size_t = 0, const size_t = 0);
+  Texture_Obj(size_t, size_t, size_t, std::string, size_t = 0, size_t = 0);
 
   friend class Sprite_Obj;
-
 };
 
 // Stores actual sf::Sprite's of textures from a Texture_Obj
@@ -55,12 +53,11 @@ public:
   Sprite_Obj& operator= (const Sprite_Obj&) = delete;
 
   // params : texture object, origin x (=0), origin y (=0), scale x (=1), scale y (=1)
-  Sprite_Obj(const Texture_Obj&, const size_t = 0, const size_t = 0, 
-             const double = 1, const double = 1);
+  Sprite_Obj(const Texture_Obj&, size_t = 0, size_t = 0, float = 1, float = 1);
   virtual ~Sprite_Obj() = default;
 
   // param : Index position of sprite in s_
-  std::shared_ptr<sf::Sprite> get_Ptr(const size_t) const;
+  std::shared_ptr<sf::Sprite> get_Ptr(size_t) const;
   // Returns ptr to random index position
   std::shared_ptr<sf::Sprite> get_rand_Ptr() const;
 

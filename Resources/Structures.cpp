@@ -1,7 +1,7 @@
 #include "Structures.h"
 
-One_Piece::One_Piece(const float pos_x, const float pos_y, 
-                     std::shared_ptr<sf::Sprite> sprite, const float angle):
+One_Piece::One_Piece(float pos_x, float pos_y, 
+                     std::shared_ptr<sf::Sprite> sprite, float angle):
   Resource(pos_x, pos_y),
   sprite_(sprite),
   angle_(angle) { }
@@ -28,14 +28,14 @@ bool One_Piece::is_overlapped(const sf::FloatRect& rect) {
 }
 
 
-Two_Piece_Vert::Two_Piece_Vert(const float pos_x, const float pos_y, const float top_offset_x,
-	               	             const float top_offset_y, std::shared_ptr<sf::Sprite> bot, 
+Two_Piece_Vert::Two_Piece_Vert(float pos_x, float pos_y, float top_offset_x,
+	               	             float top_offset_y, std::shared_ptr<sf::Sprite> bot, 
                                std::shared_ptr<sf::Sprite> top):
   Resource(pos_x, pos_y),
-  top_offset_x_(top_offset_x),
-  top_offset_y_(top_offset_y),
   top_(top),
-  bot_(bot) { }
+  bot_(bot),
+  top_offset_x_(top_offset_x),
+  top_offset_y_(top_offset_y) { }
 
 void Two_Piece_Vert::draw(sf::RenderWindow& window) const {
   window.draw(*bot_);
@@ -63,15 +63,13 @@ bool Two_Piece_Vert::is_overlapped(const sf::FloatRect& rect) {
 }
 
 
-// TO DO : float to double?
-Animation::Animation(const float pos_x, const float pos_y, 
-                     const Texture_Obj& t_obj, const float orig_x, const float orig_y, 
-                     const double scale_x, const double scale_y):  
+Animation::Animation(float pos_x, float pos_y, const Texture_Obj& t_obj, 
+                     size_t orig_x, size_t orig_y, float scale_x, float scale_y):  
   Resource(pos_x, pos_y),
   Sprite_Obj(t_obj, orig_x, orig_y, scale_x, scale_y),
-  curr_frame_(0),
   frame_inc_(0),
-  fps_(5) // TO DO
+  fps_(5), // TO DO
+  curr_frame_(0)
   { }
 
 void Animation::set_frames() {
